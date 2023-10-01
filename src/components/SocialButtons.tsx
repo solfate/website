@@ -26,7 +26,7 @@ export const SocialButtonLink = memo(
         href={href}
         className={`${styles.button} ${!!label ? "!px-3" : ""}`}
       >
-        <IconToUse className="w-5 h-5" strokeWidth={1} />
+        <IconToUse className="w-4 md:w-5 h-4 md:h-5" strokeWidth={1} />
         {!!label && label}
       </NextLink>
     );
@@ -49,7 +49,7 @@ export const SocialButton = memo(
         title={title}
         className={styles.button}
       >
-        <IconToUse className="w-5 h-5" strokeWidth={1} />
+        <IconToUse className="w-4 md:w-5 h-4 md:h-5" strokeWidth={1} />
       </button>
     );
   },

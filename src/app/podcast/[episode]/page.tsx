@@ -28,7 +28,7 @@ export default async function Page({ params }: PageProps) {
   });
 
   return (
-    <main className="page-container max-w-3xl !space-y-6">
+    <main className="page-container max-w-3xl !space-y-4 !md:space-y-6">
       <section className="">
         <ul className="">
           <li>
@@ -45,12 +45,12 @@ export default async function Page({ params }: PageProps) {
         {/* breadcrumbs? */}
       </section>
 
-      <h1 className="font-bold text-5xl max-w-5xl">
+      <h1 className="font-bold text-3xl md:text-4xl max-w-5xl">
         {episode.title ?? "[err]"}
       </h1>
 
       <section className="flex items-center justify-between gap-4">
-        <section className="flex items-center gap-4">
+        <section className="flex items-center gap-2 md:gap-4">
           <Link
             href={"/podcast"}
             className="block rounded-full overflow-hidden w-12 h-12 bg-slate-300"
@@ -68,7 +68,7 @@ export default async function Page({ params }: PageProps) {
           <div className="space-y-0">
             <Link
               href={"/podcast"}
-              className="hover:underline text-lg font-semibold"
+              className="hover:underline md:text-lg font-semibold"
             >
               {PODCAST.name}
             </Link>
