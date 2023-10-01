@@ -1,7 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { usePathname } from "next/navigation";
 
 import styles from "@/styles/Nav.module.css";
 import { Menu as MenuIcon, X as XIcon, Mic as MicIcon } from "react-feather";
@@ -9,7 +10,12 @@ import { AppLogo } from "@/components/core/AppLogo";
 import { AppNav } from "@/components/core/AppNav";
 
 export default function AppHeader() {
+  const pathName = usePathname();
   const [showMenu, setShowMenu] = useState(false);
+
+  useEffect(() => {
+    setShowMenu(false);
+  }, [pathName]);
 
   return (
     <header className={styles.nav}>
