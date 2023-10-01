@@ -58,7 +58,7 @@ export default async function Page({ params }: PageProps) {
             <Image
               width={64}
               height={64}
-              src={"/img/cover0.jpg"}
+              src={"/media/podcast/cover0.jpg"}
               alt={PODCAST.name}
               className="object-cover object-center rounded-full overflow-hidden w-12 h-12"
               priority={true}
