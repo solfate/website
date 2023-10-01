@@ -1,0 +1,82 @@
+/*
+	Navigation / header styles
+*/
+
+/* Desktop (aka non-mobile specific styles) */
+.desktopMenu {
+  @apply hidden w-full mx-auto md:flex md:bg-transparent;
+}
+.desktopActionMenu {
+  @apply justify-between hidden space-x-2 md:flex;
+}
+
+/* Mobile specific styles */
+.mobileMenu {
+  @apply w-full mx-auto border-b border-gray-800 shadow-lg;
+  @apply md:hidden md:bg-transparent;
+}
+.mobileActionMenu {
+  @apply flex items-center justify-between md:hidden;
+  @apply space-x-4;
+}
+.dropdownActive {
+  @apply fixed left-0;
+  @apply bg-white;
+}
+.dropdownInactive {
+  @apply hidden;
+}
+
+.nav {
+  /* @apply relative; */
+  @apply sticky top-0 z-10;
+  @apply lg:relative;
+  @apply bg-white;
+
+  @apply flex items-center justify-between w-full h-16;
+  @apply border-b border-gray-300;
+  /* @apply md:px-8; */
+  /* @apply fixed top-0 z-20 bg-color-dark; */
+  /* @apply border-b border-gray-400 shadow-md md:shadow-none md:border-0; */
+}
+.overlay {
+  @apply fixed inset-0 z-20;
+  @apply bg-white/5 backdrop-blur-sm;
+}
+
+.inner {
+  /* @apply container-inner; */
+  @apply z-30 w-full;
+  @apply flex items-center justify-between mx-auto;
+  /* @apply px-4 space-x-5 space-y-0 md:py-2; */
+}
+.linksListing {
+  @apply items-center flex-1 inline-block mr-0 md:flex md:mr-2 md:justify-between md:space-x-8;
+}
+
+.nav a {
+  @apply no-underline hover:no-underline;
+}
+
+.link {
+  @apply flex items-center p-4 space-x-2 md:px-6;
+  @apply transition-colors duration-150 ease-in-out;
+  @apply text-lg;
+  @apply border-l-4 border-transparent md:border-l-0 md:border-b-[3px];
+  @apply tracking-wide no-underline;
+
+  @apply hover:text-hot-red;
+  /* focus:outline-none focus:shadow-outline */
+}
+
+.activeLink {
+  @apply text-hot-red;
+  @apply border-hot-red;
+  /* @apply bg-gray-100; */
+  @apply font-semibold;
+}
+.inactiveLink {
+  @apply hover:text-hot-red;
+  @apply hover:border-hot-red;
+  /* @apply hover:bg-gray-100; */
+}

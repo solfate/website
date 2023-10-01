@@ -1,0 +1,79 @@
+@tailwind base;
+@tailwind components;
+
+body {
+  /* @apply bg-gray-100; */
+  background-color: #fffafa;
+  /* background-image: url("/img/background.png");
+  @apply bg-center bg-fixed; */
+}
+
+.container {
+  @apply mx-auto max-w-7xl;
+  @apply p-4;
+}
+.page-container {
+  @apply container min-h-[90vh];
+  @apply space-y-8 py-8 md:space-y-20;
+}
+
+.input {
+  @apply px-3 py-2 rounded-lg;
+  @apply border bg-transparent border-transparent;
+}
+.btn {
+  @apply flex items-center gap-2;
+  @apply px-5 py-2 rounded-lg;
+  @apply border bg-transparent border-transparent;
+  @apply hover:bg-opacity-95 hover:border-opacity-90;
+}
+.btn-blue {
+  @apply bg-blue-500 border-blue-200 text-white;
+}
+.btn-gray {
+  @apply bg-gray-900 border-blue-200 text-white;
+}
+
+.prose-cover-image {
+  max-width: 60rem;
+  --child-width: 60rem;
+  /* todo: handle different screen sizes */
+}
+.child-past-parent {
+  position: relative;
+  width: 100vw;
+  left: calc(-0.5 * var(--child-width) + 50%);
+}
+
+.fade-bottom {
+  -webkit-mask-image: linear-gradient(to bottom, black 50%, transparent 100%);
+  mask-image: linear-gradient(to bottom, black 50%, transparent 100%);
+}
+
+.icon {
+  @apply icon-base;
+  /* @apply text-gray-100 hover:text-gray-100; */
+  @apply text-gray-800 hover:text-gray-800;
+}
+.icon-xs {
+  @apply w-3 h-3;
+}
+.icon-sm {
+  @apply w-5 h-5;
+}
+.icon-base,
+.icon-md {
+  @apply w-6 h-6;
+}
+.icon-lg {
+  @apply w-9 h-9;
+}
+.icon-xl {
+  @apply w-16 h-16;
+}
+.icon-2xl {
+  @apply w-20 h-20;
+}
+
+/** always keep this as the end */
+@tailwind utilities;
