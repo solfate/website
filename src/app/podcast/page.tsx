@@ -4,15 +4,16 @@ import { SimpleHeroHeader } from "@/components/core/SimpleHeroHeader";
 import { FeaturedPostCard } from "@/components/posts/FeaturedPostCard";
 import { SimpleAuthorCard } from "@/components/posts/SimpleAuthorCard";
 import { SimplePostCard } from "@/components/posts/SimplePostCard";
-import Image from "next/image";
+import { PODCAST } from "@/lib/const/podcast";
 import Link from "next/link";
 
 export default function Page() {
   return (
     <main className="page-container">
       <SimpleHeroHeader
-        title="Discover"
-        description="Discover the latest content from around the Solana ecosystem."
+        title={PODCAST.name}
+        description={PODCAST.description}
+        className="max-w-lg"
       />
 
       <section className="grid md:grid-cols-2 lg:grid-cols-3 lg:gap-8 gap-y-8">
