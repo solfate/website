@@ -10,6 +10,9 @@ export const INITIAL_EPISODES_PER_PAGE = 5;
 export const PODCAST = {
   name: "Solfate Podcast",
   url: `${SITE.url}/podcast`,
+  description:
+    "Interviews with blockchain founders and builders on Solana. \
+    From two developers in the Solana ecosystem.",
 };
 
 export const PODCAST_HOSTS = [
