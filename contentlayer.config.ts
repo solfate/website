@@ -1,3 +1,4 @@
+import { podcastEpisodeImage } from "./src/lib/podcast";
 import { createStandardSlug } from "./src/lib/helpers";
 import { defineDocumentType, makeSource } from "contentlayer/source-files";
 
@@ -81,6 +82,11 @@ export const PodcastEpisode = defineDocumentType(() => ({
       type: "string",
       resolve: (record) =>
         `/podcast/${record?.slug ?? createStandardSlug(record._id)}`,
+    },
+    image: {
+      description: "Primary image for the podcast episode",
+      type: "string",
+      resolve: (record) => podcastEpisodeImage(record.image),
     },
   },
 }));
