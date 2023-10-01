@@ -1,10 +1,10 @@
-import { ArrowLeftIcon } from "@heroicons/react/24/outline";
 import Image from "next/image";
 import Link from "next/link";
 
 import { serialize } from "next-mdx-remote/serialize";
 import MarkdownFormatter from "@/components/MarkdownFormatter";
 import { SocialShareButtons } from "@/components/SocialButtons";
+import { ArrowLeft } from "react-feather";
 
 type PostFrontmatter = {
   /** title of the post */
@@ -50,7 +50,7 @@ export default async function Page() {
               href={"/"}
               className="inline-flex items-center text-gray-700 gap-2 hover:underline text-sm font-semibold"
             >
-              <ArrowLeftIcon className="w-4 h-4" />
+              <ArrowLeft className="w-4 h-4" />
               Home
             </Link>
           </li>
