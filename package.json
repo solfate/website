@@ -3,9 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
+    "dev": "yarn contentlayer && next dev",
+    "build": "yarn contentlayer && next build",
     "start": "next start",
+    "contentlayer": "contentlayer build --clearCache",
     "lint": "next lint"
   },
   "dependencies": {
@@ -14,8 +15,10 @@
     "@next/mdx": "^13.5.3",
     "add": "^2.0.6",
     "clsx": "^2.0.0",
+    "contentlayer": "^0.3.4",
     "date-fns": "^2.30.0",
     "next": "latest",
+    "next-contentlayer": "^0.3.4",
     "next-mdx-remote": "^4.4.1",
     "react": "latest",
     "react-dom": "latest",
@@ -34,5 +37,8 @@
     "postcss": "latest",
     "tailwindcss": "latest",
     "typescript": "latest"
+  },
+  "engines": {
+    "node": ">=16"
   }
 }
