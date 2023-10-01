@@ -12,9 +12,9 @@ export const SimpleHeroHeader = ({
 }: SimpleHeroHeaderProps) => {
   return (
     <section className={clsx("py-4 md:py-8", className)}>
-      <h1 className="text-4xl md:text-6xl font-bold">{title}</h1>
+      <h1 className="text-4xl md:text-5xl font-bold">{title}</h1>
 
-      <p className="text-lg text-gray-500">{description}</p>
+      <p className="text-base md:text-lg text-gray-500">{description}</p>
     </section>
   );
 };
