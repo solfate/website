@@ -51,7 +51,7 @@
   /* @apply px-4 space-x-5 space-y-0 md:py-2; */
 }
 .linksListing {
-  @apply items-center flex-1 inline-block mr-0 md:flex md:mr-2 md:justify-between md:space-x-8;
+  @apply items-center flex-1 mr-0 flex md:mr-2 md:justify-between md:space-x-8;
 }
 
 .nav a {
