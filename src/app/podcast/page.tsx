@@ -79,8 +79,9 @@ export default function Page() {
         </section>
 
         <section className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {episodes.map((episode) => (
+          {episodes.map((episode, key) => (
             <SimplePostCard
+              key={key}
               href={episode.href}
               date={episode.date}
               title={episode.title}
