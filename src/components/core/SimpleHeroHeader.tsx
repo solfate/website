@@ -1,4 +1,6 @@
-type SimpleHeroHeaderProps = {
+import clsx from "clsx";
+
+type SimpleHeroHeaderProps = SimpleComponentProps & {
   title: string;
   description: string;
 };
@@ -6,9 +8,10 @@ type SimpleHeroHeaderProps = {
 export const SimpleHeroHeader = ({
   title,
   description,
+  className,
 }: SimpleHeroHeaderProps) => {
   return (
-    <section className="py-4 md:py-8">
+    <section className={clsx("py-4 md:py-8", className)}>
       <h1 className="text-4xl md:text-6xl font-bold">{title}</h1>
 
       <p className="text-lg text-gray-500">{description}</p>
