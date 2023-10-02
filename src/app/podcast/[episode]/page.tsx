@@ -99,6 +99,16 @@ export default async function Page({ params }: PageProps) {
         />
       </div> */}
 
+      <iframe
+        width="100%"
+        height="180"
+        frameBorder="no"
+        scrolling="no"
+        seamless
+        src={episode.transistorUrl}
+        className="border-0"
+      ></iframe>
+
       <article className="prose max-w-full !text-lg">
         <MarkdownFormatter source={mdxSerialized} />
       </article>
