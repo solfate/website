@@ -2,7 +2,7 @@
   Specific constants for the podcast
 */
 
-import { PodcastPerson } from "@/types";
+import { PodcastFeedLocation, PodcastPerson } from "@/types";
 import { SITE } from "./general";
 
 //name is a name. define it for use
@@ -41,7 +41,7 @@ export const PODCAST_HOSTS: PodcastPerson[] = [
   },
 ];
 
-export const RSS_PLATFORMS = [
+export const PODCAST_FEED_LOCATIONS: PodcastFeedLocation[] = [
   {
     label: "RSS feed",
     href: "https://feeds.transistor.fm/solfate",
@@ -56,5 +56,10 @@ export const RSS_PLATFORMS = [
     label: "Spotify",
     href: "https://open.spotify.com/show/5YnYJdFDfEM16Om3v4VRcs",
     icon: "/icons/spotify.svg",
+  },
+  {
+    label: "YouTube",
+    href: "https://www.youtube.com/@SolfatePod/podcasts",
+    icon: "/icons/youtube.svg",
   },
 ];

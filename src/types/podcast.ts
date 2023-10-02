@@ -10,3 +10,12 @@ export type PodcastPerson = {
   blurb?: string;
   bio?: string;
 };
+
+/**
+ * Location where people can find the episodes for the podcast
+ */
+export type PodcastFeedLocation = {
+  label: string;
+  href: string;
+  icon: string;
+};
