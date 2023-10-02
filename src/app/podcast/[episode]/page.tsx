@@ -12,17 +12,49 @@ import { FormattedDateAgo } from "@/components/core/FormattedDateAgo";
 import { PodcastDisclaimer } from "@/components/podcast/PodcastDisclaimer";
 import { allPodcastEpisodes } from "contentlayer/generated";
 import { NextPrevButtons } from "@/components/posts/NextPrevButtons";
+import { Metadata, ResolvingMetadata } from "next";
 
 type PageProps = {
   params: {
     episode: string;
   };
+  // searchParams?: {}
 };
 
 export async function generateStaticParams() {
   return allPodcastEpisodes.map((item) => ({
     episode: item.slug,
   }));
+}
+
+export async function generateMetadata(
+  { params }: PageProps,
+  parent: ResolvingMetadata,
+): Promise<Metadata> {
+  // locate the single record
+  const episode = allPodcastEpisodes.find(
+    (item) => item.slug == params.episode,
+  );
+
+  // do nothing if the episode was not found
+  if (!episode) return {};
+
+  // get the parent images, and add the episode specific ones
+  const openGraphImages = (await parent).openGraph?.images || [];
+  if (episode.image) openGraphImages.unshift(episode.image);
+
+  return {
+    alternates: {
+      canonical: episode.href,
+    },
+    title: `${PODCAST.name} #${episode.ep} - ${episode.title}`,
+    description: episode.description,
+    openGraph: {
+      title: `${PODCAST.name} #${episode.ep} - ${episode.title}`,
+      description: episode.description,
+      images: openGraphImages,
+    },
+  };
 }
 
 export default async function Page({ params }: PageProps) {

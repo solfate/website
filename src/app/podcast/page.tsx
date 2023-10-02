@@ -1,13 +1,18 @@
-"use client";
-
 import { PodcastFeedLinkButtons } from "@/components/podcast/PodcastFeedLinkButtons";
 import { SimpleAuthorCard } from "@/components/posts/SimpleAuthorCard";
 import { SimplePostCard } from "@/components/posts/SimplePostCard";
 import { PODCAST } from "@/lib/const/podcast";
 import { podcastEpisodeImage } from "@/lib/podcast";
 import { PodcastEpisode, allPodcastEpisodes } from "contentlayer/generated";
+import { Metadata } from "next";
 import Link from "next/link";
 import { ArrowRight } from "react-feather";
+
+export const metadata: Metadata = {
+  alternates: {
+    canonical: "/podcast",
+  },
+};
 
 export default function Page() {
   // get the listing of episodes, sorted by their episode date
