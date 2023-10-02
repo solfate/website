@@ -39,16 +39,12 @@ export default function Page() {
 
         <div className=" gap-2">
           <SimplePostCard
-            href={"/post"}
-            date={"Oct 20, 2023"}
-            title={"Secondary featured post"}
-            imageSrc={"/img/sample4.jpg"}
-            description={
-              "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur a libero euismod, volutpat ipsum in, suscipit eros. Vivamus id porta augue. Maecenas fringilla"
-            }
+            title={mostRecent.title}
+            href={mostRecent.href}
+            date={mostRecent.date}
+            imageSrc={mostRecent.image ?? podcastEpisodeImage()}
+            description={mostRecent.description}
           />
-
-          {/* <div>cycle through featured posts, with animation</div> */}
         </div>
       </section>
 
