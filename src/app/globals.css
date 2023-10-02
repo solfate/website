@@ -74,6 +74,29 @@ body {
 .icon-2xl {
   @apply w-20 h-20;
 }
+.avatar {
+  @apply rounded-full;
+  @apply flex-shrink-0 block overflow-hidden bg-gray-400;
+}
+.avatar img {
+  @apply w-full;
+}
+.avatar-sm {
+  @apply w-16 h-16;
+}
+.avatar-base {
+  @apply w-24 h-24;
+}
+.avatar-md {
+  @apply w-16 h-16 md:w-32 md:h-32;
+}
+.avatar-lg {
+  @apply w-24 h-24 md:w-48 md:h-48;
+}
+.avatar-xl {
+  @apply md:w-80 md:h-80;
+  @apply w-full;
+}
 
 /** always keep this as the end */
 @tailwind utilities;
