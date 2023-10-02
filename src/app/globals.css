@@ -10,7 +10,7 @@ body {
 
 .container {
   @apply mx-auto max-w-7xl;
-  @apply p-4;
+  @apply p-5;
 }
 .page-container {
   @apply container min-h-[90vh];
