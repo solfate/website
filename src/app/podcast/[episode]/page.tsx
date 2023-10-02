@@ -11,6 +11,7 @@ import { PODCAST } from "@/lib/const/podcast";
 import { FormattedDateAgo } from "@/components/core/FormattedDateAgo";
 import { PodcastDisclaimer } from "@/components/podcast/PodcastDisclaimer";
 import { allPodcastEpisodes } from "contentlayer/generated";
+import { NextPrevButtons } from "@/components/posts/NextPrevButtons";
 
 type PageProps = {
   params: {
@@ -26,7 +27,7 @@ export async function generateStaticParams() {
 
 export default async function Page({ params }: PageProps) {
   // locate the current episode
-  const { episode } = usePodcastEpisode({ slug: params.episode });
+  const { episode, next, prev } = usePodcastEpisode({ slug: params.episode });
   if (!episode) {
     notFound();
   }
@@ -124,6 +125,18 @@ export default async function Page({ params }: PageProps) {
       <PodcastDisclaimer />
 
       {/* <AboutTheAuthor /> */}
+
+      <NextPrevButtons
+        className="pt-10"
+        next={{
+          label: "Next Episode",
+          href: next?.href,
+        }}
+        prev={{
+          label: "Previous Episode",
+          href: prev?.href,
+        }}
+      />
     </main>
   );
 }
