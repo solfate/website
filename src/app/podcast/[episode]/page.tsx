@@ -8,6 +8,7 @@ import { ArrowLeft } from "react-feather";
 import { notFound } from "next/navigation";
 import { usePodcastEpisode } from "@/hooks/usePodcastEpisode";
 import { PODCAST } from "@/lib/const/podcast";
+import { FormattedDateAgo } from "@/components/core/FormattedDateAgo";
 
 type PageProps = {
   params: {
@@ -73,11 +74,7 @@ export default async function Page({ params }: PageProps) {
               {PODCAST.name}
             </Link>
 
-            {!!episode.date && (
-              <p className="text-sm text-gray-400">
-                {new Date(episode.date).toLocaleDateString()}
-              </p>
-            )}
+            {!!episode.date && <FormattedDateAgo date={episode.date} />}
           </div>
 
           {/* <button className="btn mx-8 border-gray-400">Following</button> */}

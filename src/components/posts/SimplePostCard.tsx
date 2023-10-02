@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { memo } from "react";
+import { FormattedDateAgo } from "../core/FormattedDateAgo";
 
 type SimplePostCardProps = {
   title: string;
@@ -59,11 +60,7 @@ export const SimplePostCard = memo(
               <span className="">Username</span>
             </Link>
 
-            {!!date && (
-              <p className="text-sm text-gray-500">
-                {new Date(date).toLocaleDateString()}
-              </p>
-            )}
+            {!!date && <FormattedDateAgo date={date} />}
           </section>
 
           {!!description && (
