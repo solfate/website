@@ -9,6 +9,7 @@ import { notFound } from "next/navigation";
 import { usePodcastEpisode } from "@/hooks/usePodcastEpisode";
 import { PODCAST } from "@/lib/const/podcast";
 import { FormattedDateAgo } from "@/components/core/FormattedDateAgo";
+import { PodcastDisclaimer } from "@/components/podcast/PodcastDisclaimer";
 
 type PageProps = {
   params: {
@@ -112,6 +113,8 @@ export default async function Page({ params }: PageProps) {
       <article className="prose max-w-full !text-lg">
         <MarkdownFormatter source={mdxSerialized} />
       </article>
+
+      <PodcastDisclaimer />
 
       {/* <AboutTheAuthor /> */}
     </main>
