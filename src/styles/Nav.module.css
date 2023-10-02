@@ -22,6 +22,8 @@
 .dropdownActive {
   @apply fixed left-0;
   @apply bg-white;
+  /* todo: this `top` value is a hack to allow the mobile nav to display properly */
+  @apply top-14;
 }
 .dropdownInactive {
   @apply hidden;
