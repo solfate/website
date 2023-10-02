@@ -3,11 +3,14 @@ import styles from "@/styles/SocialButton.module.css";
 import { Icon as FeatherIcon } from "react-feather";
 import { Linkedin, Link as LinkIcon, Twitter } from "react-feather";
 import { memo } from "react";
+import clsx from "clsx";
 
 type SocialButtonBaseProps = {
   title: string;
   label?: string;
   icon: FeatherIcon;
+  strokeWidth?: number;
+  className?: string;
 };
 
 /**
@@ -19,6 +22,8 @@ export const SocialButtonLink = memo(
     label,
     href,
     newTab,
+    strokeWidth,
+    className,
     icon: IconToUse,
   }: SocialButtonBaseProps & { href: string; newTab?: boolean }) => {
     return (
@@ -26,9 +31,12 @@ export const SocialButtonLink = memo(
         target={newTab ? "_blank" : undefined}
         title={title}
         href={href}
-        className={`${styles.button} ${!!label ? "!px-3" : ""}`}
+        className={clsx(styles.button, !!label ? "!px-3" : "", className)}
       >
-        <IconToUse className="w-4 md:w-5 h-4 md:h-5" strokeWidth={1} />
+        <IconToUse
+          className="w-4 md:w-5 h-4 md:h-5"
+          strokeWidth={strokeWidth ?? 1}
+        />
         {!!label && label}
       </NextLink>
     );
