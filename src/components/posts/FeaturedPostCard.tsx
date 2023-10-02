@@ -23,6 +23,7 @@ export const FeaturedPostCard = memo(
             src={imageSrc}
             layout={"fill"}
             alt={imageAlt ?? title}
+            title={imageAlt ?? title}
             className={"object-cover object-center"}
             priority={true}
           />
@@ -44,6 +45,7 @@ export const FeaturedPostCard = memo(
                   height={64}
                   src={"/img/nick.jpg"}
                   alt={"username"}
+                  title={"username"}
                   className="object-cover object-center rounded-full overflow-hidden w-7 h-7"
                 />
               </span>
