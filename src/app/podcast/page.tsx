@@ -7,6 +7,7 @@ import { PODCAST } from "@/lib/const/podcast";
 import { podcastEpisodeImage } from "@/lib/podcast";
 import { PodcastEpisode, allPodcastEpisodes } from "contentlayer/generated";
 import Link from "next/link";
+import { ArrowRight } from "react-feather";
 
 export default function Page() {
   // get the listing of episodes, sorted by their episode date
@@ -24,7 +25,9 @@ export default function Page() {
         <div className="col-span-2 items-center flex flex-grow">
           <div>
             <section className={"py-4 md:py-8 max-w-lg space-y-2"}>
-              <h1 className="text-4xl md:text-5xl font-bold">{PODCAST.name}</h1>
+              <h1 className="text-4xl md:text-5xl font-bold">
+                <Link href="/podcast">{PODCAST.name}</Link>
+              </h1>
 
               <p className="text-base md:text-lg text-gray-500">
                 {PODCAST.description}
@@ -71,8 +74,12 @@ export default function Page() {
       <section className="space-y-8">
         <section className="flex items-center justify-between">
           <h2 className="font-semibold text-2xl">Recent episodes</h2>
-          <Link href={"#"} className="underline">
+          <Link
+            href={"/podcast/episodes"}
+            className="btn inline-flex items-center gap-2"
+          >
             View more
+            <ArrowRight className="w-5 h-5" strokeWidth={2} />
           </Link>
         </section>
 
