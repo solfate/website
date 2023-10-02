@@ -1,7 +1,6 @@
 "use client";
 
-import { SimpleHeroHeader } from "@/components/core/SimpleHeroHeader";
-import { FeaturedPostCard } from "@/components/posts/FeaturedPostCard";
+import { PodcastFeedLinkButtons } from "@/components/podcast/PodcastFeedLinkButtons";
 import { SimpleAuthorCard } from "@/components/posts/SimpleAuthorCard";
 import { SimplePostCard } from "@/components/posts/SimplePostCard";
 import { PODCAST } from "@/lib/const/podcast";
@@ -21,23 +20,26 @@ export default function Page() {
 
   return (
     <main className="page-container">
-      <SimpleHeroHeader
-        title={PODCAST.name}
-        description={PODCAST.description}
-        className="max-w-lg"
-      />
+      <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 lg:gap-8 gap-y-10 md:mx-20">
+        <div className="col-span-2 items-center flex flex-grow">
+          <div>
+            <section className={"py-4 md:py-8 max-w-lg space-y-2"}>
+              <h1 className="text-4xl md:text-5xl font-bold">{PODCAST.name}</h1>
 
-      <section className="grid md:grid-cols-2 lg:grid-cols-3 lg:gap-8 gap-y-8">
-        <div className="col-span-2">
-          <FeaturedPostCard
-            title={mostRecent.title}
-            href={mostRecent.href}
-            date={mostRecent.date}
-            imageSrc={mostRecent.image ?? podcastEpisodeImage()}
-          />
+              <p className="text-base md:text-lg text-gray-500">
+                {PODCAST.description}
+              </p>
+            </section>
+
+            <PodcastFeedLinkButtons />
+          </div>
         </div>
 
-        <div className=" gap-2">
+        <div className="grid gap-2">
+          <h2 className="font-semibold text-center text-3xl md:text-2xl">
+            Latest Episode #{mostRecent.ep}
+          </h2>
+
           <SimplePostCard
             title={mostRecent.title}
             href={mostRecent.href}
