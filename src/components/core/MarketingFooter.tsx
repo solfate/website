@@ -67,12 +67,14 @@ export default function MarketingFooter() {
 
         <div className="order-1 justify-center md:order-2 flex items-center gap-2">
           <SocialButtonLink
+            newTab={true}
             title={"Twitter / X"}
             href={TWITTER.url}
             icon={Twitter}
             label={TWITTER.handle}
           />
           <SocialButtonLink
+            newTab={true}
             title={"YouTube"}
             href={YOUTUBE.url}
             icon={Youtube}

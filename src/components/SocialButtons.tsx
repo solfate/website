@@ -18,10 +18,12 @@ export const SocialButtonLink = memo(
     title,
     label,
     href,
+    newTab,
     icon: IconToUse,
-  }: SocialButtonBaseProps & { href: string }) => {
+  }: SocialButtonBaseProps & { href: string; newTab?: boolean }) => {
     return (
       <NextLink
+        target={newTab ? "_blank" : undefined}
         title={title}
         href={href}
         className={`${styles.button} ${!!label ? "!px-3" : ""}`}
