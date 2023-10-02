@@ -10,12 +10,19 @@ import { usePodcastEpisode } from "@/hooks/usePodcastEpisode";
 import { PODCAST } from "@/lib/const/podcast";
 import { FormattedDateAgo } from "@/components/core/FormattedDateAgo";
 import { PodcastDisclaimer } from "@/components/podcast/PodcastDisclaimer";
+import { allPodcastEpisodes } from "contentlayer/generated";
 
 type PageProps = {
   params: {
     episode: string;
   };
 };
+
+export async function generateStaticParams() {
+  return allPodcastEpisodes.map((item) => ({
+    episode: item.slug,
+  }));
+}
 
 export default async function Page({ params }: PageProps) {
   // locate the current episode
