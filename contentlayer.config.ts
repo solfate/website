@@ -57,7 +57,7 @@ export const PodcastEpisode = defineDocumentType(() => ({
     duration: {
       type: "string",
       description: "Duration of the episode",
-      required: false,
+      required: true,
     },
   },
   computedFields: {
