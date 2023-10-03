@@ -8,7 +8,7 @@ type PodcastFeedLinkButtonsProps = SimpleComponentProps;
 
 export const PodcastFeedLinkButtons = memo(
   ({ className }: PodcastFeedLinkButtonsProps) => (
-    <section className="space-y-3">
+    <section className="space-y-4">
       <div className={clsx("gap-4 flex items-center", className)}>
         {PODCAST_FEED_LOCATIONS.map((item, index) => (
           <Link

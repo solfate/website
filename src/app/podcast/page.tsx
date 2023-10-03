@@ -29,7 +29,7 @@ export default function Page() {
       <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 lg:gap-8 gap-y-10 md:mx-20">
         <div className="col-span-2 items-center flex flex-grow">
           <div>
-            <section className={"py-4 md:py-8 max-w-lg space-y-2"}>
+            <section className={"py-4 max-w-lg space-y-2"}>
               <h1 className="text-4xl md:text-5xl font-bold">
                 <Link href="/podcast">{PODCAST.name}</Link>
               </h1>
