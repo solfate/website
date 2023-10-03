@@ -1,6 +1,6 @@
 import { PodcastFeedLinkButtons } from "@/components/podcast/PodcastFeedLinkButtons";
+import { SimpleEpisodeCard } from "@/components/podcast/SimpleEpisodeCard";
 import { SimpleAuthorCard } from "@/components/posts/SimpleAuthorCard";
-import { SimplePostCard } from "@/components/posts/SimplePostCard";
 import { PODCAST } from "@/lib/const/podcast";
 import { podcastEpisodeImage } from "@/lib/podcast";
 import { PodcastEpisode, allPodcastEpisodes } from "contentlayer/generated";
@@ -48,14 +48,13 @@ export default function Page() {
             Latest Episode #{mostRecent.ep}
           </h2>
 
-          <SimplePostCard
+          <SimpleEpisodeCard
             title={mostRecent.title}
             href={mostRecent.href}
             date={mostRecent.date}
             imageSrc={mostRecent.image ?? podcastEpisodeImage()}
             description={mostRecent.description}
-            username=""
-            avatarImage=""
+            duration={mostRecent.duration}
           />
         </div>
       </section>
@@ -92,15 +91,14 @@ export default function Page() {
 
         <section className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           {episodes.map((episode, key) => (
-            <SimplePostCard
+            <SimpleEpisodeCard
               key={key}
               href={episode.href}
               date={episode.date}
               title={episode.title}
               imageSrc={episode.image}
               description={episode.description}
-              username=""
-              avatarImage=""
+              duration={episode.duration}
             />
           ))}
         </section>
