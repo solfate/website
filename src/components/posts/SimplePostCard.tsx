@@ -1,7 +1,8 @@
 import Image from "next/image";
 import Link from "next/link";
 import { memo } from "react";
-import { FormattedDateAgo } from "../core/FormattedDateAgo";
+import { FormattedDateAgo } from "@/components/core/FormattedDateAgo";
+import styles from "@/styles/SimplePostCard.module.css";
 
 type SimplePostCardProps = {
   title: string;
@@ -10,6 +11,8 @@ type SimplePostCardProps = {
   description?: string;
   imageAlt?: string;
   date?: string;
+  username: string;
+  avatarImage?: string;
 };
 
 export const SimplePostCard = memo(
@@ -20,55 +23,52 @@ export const SimplePostCard = memo(
     date,
     imageSrc,
     imageAlt,
+    username,
+    avatarImage,
   }: SimplePostCardProps) => {
     return (
-      <div className="bg-white border hover:shadow-md hover:border-gray-500 cursor-default border-gray-300 rounded-2xl overflow-hidden">
+      <div className={styles.card}>
         {!!imageSrc && (
-          <Link
-            href={href}
-            className="block w-full rounded-t-2xl overflow-hidden bg-gray-200 relative h-56"
-          >
+          <Link href={href} className={styles.image}>
             <Image
               src={imageSrc}
               layout={"fill"}
               alt={imageAlt ?? title}
               title={imageAlt ?? title}
-              className={"object-cover object-center"}
               //   priority={true}
             />
           </Link>
         )}
 
-        <div className="px-4 py-4 grid gap-2">
-          <h4 className="font-bold text-xl max-w-5xl line-clamp-2">
+        <div className={styles.details}>
+          <h4 className={styles.title}>
             <Link href={href}>{title}</Link>
           </h4>
 
-          <section className="flex items-center gap-4 justify-between">
+          <section className={styles.meta}>
             <Link
-              href={"#username"}
-              className="hover:underline text-base flex items-center gap-2"
+              href={`/profile/${username}`}
+              className={styles.userContainer}
             >
-              <span className="block rounded-full w-7 h-7 overflow-hidden bg-slate-300">
-                <Image
-                  width={64}
-                  height={64}
-                  src={"/img/nick.jpg"}
-                  alt={"username"}
-                  title={"username"}
-                  className="object-cover object-center rounded-full overflow-hidden w-7 h-7"
-                />
-              </span>
-              <span className="">Username</span>
+              {!!avatarImage && (
+                <span className={styles.avatar}>
+                  <Image
+                    width={64}
+                    height={64}
+                    src={avatarImage}
+                    alt={username}
+                    title={username}
+                  />
+                </span>
+              )}
+              <span className={""}>{username}</span>
             </Link>
 
             {!!date && <FormattedDateAgo date={date} />}
           </section>
 
           {!!description && (
-            <p className="text-gray-500 fade-bottom h-24 line-clamp-4">
-              {description}
-            </p>
+            <p className={`${styles.description} fade-bottom`}>{description}</p>
           )}
         </div>
       </div>

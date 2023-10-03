@@ -54,6 +54,8 @@ export default function Page() {
             date={mostRecent.date}
             imageSrc={mostRecent.image ?? podcastEpisodeImage()}
             description={mostRecent.description}
+            username=""
+            avatarImage=""
           />
         </div>
       </section>
@@ -97,6 +99,8 @@ export default function Page() {
               title={episode.title}
               imageSrc={episode.image}
               description={episode.description}
+              username=""
+              avatarImage=""
             />
           ))}
         </section>

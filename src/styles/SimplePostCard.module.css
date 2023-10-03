@@ -1,0 +1,36 @@
+.card {
+  @apply bg-white border hover:shadow-md hover:border-gray-500 cursor-default border-gray-300 rounded-2xl overflow-hidden;
+}
+
+.image {
+  @apply block w-full rounded-t-2xl overflow-hidden bg-gray-200 relative h-56;
+}
+.image img,
+.image svg {
+  @apply object-cover object-center;
+}
+
+.details {
+  @apply px-4 py-4 grid gap-2;
+}
+.title {
+  @apply font-bold text-xl max-w-5xl line-clamp-2;
+}
+.meta {
+  @apply flex items-center gap-4 justify-between;
+}
+
+.description {
+  @apply text-gray-500 h-24 line-clamp-4;
+}
+
+.userContainer {
+  @apply hover:underline text-base flex items-center gap-2;
+}
+.avatar {
+  @apply block rounded-full w-7 h-7 overflow-hidden bg-slate-300;
+}
+.avatar img,
+.avatar svg {
+  @apply object-cover object-center rounded-full overflow-hidden w-7 h-7;
+}
