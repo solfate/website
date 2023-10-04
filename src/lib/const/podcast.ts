@@ -12,8 +12,8 @@ export const PODCAST = {
   name: "Solfate Podcast",
   url: `${SITE.url}/podcast`,
   description:
-    "Interviews with blockchain founders and builders in the Solana ecosystem. \
-    Hosted by two developers.",
+    "Interviews with blockchain founders and builders in the Solana ecosystem. " +
+    "Hosted by two developers.",
 };
 
 export const PODCAST_HOSTS: PodcastPerson[] = [

@@ -34,8 +34,8 @@ export const metadata: Metadata = {
   // set a default title and description for every page
   title: `${SITE.name} - Interviews with blockchain founders on Solana`,
   description:
-    "Interviews with blockchain founders and builders in the Solana ecosystem. \
-    Hosted by two developers, Nick (@nickfrosty) and James (@jamesrp13).",
+    "Interviews with blockchain founders and builders in the Solana ecosystem. " +
+    "Hosted by two developers, Nick (@nickfrosty) and James (@jamesrp13).",
 };
 
 export default function RootLayout({
