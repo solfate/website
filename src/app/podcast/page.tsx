@@ -1,9 +1,5 @@
-import { PodcastFeedLinkButtons } from "@/components/podcast/PodcastFeedLinkButtons";
 import { PodcastHero } from "@/components/podcast/PodcastHero";
 import { SimpleEpisodeCard } from "@/components/podcast/SimpleEpisodeCard";
-import { SimpleAuthorCard } from "@/components/posts/SimpleAuthorCard";
-import { PODCAST } from "@/lib/const/podcast";
-import { podcastEpisodeImage } from "@/lib/podcast";
 import { PodcastEpisode, allPodcastEpisodes } from "contentlayer/generated";
 import { Metadata } from "next";
 import Link from "next/link";
