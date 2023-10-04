@@ -7,7 +7,7 @@ import { podcastEpisodeImage } from "@/lib/podcast";
 
 type PodcastHeroProps = {
   /** the episode to be featured in this hero section */
-  featuredEpisode: PodcastEpisode;
+  featuredEpisode?: PodcastEpisode;
   /** custom label to be displayed above the episode card */
   featuredLabel?: string;
 };
@@ -34,20 +34,22 @@ export const PodcastHero = ({
         </div>
       </div>
 
-      <div className="grid gap-2">
-        <h2 className="font-semibold text-center text-3xl md:text-2xl">
-          {featuredLabel ?? `Episode #${featuredEpisode.ep}`}
-        </h2>
+      {!!featuredEpisode && (
+        <div className="grid gap-2">
+          <h2 className="font-semibold text-center text-3xl md:text-2xl">
+            {featuredLabel ?? `Episode #${featuredEpisode.ep}`}
+          </h2>
 
-        <SimpleEpisodeCard
-          title={featuredEpisode.title}
-          href={featuredEpisode.href}
-          date={featuredEpisode.date}
-          imageSrc={featuredEpisode.image ?? podcastEpisodeImage()}
-          description={featuredEpisode.description}
-          duration={featuredEpisode.duration}
-        />
-      </div>
+          <SimpleEpisodeCard
+            title={featuredEpisode.title}
+            href={featuredEpisode.href}
+            date={featuredEpisode.date}
+            imageSrc={featuredEpisode.image ?? podcastEpisodeImage()}
+            description={featuredEpisode.description}
+            duration={featuredEpisode.duration}
+          />
+        </div>
+      )}
     </section>
   );
 };
