@@ -7,7 +7,7 @@ import clsx from "clsx";
 import { PodcastPerson } from "@/types";
 import Image from "next/image";
 
-export const PodcastHosts = memo(({}) => (
+export const PodcastHostsHero = memo(({}) => (
   <section className="py-8 border border-black">
     <section className="container grid gap-14 md:grid-cols-2">
       {PODCAST_HOSTS.map((person, index) => (
