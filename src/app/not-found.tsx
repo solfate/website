@@ -1,4 +1,4 @@
-import { SimplePostCard } from "@/components/posts/SimplePostCard";
+import { SimpleEpisodeCard } from "@/components/podcast/SimpleEpisodeCard";
 import { SITE } from "@/lib/const/general";
 import { podcastEpisodeImage } from "@/lib/podcast";
 import { PodcastEpisode, allPodcastEpisodes } from "contentlayer/generated";
@@ -55,12 +55,13 @@ export default async function NotFound() {
             Latest Podcast Episode #{recentEpisode.ep}
           </h2>
 
-          <SimplePostCard
+          <SimpleEpisodeCard
             title={recentEpisode.title}
             href={recentEpisode.href}
             date={recentEpisode.date}
             imageSrc={recentEpisode.image ?? podcastEpisodeImage()}
             description={recentEpisode.description}
+            duration={recentEpisode.duration}
           />
         </div>
       </section>
