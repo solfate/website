@@ -1,17 +1,23 @@
 import MarketingFooter from "@/components/core/MarketingFooter";
-import Link from "next/link";
+import { PodcastHero } from "@/components/podcast/PodcastHero";
+import { PodcastHostsHero } from "@/components/podcast/PodcastHostsHero";
+import { PodcastEpisode, allPodcastEpisodes } from "contentlayer/generated";
 
-export default function Page() {
+export default async function Page() {
+  // get the listing of episodes, sorted by their episode date
+  const mostRecent = allPodcastEpisodes
+    .sort((a, b) => parseFloat(b.ep) - parseFloat(a.ep))
+    .slice(0, 1)[0] as PodcastEpisode;
+
   return (
     <>
       <main className="page-container">
-        <section className="py-8">
-          <h1 className="text-6xl font-bold">Discover</h1>
+        <PodcastHero
+          featuredEpisode={mostRecent}
+          featuredLabel={`Latest episode: #${mostRecent.ep}`}
+        />
 
-          <p className="text-lg text-gray-500">
-            Discover the latest content from around the Solana ecosystem.
-          </p>
-        </section>
+        <PodcastHostsHero label="Meet the hosts" />
       </main>
 
       <MarketingFooter />
