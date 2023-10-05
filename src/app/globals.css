@@ -33,6 +33,9 @@ body {
 .btn-black {
   @apply bg-gray-900 border-blue-200 text-white;
 }
+.btn-ghost {
+  @apply bg-transparent border-gray-500;
+}
 
 .prose-cover-image {
   max-width: 60rem;
