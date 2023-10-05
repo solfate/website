@@ -37,7 +37,7 @@ export function AboutTheAuthor() {
         </p>
 
         <div className="pt-3 flex items-center gap-2">
-          <SocialShareButtons />
+          <SocialShareButtons href="#username" />
         </div>
       </div>
     </section>
