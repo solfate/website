@@ -1,4 +1,3 @@
-/* eslint-disable @next/next/no-img-element */
 import { PODCAST_HOSTS } from "@/lib/const/podcast";
 import { memo } from "react";
 import { GitHub, Link as LinkIcon, Twitter } from "react-feather";
@@ -7,8 +6,18 @@ import clsx from "clsx";
 import { PodcastPerson } from "@/types";
 import Image from "next/image";
 
-export const PodcastHostsHero = memo(({}) => (
-  <section className="py-8 border border-black">
+type PodcastHostsHeroProps = {
+  label?: string;
+};
+
+export const PodcastHostsHero = memo(({ label }: PodcastHostsHeroProps) => (
+  <section className="py-8 space-y-6">
+    {!!label && (
+      <h2 className="w-min whitespace-nowrap px-4 mx-auto text-center text-4xl font-semibold shadow-underline shadow-hot-pink">
+        {label}
+      </h2>
+    )}
+
     <section className="container grid gap-14 md:grid-cols-2">
       {PODCAST_HOSTS.map((person, index) => (
         <section key={index} className="space-y-4">
@@ -24,7 +33,7 @@ export const PodcastHostsHero = memo(({}) => (
             </div>
 
             <div className="space-y-4">
-              <h2 className="text-4xl font-semibold md:text-3xl">
+              <h2 className="text-3xl font-semibold md:text-3xl">
                 {person.name}
               </h2>
 
