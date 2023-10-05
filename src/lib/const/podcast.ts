@@ -2,7 +2,11 @@
   Specific constants for the podcast
 */
 
-import { PodcastFeedLocation, PodcastPerson } from "@/types";
+import {
+  PodcastFeedLocation,
+  PodcastPerson,
+  PodcastRatingLocation,
+} from "@/types";
 import { SITE } from "./general";
 
 //name is a name. define it for use
@@ -72,4 +76,22 @@ export const PODCAST_FEED_LOCATIONS: PodcastFeedLocation[] = [
     href: "https://www.youtube.com/@SolfatePod/podcasts",
     icon: "/icons/youtube.svg",
   },
+];
+
+export const PODCAST_RATING_LOCATIONS: PodcastRatingLocation[] = [
+  {
+    label: "Apple Podcast",
+    href: "https://podcasts.apple.com/us/podcast/solfate-podcast/id1663919657",
+    icon: "/icons/apple.svg",
+  },
+  {
+    label: "Spotify",
+    href: "https://open.spotify.com/show/5YnYJdFDfEM16Om3v4VRcs",
+    icon: "/icons/spotify.svg",
+  },
+  // {
+  //   label: "Google Podcasts",
+  //   href: "https://podcasts.google.com/feed/aHR0cHM6Ly9mZWVkcy50cmFuc2lzdG9yLmZtL3NvbGZhdGU",
+  //   icon: "/icons/google.svg",
+  // },
 ];

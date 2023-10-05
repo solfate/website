@@ -19,3 +19,12 @@ export type PodcastFeedLocation = {
   href: string;
   icon: string;
 };
+
+/**
+ * Location where people can rate the podcast
+ */
+export type PodcastRatingLocation = {
+  label: string;
+  href: string;
+  icon: string;
+};
