@@ -13,6 +13,7 @@ import { PodcastDisclaimer } from "@/components/podcast/PodcastDisclaimer";
 import { allPodcastEpisodes } from "contentlayer/generated";
 import { NextPrevButtons } from "@/components/posts/NextPrevButtons";
 import { Metadata, ResolvingMetadata } from "next";
+import { PodcastRatingButtons } from "@/components/podcast/PodcastRatingButtons";
 
 type PageProps = {
   params: {
@@ -70,7 +71,7 @@ export default async function Page({ params }: PageProps) {
   });
 
   return (
-    <main className="page-container max-w-3xl !space-y-4 !md:space-y-6">
+    <main className="page-container max-w-3xl !space-y-4 md:!space-y-6">
       <section className="">
         <ul className="">
           <li>
@@ -155,6 +156,8 @@ export default async function Page({ params }: PageProps) {
       </article>
 
       <PodcastDisclaimer />
+
+      <PodcastRatingButtons />
 
       {/* <AboutTheAuthor /> */}
 
