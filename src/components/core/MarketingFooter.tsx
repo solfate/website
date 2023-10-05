@@ -3,11 +3,12 @@ import Link from "next/link";
 import { Twitter, Youtube } from "react-feather";
 import { SocialButtonLink } from "@/components/SocialButtons";
 import { SITE, TWITTER, YOUTUBE } from "@/lib/const/general";
+import { PODCAST, PODCAST_FEED_LOCATIONS } from "@/lib/const/podcast";
 
 export default function MarketingFooter() {
   return (
     <footer className="border-t border-gray-400 bg-gray-100">
-      <section className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 container gap-8 py-8">
+      <section className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 container gap-8 py-8">
         <section className="col-span-full max-w-lg lg:col-span-2 space-y-6">
           <Link
             href="/"
@@ -31,29 +32,31 @@ export default function MarketingFooter() {
         </section>
 
         <ul className="space-y-2">
-          <li>
-            <FooterSectionTitle title="Features" />
-          </li>
-          <li>
-            <FooterSectionLink href="#" label="Easy to use editor" />
-          </li>
+          <FooterSectionTitle title={PODCAST.name} />
+          {/* <FooterSectionLink href="/podcast" label="Subscribe" /> */}
+          <FooterSectionLink href="/podcast" label="Browse Episodes" />
+          <FooterSectionLink href="/podcast" label="Meet the hosts" />
+          <FooterSectionLink href="/podcast" label="Rate & Review" />
         </ul>
         <ul className="space-y-2">
-          <li>
-            <FooterSectionTitle title="Resources" />
-          </li>
-          <li>
-            <FooterSectionLink href="#" label="Getting started" />
-          </li>
+          <FooterSectionTitle title="Subscribe" />
+          {PODCAST_FEED_LOCATIONS.slice(0, 4).map((item, key) => (
+            <FooterSectionLink
+              key={key}
+              href={item.href}
+              target="_blank"
+              label={item.label}
+            />
+          ))}
         </ul>
-        <ul className="space-y-2">
-          <li>
-            <FooterSectionTitle title="Support" />
-          </li>
-          <li>
-            <FooterSectionLink href="#" label="Privacy policy" />
-          </li>
-        </ul>
+        {/* <ul className="space-y-2">
+          <FooterSectionTitle title="Resources" />
+          <FooterSectionLink href="#" label="Getting started" />
+        </ul> */}
+        {/* <ul className="space-y-2">
+          <FooterSectionTitle title="Support" />
+          <FooterSectionLink href="#" label="Privacy policy" />
+        </ul> */}
       </section>
 
       <section className="container grid gap-4 md:flex items-center justify-center md:justify-between text-gray-500">
@@ -87,19 +90,32 @@ export default function MarketingFooter() {
 }
 
 export const FooterSectionTitle = ({ title }: { title: string }) => {
-  return <h4 className="font-semibold text-base text-gray-700">{title}</h4>;
+  return (
+    <li>
+      <h4 className="font-semibold text-base text-gray-700">{title}</h4>
+    </li>
+  );
 };
 
 export const FooterSectionLink = ({
   href,
   label,
+  target,
 }: {
   href: string;
   label: string;
+  target?: "_blank";
 }) => {
   return (
-    <Link href={href} title={label} className="hover:underline">
-      {label}
-    </Link>
+    <li>
+      <Link
+        href={href}
+        title={label}
+        target={target}
+        className="hover:underline"
+      >
+        {label}
+      </Link>
+    </li>
   );
 };
