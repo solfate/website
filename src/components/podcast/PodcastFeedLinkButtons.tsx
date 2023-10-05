@@ -9,13 +9,13 @@ type PodcastFeedLinkButtonsProps = SimpleComponentProps;
 export const PodcastFeedLinkButtons = memo(
   ({ className }: PodcastFeedLinkButtonsProps) => (
     <section className="space-y-4">
-      <div className={clsx("gap-4 flex items-center", className)}>
+      <div className={clsx("gap-2 flex items-center", className)}>
         {PODCAST_FEED_LOCATIONS.map((item, index) => (
           <Link
             key={index}
             href={item.href}
             title={item.label}
-            className="inline-flex"
+            className="btn !p-2 border hover:border-gray-400 hover:bg-white opacity-80 hover:opacity-100"
             target="_blank"
             rel="noreferrer"
           >
@@ -24,7 +24,7 @@ export const PodcastFeedLinkButtons = memo(
               alt={item.label}
               width={36}
               height={36}
-              className="w-9 h-9"
+              className="w-8 h-8"
             />
           </Link>
         ))}
