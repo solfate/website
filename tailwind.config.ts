@@ -24,6 +24,11 @@ const config: Config = {
         "hot-red": "#dd2e44",
         twitter: "#1d9bf0",
       },
+      boxShadow: {
+        "underline-sm": "0px -3px 0px 0px inset",
+        underline: "0px -5px 0px 0px inset",
+        "underline-lg": "0px -8px 0px 0px inset",
+      },
     },
   },
   plugins: [require("@tailwindcss/typography")],
