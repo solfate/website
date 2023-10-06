@@ -1,4 +1,5 @@
 import { PodcastHero } from "@/components/podcast/PodcastHero";
+import { PodcastHostsHero } from "@/components/podcast/PodcastHostsHero";
 import { SimpleEpisodeCard } from "@/components/podcast/SimpleEpisodeCard";
 import { PodcastEpisode, allPodcastEpisodes } from "contentlayer/generated";
 import { Metadata } from "next";
@@ -27,6 +28,8 @@ export default function Page() {
         featuredEpisode={mostRecent}
         featuredLabel={`Latest episode: #${mostRecent.ep}`}
       />
+
+      <PodcastHostsHero label="Meet the hosts" />
 
       {/* <section className="space-y-8">
       <section className="flex items-center justify-between">

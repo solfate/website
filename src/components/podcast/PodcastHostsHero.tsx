@@ -11,7 +11,7 @@ type PodcastHostsHeroProps = {
 };
 
 export const PodcastHostsHero = memo(({ label }: PodcastHostsHeroProps) => (
-  <section className="py-8 space-y-6">
+  <section className="py-8 space-y-6" id="hosts">
     {!!label && (
       <h2 className="w-min whitespace-nowrap px-4 mx-auto text-center text-4xl font-semibold shadow-underline shadow-hot-pink">
         {label}

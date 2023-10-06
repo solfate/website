@@ -34,8 +34,8 @@ export default function MarketingFooter() {
         <ul className="space-y-2">
           <FooterSectionTitle title={PODCAST.name} />
           {/* <FooterSectionLink href="/podcast" label="Subscribe" /> */}
-          <FooterSectionLink href="/podcast" label="Browse Episodes" />
-          <FooterSectionLink href="/podcast" label="Meet the hosts" />
+          <FooterSectionLink href="/podcast#hosts" label="Meet the hosts" />
+          <FooterSectionLink href="/podcast/episodes" label="Browse Episodes" />
           <FooterSectionLink href="/podcast" label="Rate & Review" />
         </ul>
         <ul className="space-y-2">
