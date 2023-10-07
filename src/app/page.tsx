@@ -17,7 +17,7 @@ export default async function Page() {
           featuredLabel={`Latest episode: #${mostRecent.ep}`}
         />
 
-        <PodcastHostsHero label="Meet the hosts" />
+        <PodcastHostsHero label="Meet the Hosts" />
       </main>
 
       <MarketingFooter />
