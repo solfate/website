@@ -16,7 +16,7 @@ export default function Page() {
   // get the listing of episodes, sorted by their episode date
   const episodes = allPodcastEpisodes
     .sort((a, b) => parseFloat(b.ep) - parseFloat(a.ep))
-    .slice(0, 7);
+    .slice(0, 3 + 1);
 
   // extract the most recent episode
   // trust me: this will always have a value unless contentlayer fails
@@ -29,7 +29,7 @@ export default function Page() {
         featuredLabel={`Latest episode: #${mostRecent.ep}`}
       />
 
-      <PodcastHostsHero label="Meet the hosts" />
+      <PodcastHostsHero label="Meet the Hosts" />
 
       {/* <section className="space-y-8">
       <section className="flex items-center justify-between">
