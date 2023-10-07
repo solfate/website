@@ -14,16 +14,19 @@ export const metadata: Metadata = {
 };
 
 type PageProps = {
-  searchParams: {
+  params: {
     /** current page being viewed */
     page: string | undefined;
+  };
+  searchParams: {
     /** number of results per page */
     take: string | undefined;
   };
 };
 
 export default function Page({
-  searchParams: { page = "1", take = "9" },
+  params: { page = "1" },
+  searchParams: { take = "9" },
 }: PageProps) {
   const pagination = computePagination({
     page,
@@ -71,20 +74,14 @@ export default function Page({
 
         <section className=" flex items-center justify-center gap-3">
           {pagination.page > 1 && (
-            <Link
-              href={`/podcast/episodes?page=${pagination.prev}`}
-              className="btn"
-            >
+            <Link href={`/podcast/browse/${pagination.prev}`} className="btn">
               <ArrowLeft className="w-5 h-5" strokeWidth={2} />
               Prev
             </Link>
           )}
 
           {pagination.page < pagination.totalPages && (
-            <Link
-              href={`/podcast/episodes?page=${pagination.next}`}
-              className="btn"
-            >
+            <Link href={`/podcast/browse/${pagination.next}`} className="btn">
               Next
               <ArrowRight className="w-5 h-5" strokeWidth={2} />
             </Link>
