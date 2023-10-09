@@ -42,7 +42,9 @@ export async function generateMetadata(
 
   // get the parent images, and add the episode specific ones
   const openGraphImages = (await parent).openGraph?.images || [];
-  if (episode.image) openGraphImages.unshift(episode.image);
+  if (episode.image) {
+    openGraphImages.unshift(`/podcast/${episode.ep}/opengraph-image`);
+  }
 
   return {
     alternates: {
