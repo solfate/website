@@ -1,9 +1,7 @@
 import { PODCAST } from "@/lib/const/podcast";
-import { Inter } from "next/font/google";
 import { ImageResponse } from "next/server";
 import { SITE } from "@/lib/const/general";
 import { usePodcastEpisode } from "@/hooks/usePodcastEpisode";
-import { notFound } from "next/navigation";
 import { Colors } from "@/lib/const/theme";
 
 // Route segment config
@@ -25,8 +23,6 @@ export default async function Image({
 }: {
   params: { episode: string };
 }) {
-  console.warn("import.meta.url:", import.meta.url);
-
   const fonts = await Promise.all([
     fetch(
       new URL("../../../../public/fonts/Inter-Regular.ttf", import.meta.url),
@@ -36,11 +32,15 @@ export default async function Image({
     ).then((res) => res.arrayBuffer()),
   ]);
 
-  // const inter = Inter({ subsets: ["latin"] });
-
   const { episode } = usePodcastEpisode({ slug: params.episode });
   if (!episode) {
-    notFound();
+    // hack: instead of importing from `next/navigation`, this makes the edge function smaller
+    const NOT_FOUND_ERROR_CODE = "NEXT_NOT_FOUND";
+    type NotFoundError = Error & { digest: typeof NOT_FOUND_ERROR_CODE };
+    // eslint-disable-next-line no-throw-literal
+    const error = new Error(NOT_FOUND_ERROR_CODE);
+    (error as NotFoundError).digest = NOT_FOUND_ERROR_CODE;
+    throw error;
   }
 
   // define the podcast's default cover image
