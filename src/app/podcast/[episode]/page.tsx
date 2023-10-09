@@ -51,9 +51,12 @@ export async function generateMetadata(
     title: `${PODCAST.name} #${episode.ep} - ${episode.title}`,
     description: episode.description,
     openGraph: {
-      title: `${PODCAST.name} #${episode.ep} - ${episode.title}`,
+      title: `${PODCAST.name} #${episode.ep} - ${
+        episode.longTitle ?? episode.title
+      }`,
       description: episode.description,
-      images: openGraphImages,
+      // note: `images` will be auto populated by the `opengraph-image` generator
+      // images: openGraphImages,
     },
   };
 }
@@ -89,7 +92,9 @@ export default async function Page({ params }: PageProps) {
       </section>
 
       <h1 className="font-bold text-3xl md:text-4xl max-w-5xl">
-        {episode.title ?? "[err]"}
+        <Link href={`/podcast/${episode.ep}`} className="">
+          {episode.longTitle ?? episode.title ?? "[err]"}
+        </Link>
       </h1>
 
       <section className="flex items-center justify-between gap-4">
@@ -101,7 +106,7 @@ export default async function Page({ params }: PageProps) {
             <Image
               width={64}
               height={64}
-              src={"/media/podcast/cover0.jpg"}
+              src={PODCAST.image}
               alt={PODCAST.name}
               className="object-cover object-center rounded-full overflow-hidden w-12 h-12"
               priority={true}
