@@ -14,6 +14,11 @@ export const PodcastEpisode = defineDocumentType(() => ({
       description: "The title of the episode",
       required: true,
     },
+    longTitle: {
+      type: "string",
+      description: "The longer title of the episode",
+      required: false,
+    },
     date: {
       type: "date",
       description: "The public date of the episode",
