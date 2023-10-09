@@ -1,5 +1,16 @@
 import { ImageResponseOptions } from "next/server";
 
+/**
+ * helper function for fetching and loading remote Inter fonts for
+ * use within generating open graph images
+ *
+ * note: when loading the fonts in locally:
+ * - the `edge` runtime would exceed to 1MB free tier on Vercel
+ * - the `nodejs` runtime would not be able to locate the local file
+ *
+ * huge thanks to the author of this GH comment:
+ * https://github.com/vercel/next.js/issues/48081#issuecomment-1685391506
+ */
 export default async function getInterFonts(): Promise<
   ImageResponseOptions["fonts"]
 > {
