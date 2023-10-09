@@ -15,6 +15,7 @@ export const INITIAL_EPISODES_PER_PAGE = 5;
 export const PODCAST = {
   name: "Solfate Podcast",
   url: `${SITE.url}/podcast`,
+  image: "/media/podcast/cover0.jpg",
   description:
     "Interviews with blockchain founders and builders in the Solana ecosystem. " +
     "Hosted by two developers.",
