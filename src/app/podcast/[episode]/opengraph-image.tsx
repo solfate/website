@@ -5,10 +5,7 @@ import { usePodcastEpisode } from "@/hooks/usePodcastEpisode";
 import { Colors } from "@/lib/const/theme";
 
 // Route segment config
-export const runtime = "edge";
-
-// Image metadata
-// export const alt = "About Acme";
+export const runtime = "nodejs";
 
 export const size = {
   width: 1200,
@@ -17,20 +14,24 @@ export const size = {
 
 export const contentType = "image/png";
 
+async function getFonts() {
+  return await Promise.all([
+    fetch(`https://rsms.me/inter/font-files/Inter-SemiBold.woff`).then((res) =>
+      res.arrayBuffer(),
+    ),
+    fetch(`https://rsms.me/inter/font-files/Inter-SemiBold.woff`).then((res) =>
+      res.arrayBuffer(),
+    ),
+  ]);
+}
+
 // Image generation
 export default async function Image({
   params,
 }: {
   params: { episode: string };
 }) {
-  const fonts = await Promise.all([
-    fetch(
-      new URL("../../../../public/fonts/Inter-Regular.ttf", import.meta.url),
-    ).then((res) => res.arrayBuffer()),
-    fetch(
-      new URL("../../../../public/fonts/Inter-SemiBold.ttf", import.meta.url),
-    ).then((res) => res.arrayBuffer()),
-  ]);
+  const fonts = await getFonts();
 
   const { episode } = usePodcastEpisode({ slug: params.episode });
   if (!episode) {
