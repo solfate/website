@@ -43,7 +43,10 @@ export default async function Image({
           <div tw="flex-1 h-full flex flex-col mr-10">
             <p tw="text-4xl mb-0">Episode #{episode.ep}:</p>
 
-            <h1 tw="text-6xl max-h-[308px] font-semibold overflow-hidden">
+            <h1
+              tw="text-6xl max-h-[308px] font-semibold overflow-hidden"
+              style={{ lineHeight: 1.1 }}
+            >
               {episode.title}
             </h1>
 
