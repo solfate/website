@@ -1,4 +1,4 @@
-import type { Font } from "satori";
+import { type Font } from "node_modules/next/dist/compiled/@vercel/og/satori";
 
 export default async function getInterFonts(): Promise<Font[]> {
   // This is unfortunate but I can't figure out how to load local font files
