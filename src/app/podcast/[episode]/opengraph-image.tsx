@@ -1,10 +1,12 @@
-import { PODCAST } from "@/lib/const/podcast";
 import { ImageResponse } from "next/server";
+import getInterFonts from "@/lib/og-inter-fonts";
+import { Colors } from "@/lib/const/theme";
+import { notFound } from "next/navigation";
+
+import { PODCAST } from "@/lib/const/podcast";
 import { SITE } from "@/lib/const/general";
 import { usePodcastEpisode } from "@/hooks/usePodcastEpisode";
-import { Colors } from "@/lib/const/theme";
 
-// Route segment config
 export const runtime = "nodejs";
 
 export const size = {
@@ -14,34 +16,16 @@ export const size = {
 
 export const contentType = "image/png";
 
-async function getFonts() {
-  return await Promise.all([
-    fetch(`https://rsms.me/inter/font-files/Inter-SemiBold.woff`).then((res) =>
-      res.arrayBuffer(),
-    ),
-    fetch(`https://rsms.me/inter/font-files/Inter-SemiBold.woff`).then((res) =>
-      res.arrayBuffer(),
-    ),
-  ]);
-}
-
 // Image generation
 export default async function Image({
   params,
 }: {
   params: { episode: string };
 }) {
-  const fonts = await getFonts();
-
+  //
   const { episode } = usePodcastEpisode({ slug: params.episode });
   if (!episode) {
-    // hack: instead of importing from `next/navigation`, this makes the edge function smaller
-    const NOT_FOUND_ERROR_CODE = "NEXT_NOT_FOUND";
-    type NotFoundError = Error & { digest: typeof NOT_FOUND_ERROR_CODE };
-    // eslint-disable-next-line no-throw-literal
-    const error = new Error(NOT_FOUND_ERROR_CODE);
-    (error as NotFoundError).digest = NOT_FOUND_ERROR_CODE;
-    throw error;
+    notFound();
   }
 
   // define the podcast's default cover image
@@ -110,20 +94,7 @@ export default async function Image({
       // For convenience, we can re-use the exported opengraph-image
       // size config to also set the ImageResponse's width and height.
       ...size,
-      fonts: [
-        {
-          name: "Inter",
-          data: fonts[0],
-          style: "normal",
-          weight: 400,
-        },
-        {
-          name: "Inter",
-          data: fonts[1],
-          style: "normal",
-          weight: 500,
-        },
-      ],
+      fonts: await getInterFonts(),
     },
   );
 }
