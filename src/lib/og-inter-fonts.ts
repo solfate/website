@@ -1,6 +1,8 @@
-import { type Font } from "node_modules/next/dist/compiled/@vercel/og/satori";
+import { ImageResponseOptions } from "next/server";
 
-export default async function getInterFonts(): Promise<Font[]> {
+export default async function getInterFonts(): Promise<
+  ImageResponseOptions["fonts"]
+> {
   // This is unfortunate but I can't figure out how to load local font files
   // when deployed to vercel.
   const [interRegular, interMedium, interSemiBold, interBold] =
