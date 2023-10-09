@@ -32,7 +32,8 @@ export default async function Image({
   const coverImage = `${SITE.url}${PODCAST.image}`;
 
   // set the image to be used with image
-  const image = episode.image ? `${SITE.url}${episode.image}` : coverImage;
+  // const image = episode.image ? `${SITE.url}${episode.image}` : coverImage;
+  const image = coverImage;
 
   return new ImageResponse(
     (
@@ -52,10 +53,10 @@ export default async function Image({
 
             {/* <p tw="text-hot-pink text-2xl mt-0">solfate.com/podcast</p> */}
 
-            <div tw="flex items-center absolute bottom-0">
-              <span tw="rounded-lg overflow-hidden bg-gray-500 w-[84px] h-[84px] mr-4">
+            <div tw="flex items-center absolute bottom-4">
+              {/* <span tw="rounded-lg overflow-hidden bg-gray-500 w-[84px] h-[84px] mr-4">
                 <img src={coverImage} width={84} height={84} alt={""} />
-              </span>
+              </span> */}
 
               <span tw="text-4xl">{`solfate.com/podcast`}</span>
             </div>
