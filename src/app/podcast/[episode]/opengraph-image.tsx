@@ -51,7 +51,7 @@ export default async function Image({
 
             <div tw="flex items-center absolute bottom-0">
               <span tw="rounded-lg overflow-hidden bg-gray-500 w-[84px] h-[84px] mr-4">
-                <img src={coverImage} width={84} height={84} />
+                <img src={coverImage} width={84} height={84} alt={""} />
               </span>
 
               <span tw="text-4xl">{`solfate.com/podcast`}</span>
@@ -81,6 +81,7 @@ export default async function Image({
                   style={{ objectFit: "cover" }}
                   tw={`mx-auto border-8 border-[${Colors["hot-pink"]}] w-[300px] h-[300px] rounded-full`}
                   src={image}
+                  alt={""}
                 />
                 {/* <div tw="flex text-4xl mt-4 font-semibold">Tommy Johnson</div>
                 <div tw="flex text-3xl mt-2 text-gray-500">@username</div> */}
