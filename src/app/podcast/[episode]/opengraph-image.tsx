@@ -5,7 +5,7 @@ import { notFound } from "next/navigation";
 
 import { PODCAST } from "@/lib/const/podcast";
 import { SITE } from "@/lib/const/general";
-import { usePodcastEpisode } from "@/hooks/usePodcastEpisode";
+import { usePodcastEpisode } from "@/lib/queries/getPodcastEpisode";
 
 export const runtime = "nodejs";
 

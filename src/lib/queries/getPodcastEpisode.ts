@@ -1,10 +1,10 @@
 import { PodcastEpisode, allPodcastEpisodes } from "contentlayer/generated";
 
-type UsePodcastEpisodeHookProps = {
+type GetPodcastEpisodeProps = {
   slug: string;
 };
 
-export const usePodcastEpisode = ({ slug }: UsePodcastEpisodeHookProps) => {
+export const getPodcastEpisode = ({ slug }: GetPodcastEpisodeProps) => {
   // define episode placeholders
   let [episode, next, prev]: Array<PodcastEpisode | null> = [null, null, null];
 

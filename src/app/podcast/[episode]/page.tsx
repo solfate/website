@@ -6,7 +6,7 @@ import MarkdownFormatter from "@/components/MarkdownFormatter";
 import { SocialShareButtons } from "@/components/SocialButtons";
 import { ArrowLeft } from "react-feather";
 import { notFound } from "next/navigation";
-import { usePodcastEpisode } from "@/hooks/usePodcastEpisode";
+import { getPodcastEpisode } from "@/lib/queries/getPodcastEpisode";
 import { PODCAST } from "@/lib/const/podcast";
 import { FormattedDateAgo } from "@/components/core/FormattedDateAgo";
 import { PodcastDisclaimer } from "@/components/podcast/PodcastDisclaimer";
@@ -65,7 +65,7 @@ export async function generateMetadata(
 
 export default async function Page({ params }: PageProps) {
   // locate the current episode
-  const { episode, next, prev } = usePodcastEpisode({ slug: params.episode });
+  const { episode, next, prev } = getPodcastEpisode({ slug: params.episode });
   if (!episode) {
     notFound();
   }
