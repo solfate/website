@@ -57,12 +57,12 @@ export const PodcastEpisode = defineDocumentType(() => ({
       type: "string",
       description:
         "Brief description of the episode (also used in the SEO metadata)",
-      required: true,
+      required: false,
     },
     duration: {
       type: "string",
       description: "Duration of the episode",
-      required: true,
+      required: false,
     },
   },
   computedFields: {

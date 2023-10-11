@@ -3,16 +3,17 @@ import Link from "next/link";
 import { memo } from "react";
 import { FormattedDateAgo } from "@/components/core/FormattedDateAgo";
 import styles from "@/styles/SimplePostCard.module.css";
-import { Clock, Mic } from "react-feather";
+import { Clock } from "react-feather";
+import { PodcastEpisode } from "contentlayer/generated";
 
 type SimpleEpisodeCardProps = {
-  title: string;
-  href: string;
-  imageSrc?: string;
-  description?: string;
+  title: PodcastEpisode["title"];
+  href: PodcastEpisode["href"];
+  imageSrc?: PodcastEpisode["image"];
+  description?: PodcastEpisode["description"];
   imageAlt?: string;
-  date?: string;
-  duration: string;
+  date?: PodcastEpisode["date"];
+  duration?: PodcastEpisode["duration"];
 };
 
 export const SimpleEpisodeCard = memo(
@@ -45,10 +46,12 @@ export const SimpleEpisodeCard = memo(
           </h4>
 
           <section className={styles.meta}>
-            <p className={styles.minor}>
-              <Clock strokeWidth={1.1} />
-              {duration}
-            </p>
+            {!!duration && (
+              <p className={styles.minor}>
+                <Clock strokeWidth={1.1} />
+                {duration}
+              </p>
+            )}
 
             {!!date && (
               <FormattedDateAgo date={date} className={styles.minor} />
