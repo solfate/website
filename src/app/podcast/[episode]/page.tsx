@@ -33,9 +33,11 @@ export async function generateMetadata(
   parent: ResolvingMetadata,
 ): Promise<Metadata> {
   // locate the single record
-  const episode = allPodcastEpisodes.find(
-    (item) => item.slug == params.episode,
-  );
+  // locate the current episode being requested
+  const { episode } = getPodcastEpisode({
+    epId: params.episode,
+    withNextPrev: false,
+  });
 
   // do nothing if the episode was not found
   if (!episode) return {};
@@ -64,8 +66,11 @@ export async function generateMetadata(
 }
 
 export default async function Page({ params }: PageProps) {
-  // locate the current episode
-  const { episode, next, prev } = getPodcastEpisode({ slug: params.episode });
+  // locate the current episode being requested
+  const { episode, next, prev } = getPodcastEpisode({
+    epId: params.episode,
+    withNextPrev: true,
+  });
   if (!episode) {
     notFound();
   }
