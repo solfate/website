@@ -5,7 +5,7 @@ import { notFound } from "next/navigation";
 
 import { PODCAST } from "@/lib/const/podcast";
 import { SITE } from "@/lib/const/general";
-import { usePodcastEpisode } from "@/lib/queries/getPodcastEpisode";
+import { getPodcastEpisode } from "@/lib/queries/getPodcastEpisode";
 
 export const runtime = "nodejs";
 
@@ -23,7 +23,7 @@ export default async function Image({
   params: { episode: string };
 }) {
   //
-  const { episode } = usePodcastEpisode({ slug: params.episode });
+  const { episode } = getPodcastEpisode({ epId: params.episode });
   if (!episode) {
     notFound();
   }
@@ -42,7 +42,10 @@ export default async function Image({
       >
         <div tw="flex h-full items-center w-full">
           <div tw="flex-1 h-full flex flex-col mr-10">
-            <p tw="text-4xl mb-0">Episode #{episode.ep}:</p>
+            <p tw="text-4xl mb-0">
+              Episode #{episode.ep}
+              {/* :{!!episode?.transistorUrl ? ` (coming soon)` : null} */}
+            </p>
 
             <h1
               tw="text-6xl max-h-[308px] font-semibold overflow-hidden"
