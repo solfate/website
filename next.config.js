@@ -18,7 +18,24 @@ const withMDX = require("@next/mdx")({
 const { withContentlayer } = require("next-contentlayer");
 
 /** @type {import('next').NextConfig} */
-const nextConfig = { reactStrictMode: true, swcMinify: true };
+const nextConfig = {
+  reactStrictMode: true,
+  swcMinify: true,
+  async redirects() {
+    return [
+      {
+        source: "/twitter",
+        destination: "https://twitter.com/SolfatePod",
+        permanent: true,
+      },
+      {
+        source: "/youtube",
+        destination: "https://youtube.com/@SolfatePod",
+        permanent: true,
+      },
+    ];
+  },
+};
 
 // module.exports = withMDX(nextConfig);
 module.exports = withContentlayer(nextConfig);
