@@ -9,7 +9,7 @@ import { ArrowLeft, ArrowRight } from "react-feather";
 export const metadata: Metadata = {
   title: `${PODCAST.name} - Browse episodes`,
   alternates: {
-    canonical: "/podcast/episodes",
+    canonical: "/podcast/browse",
   },
 };
 
@@ -50,7 +50,7 @@ export default function Page({
         <section className="flex items-center justify-between">
           <h1 className="font-semibold text-4xl">Browse Podcast Episodes</h1>
           {/* <Link
-            href={"/podcast/episodes"}
+            href={"/podcast/browse"}
             className="btn inline-flex items-center gap-2"
           >
             View more

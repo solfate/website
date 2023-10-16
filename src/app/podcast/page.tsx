@@ -53,7 +53,7 @@ export default function Page() {
         <section className="flex items-center justify-between">
           <h2 className="font-semibold text-2xl">Recent episodes</h2>
           <Link
-            href={"/podcast/episodes"}
+            href={"/podcast/browse/1"}
             className="btn inline-flex items-center gap-2"
           >
             View more
