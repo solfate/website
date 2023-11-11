@@ -135,7 +135,10 @@ export default async function Page({ params }: PageProps) {
         </section>
 
         <section className="flex items-center gap-3">
-          <SocialShareButtons href={`/podcast/${episode.ep}`} />
+          <SocialShareButtons
+            href={`/podcast/${episode.ep}`}
+            message={episode.title}
+          />
 
           {/* <button className="btn btn-blue">Mint</button> */}
         </section>

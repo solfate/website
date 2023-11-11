@@ -65,6 +65,7 @@ export const SocialButton = memo(
 
 type SocialShareButtonsProps = {
   href: string;
+  message?: string;
 };
 
 /**
@@ -73,40 +74,44 @@ type SocialShareButtonsProps = {
  * todo: add some props to support changing the message,
  * todo: and maybe have a list of standard messages to rotate though?
  */
-export const SocialShareButtons = memo(({ href }: SocialShareButtonsProps) => {
-  // auto convert the provided `href` to an absolute url
-  if (href.startsWith("/")) href = new URL(href, SITE.url).toString();
+export const SocialShareButtons = memo(
+  ({ href, message }: SocialShareButtonsProps) => {
+    // auto convert the provided `href` to an absolute url
+    if (href.startsWith("/")) href = new URL(href, SITE.url).toString();
 
-  // compute the url to use for the "click to tweet" style button
-  const twitterUrl = new URL("https://twitter.com/intent/tweet");
-  twitterUrl.searchParams.append(
-    "text",
-    `Checkout this on ${TWITTER.handle}!\n\n${href}`,
-  );
-  twitterUrl.searchParams.append("original_referer", SITE.url);
-  twitterUrl.searchParams.append("related", TWITTER.handle);
+    // compute the url to use for the "click to tweet" style button
+    const twitterUrl = new URL("https://twitter.com/intent/tweet");
+    twitterUrl.searchParams.append(
+      "text",
+      `Checkout this episode of ${TWITTER.handle}!\n${
+        typeof message != undefined ? message : ""
+      }\n${href}`,
+    );
+    twitterUrl.searchParams.append("original_referer", SITE.url);
+    twitterUrl.searchParams.append("related", TWITTER.handle);
 
-  return (
-    <>
-      <SocialButtonLink
-        href={twitterUrl.toString()}
-        title={"Share Twitter / X"}
-        icon={Twitter}
-        newTab={true}
-      />
-      {/* <SocialButtonLink
+    return (
+      <>
+        <SocialButtonLink
+          href={twitterUrl.toString()}
+          title={"Share Twitter / X"}
+          icon={Twitter}
+          newTab={true}
+        />
+        {/* <SocialButtonLink
         href={twitterUrl.toString()}
         title={"Share on Linkedin"}
         icon={Linkedin}
         newTab={true}
       /> */}
-      {/* <SocialButton
+        {/* <SocialButton
         title={"Copy link to clipboard"}
         icon={LinkIcon}
         // onClick={() => {
         //   navigator.clipboard.writeText(href);
         // }}
       /> */}
-    </>
-  );
-});
+      </>
+    );
+  },
+);
