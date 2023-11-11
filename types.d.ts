@@ -8,3 +8,8 @@ type SimpleComponentProps = {
   children?: React.ReactNode;
   className?: string;
 };
+
+type ImageSize = {
+  width: number;
+  height: number;
+};
