@@ -32,15 +32,15 @@ export async function PostImage(
 
             <div tw="flex items-center absolute bottom-4">
               {/* <span tw="rounded-lg overflow-hidden bg-gray-500 w-[84px] h-[84px] mr-4">
-                    <img src={coverImage} width={84} height={84} alt={""} />
-                  </span> */}
+                <img src={coverImage} width={84} height={84} alt={""} />
+              </span> */}
 
               <span tw="text-[2.5rem]">{`solfate.com/podcast`}</span>
             </div>
           </div>
 
           {avatarImage ? (
-            <div tw="flex relative">
+            <div tw="pr-4 flex relative">
               <svg
                 // @ts-ignore
                 tw="absolute top-[-300px] left-[-100px] opacity-20"
@@ -64,8 +64,10 @@ export async function PostImage(
                   src={avatarImage}
                   alt={""}
                 />
-                {/* <div tw="flex text-[2.5rem] mt-4 font-semibold">Tommy Johnson</div>
-                    <div tw="flex text-3xl mt-2 text-gray-500">@username</div> */}
+                {/* <div tw="flex text-[2.5rem] mt-4 font-semibold">
+                  Tommy Johnson
+                </div>
+                <div tw="flex text-3xl mt-2 text-gray-500">@username</div> */}
               </div>
             </div>
           ) : null}
