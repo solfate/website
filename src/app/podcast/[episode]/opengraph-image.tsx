@@ -42,13 +42,13 @@ export default async function Image({
       >
         <div tw="flex h-full items-center w-full">
           <div tw="flex-1 h-full flex flex-col mr-10">
-            <p tw="text-4xl mb-0">
+            <p tw="text-[2.5rem] mb-0">
               Episode #{episode.ep}
               {/* :{!!episode?.transistorUrl ? ` (coming soon)` : null} */}
             </p>
 
             <h1
-              tw="text-6xl max-h-[308px] font-semibold overflow-hidden"
+              tw="text-[4.5rem] max-h-[308px] font-semibold overflow-hidden"
               style={{ lineHeight: 1.1 }}
             >
               {episode.title}
@@ -61,7 +61,7 @@ export default async function Image({
                 <img src={coverImage} width={84} height={84} alt={""} />
               </span> */}
 
-              <span tw="text-4xl">{`solfate.com/podcast`}</span>
+              <span tw="text-[2.5rem]">{`solfate.com/podcast`}</span>
             </div>
           </div>
 
@@ -90,7 +90,7 @@ export default async function Image({
                   src={image}
                   alt={""}
                 />
-                {/* <div tw="flex text-4xl mt-4 font-semibold">Tommy Johnson</div>
+                {/* <div tw="flex text-[2.5rem] mt-4 font-semibold">Tommy Johnson</div>
                 <div tw="flex text-3xl mt-2 text-gray-500">@username</div> */}
               </div>
             </div>
