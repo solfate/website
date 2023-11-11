@@ -1,5 +1,5 @@
 export const PodcastDisclaimer = () => (
-  <aside className="border border-gray-300 rounded-2xl p-5 space-y-1 text-gray-500">
+  <aside className="border border-gray-300 rounded-lg p-5 space-y-1 text-gray-500">
     <div className="flex items-center gap-2">
       <h5 className="font-semibold text-bas3">Podcast Disclaimer</h5>
     </div>
