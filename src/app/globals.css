@@ -46,6 +46,9 @@ body {
   --child-width: 60rem;
   /* todo: handle different screen sizes */
 }
+.prose a {
+  @apply hover:text-hot-pink hover:underline;
+}
 .child-past-parent {
   position: relative;
   width: 100vw;
