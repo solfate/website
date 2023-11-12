@@ -16,6 +16,11 @@ export async function PostImage(
     (
       <div
         tw={`h-full w-full flex items-start justify-start bg-[${Colors["color-light"]}] p-20`}
+        // style={{
+        //   borderStyle: "inset",
+        //   borderColor: Colors["hot-pink"],
+        //   borderWidth: "0.75rem",
+        // }}
       >
         <div tw="flex h-full items-center w-full">
           <div tw="flex-1 h-full flex flex-col mr-10">
