@@ -4,6 +4,8 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { SITE, TWITTER } from "@/lib/const/general";
 
+import { Analytics } from "@vercel/analytics/react";
+
 const inter = Inter({ subsets: ["latin"] });
 
 /**
@@ -51,6 +53,7 @@ export default function RootLayout({
         {children}
 
         {/* <main className="min-h-[85vh]">{children}</main> */}
+        <Analytics />
       </body>
     </html>
   );
