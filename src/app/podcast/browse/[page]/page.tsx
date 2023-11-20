@@ -6,16 +6,8 @@ import { Metadata } from "next";
 import Link from "next/link";
 import { ArrowLeft, ArrowRight } from "react-feather";
 
-export async function generateMetadata({
-  params,
-}: PageProps): Promise<Metadata> {
-  return {
-    title: `${PODCAST.name} - Browse episodes`,
-    alternates: {
-      canonical: `/podcast/browse/${params.page}`,
-    },
-  };
-}
+// define the number of episodes per page
+const BROWSE_TAKE_PER_PAGE = 9;
 
 type PageProps = {
   params: {
@@ -28,13 +20,35 @@ type PageProps = {
   };
 };
 
+export async function generateStaticParams() {
+  const pagination = computePagination({
+    take: BROWSE_TAKE_PER_PAGE,
+    totalItems: allPodcastEpisodes.length,
+  });
+
+  return new Array(pagination.totalPages).fill("").map((_item, count) => ({
+    page: (count + 1).toString(),
+  }));
+}
+
+export async function generateMetadata({
+  params,
+}: PageProps): Promise<Metadata> {
+  return {
+    title: `${PODCAST.name} - Browse episodes`,
+    alternates: {
+      canonical: `/podcast/browse/${params.page}`,
+    },
+  };
+}
+
 export default function Page({
   params: { page = "1" },
-  searchParams: { take = "9" },
-}: PageProps) {
+}: // searchParams: { take = "9" },
+PageProps) {
   const pagination = computePagination({
     page,
-    take,
+    take: BROWSE_TAKE_PER_PAGE,
     totalItems: allPodcastEpisodes.length,
   });
 
