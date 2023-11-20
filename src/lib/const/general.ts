@@ -7,7 +7,7 @@ export const SITE = {
   url:
     process.env.NODE_ENV == "development"
       ? "http://localhost:3000"
-      : "https://www.solfate.com",
+      : "https://solfate.com",
 };
 
 export const TWITTER = {
