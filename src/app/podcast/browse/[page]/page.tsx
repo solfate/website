@@ -6,12 +6,16 @@ import { Metadata } from "next";
 import Link from "next/link";
 import { ArrowLeft, ArrowRight } from "react-feather";
 
-export const metadata: Metadata = {
-  title: `${PODCAST.name} - Browse episodes`,
-  alternates: {
-    canonical: "/podcast/browse",
-  },
-};
+export async function generateMetadata({
+  params,
+}: PageProps): Promise<Metadata> {
+  return {
+    title: `${PODCAST.name} - Browse episodes`,
+    alternates: {
+      canonical: `/podcast/browse/${params.page}`,
+    },
+  };
+}
 
 type PageProps = {
   params: {
