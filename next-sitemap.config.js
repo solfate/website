@@ -11,5 +11,10 @@ module.exports = {
     additionalSitemaps: [
       // `${SITE_URL}/sitemap-generated.xml`, // add custom dynamic sitemap
     ],
+    policies: [
+      {
+        disallow: ["/favicon.ico", "/api"],
+      },
+    ],
   },
 };
