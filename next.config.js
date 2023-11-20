@@ -35,22 +35,22 @@ const nextConfig = {
       },
       {
         source: "/nickfrosty",
-        destination: "https://twitter.com/@nickfrosty",
+        destination: "https://twitter.com/nickfrosty",
         permanent: true,
       },
       {
         source: "/podcast/nickfrosty",
-        destination: "https://twitter.com/@nickfrosty",
+        destination: "https://twitter.com/nickfrosty",
         permanent: true,
       },
       {
         source: "/jamesrp13",
-        destination: "https://twitter.com/@jamesrp13",
+        destination: "https://twitter.com/jamesrp13",
         permanent: true,
       },
       {
         source: "/podcast/jamesrp13",
-        destination: "https://twitter.com/@jamesrp13",
+        destination: "https://twitter.com/jamesrp13",
         permanent: true,
       },
     ];
