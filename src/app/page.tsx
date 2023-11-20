@@ -1,7 +1,14 @@
+import { Metadata } from "next";
 import MarketingFooter from "@/components/core/MarketingFooter";
 import { PodcastHero } from "@/components/podcast/PodcastHero";
 import { PodcastHostsHero } from "@/components/podcast/PodcastHostsHero";
 import { PodcastEpisode, allPodcastEpisodes } from "contentlayer/generated";
+
+export const metadata: Metadata = {
+  alternates: {
+    canonical: "/",
+  },
+};
 
 export default async function Page() {
   // get the listing of episodes, sorted by their episode date

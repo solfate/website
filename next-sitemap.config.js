@@ -1,4 +1,4 @@
-const SITE_URL = "https://solfate.com";
+const SITE_URL = "https://www.solfate.com";
 
 /** @type {import('next-sitemap').IConfig} */
 module.exports = {
