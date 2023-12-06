@@ -1,6 +1,6 @@
 import "./globals.css";
 import MarketingHeader from "@/components/core/MarketingHeader";
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
 import { SITE, TWITTER } from "@/lib/const/general";
 
@@ -24,11 +24,6 @@ export const metadata: Metadata = {
     creator: TWITTER.handle,
     card: "summary_large_image",
   },
-  viewport: {
-    width: "device-width",
-    initialScale: 1,
-    maximumScale: 1,
-  },
   category: "technology",
   // todo: set robots, when needed
   // robots: {},
@@ -38,6 +33,12 @@ export const metadata: Metadata = {
   description:
     "Interviews with blockchain founders and builders in the Solana ecosystem. " +
     "Hosted by two developers, Nick (@nickfrosty) and James (@jamesrp13).",
+};
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
 };
 
 export default function RootLayout({
