@@ -1,4 +1,4 @@
-import { ImageResponse } from "next/og";
+import { ImageResponse } from "next/server";
 import getInterFonts from "@/lib/og-inter-fonts";
 import { Colors } from "@/lib/const/theme";
 
