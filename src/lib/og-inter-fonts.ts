@@ -1,4 +1,7 @@
 import { ImageResponseOptions } from "next/server";
+import fs from "fs";
+import path from "path";
+import { fileURLToPath } from "url";
 
 /**
  * helper function for fetching and loading remote Inter fonts for
@@ -16,21 +19,38 @@ export default async function getInterFonts(): Promise<
 > {
   // This is unfortunate but I can't figure out how to load local font files
   // when deployed to vercel.
-  const [interRegular, interMedium, interSemiBold, interBold] =
-    await Promise.all([
-      fetch(`https://rsms.me/inter/font-files/Inter-Regular.woff`).then((res) =>
-        res.arrayBuffer(),
+  const [
+    // comment for better diffs
+    interRegular,
+    interMedium,
+    interSemiBold,
+    interBold,
+  ] = await Promise.all([
+    fs.promises.readFile(
+      path.join(
+        fileURLToPath(import.meta.url),
+        "../../fonts/inter/Inter-Regular.ttf",
       ),
-      fetch(`https://rsms.me/inter/font-files/Inter-Medium.woff`).then((res) =>
-        res.arrayBuffer(),
+    ),
+    fs.promises.readFile(
+      path.join(
+        fileURLToPath(import.meta.url),
+        "../../fonts/inter/Inter-Medium.ttf",
       ),
-      fetch(`https://rsms.me/inter/font-files/Inter-SemiBold.woff`).then(
-        (res) => res.arrayBuffer(),
+    ),
+    fs.promises.readFile(
+      path.join(
+        fileURLToPath(import.meta.url),
+        "../../fonts/inter/Inter-SemiBold.ttf",
       ),
-      fetch(`https://rsms.me/inter/font-files/Inter-Bold.woff`).then((res) =>
-        res.arrayBuffer(),
+    ),
+    fs.promises.readFile(
+      path.join(
+        fileURLToPath(import.meta.url),
+        "../../fonts/inter/Inter-Bold.ttf",
       ),
-    ]);
+    ),
+  ]);
 
   return [
     {
