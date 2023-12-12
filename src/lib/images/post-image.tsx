@@ -24,10 +24,10 @@ export async function PostImage(
       >
         <div tw="flex h-full items-center w-full">
           <div tw="flex-1 h-full flex flex-col mr-10">
-            {heading && <p tw="text-[2.5rem] mb-10 font-medium">{heading}</p>}
+            {heading && <p tw="text-[2.5rem] mb-6 font-medium">{heading}</p>}
 
             <h1
-              tw="text-[5rem] max-h-[308px] font-semibold overflow-hidden"
+              tw="text-[5rem] max-h-[355px] font-semibold overflow-hidden"
               style={{ lineHeight: 1.1 }}
             >
               {title}
