@@ -87,25 +87,25 @@ export async function getInterFonts2(): Promise<ImageResponseOptions["fonts"]> {
     fs.promises.readFile(
       path.join(
         fileURLToPath(import.meta.url),
-        "../../fonts/inter/Inter-Regular.ttf",
+        "../../../public/fonts/inter/Inter-Regular.ttf",
       ),
     ),
     fs.promises.readFile(
       path.join(
         fileURLToPath(import.meta.url),
-        "../../fonts/inter/Inter-Medium.ttf",
+        "../../../public/fonts/inter/Inter-Medium.ttf",
       ),
     ),
     fs.promises.readFile(
       path.join(
         fileURLToPath(import.meta.url),
-        "../../fonts/inter/Inter-SemiBold.ttf",
+        "../../../public/fonts/inter/Inter-SemiBold.ttf",
       ),
     ),
     fs.promises.readFile(
       path.join(
         fileURLToPath(import.meta.url),
-        "../../fonts/inter/Inter-Bold.ttf",
+        "../../../public/fonts/inter/Inter-Bold.ttf",
       ),
     ),
   ]);

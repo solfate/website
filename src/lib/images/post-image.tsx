@@ -1,5 +1,5 @@
 import { ImageResponse } from "next/og";
-import getInterFonts from "@/lib/og-inter-fonts";
+import getInterFonts, { getInterFonts2 } from "@/lib/og-inter-fonts";
 import { Colors } from "@/lib/const/theme";
 
 type PostImageProps = {
@@ -83,7 +83,7 @@ export async function PostImage(
       // For convenience, we can re-use the exported opengraph-image
       // size config to also set the ImageResponse's width and height.
       ...size,
-      fonts: await getInterFonts(),
+      fonts: await getInterFonts2(),
     },
   );
 }
