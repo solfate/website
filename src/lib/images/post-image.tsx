@@ -27,7 +27,7 @@ export async function PostImage(
             {heading && <p tw="text-[2.5rem] mb-6 font-medium">{heading}</p>}
 
             <h1
-              tw="text-[5rem] max-h-[355px] font-semibold overflow-hidden"
+              tw="text-[4.5rem] max-h-[355px] font-semibold overflow-hidden"
               style={{ lineHeight: 1.1 }}
             >
               {title}
