@@ -45,6 +45,12 @@ const nextConfig = {
         permanent: true,
       },
       {
+        source: "/pcast",
+        destination:
+          "https://pca.st/podcast/f7e2e7d0-7293-013b-f273-0acc26574db2",
+        permanent: true,
+      },
+      {
         source: "/youtube",
         destination: "https://youtube.com/@SolfatePod",
         permanent: true,

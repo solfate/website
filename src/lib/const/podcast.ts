@@ -63,6 +63,11 @@ export const PODCAST_FEED_LOCATIONS: PodcastFeedLocation[] = [
     icon: "/icons/spotify.svg",
   },
   {
+    label: "PocketCasts",
+    href: "https://pca.st/podcast/f7e2e7d0-7293-013b-f273-0acc26574db2",
+    icon: "/icons/pocketcasts.svg",
+  },
+  {
     label: "Google Podcasts",
     href: "https://podcasts.google.com/feed/aHR0cHM6Ly9mZWVkcy50cmFuc2lzdG9yLmZtL3NvbGZhdGU",
     icon: "/icons/google.svg",
