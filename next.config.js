@@ -34,6 +34,22 @@ const nextConfig = {
         permanent: true,
       },
       {
+        source: "/spotify",
+        destination: "https://open.spotify.com/show/5YnYJdFDfEM16Om3v4VRcs",
+        permanent: true,
+      },
+      {
+        source: "/apple",
+        destination:
+          "https://podcasts.apple.com/us/podcast/solfate-podcast/id1663919657",
+        permanent: true,
+      },
+      {
+        source: "/youtube",
+        destination: "https://youtube.com/@SolfatePod",
+        permanent: true,
+      },
+      {
         source: "/nickfrosty",
         destination: "https://twitter.com/nickfrosty",
         permanent: true,
