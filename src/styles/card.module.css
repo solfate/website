@@ -1,0 +1,38 @@
+/*
+  Card styles
+*/
+
+.card {
+  @apply w-full block rounded-xl;
+  @apply border border-gray-400;
+  @apply hover:border-hot-pink;
+}
+.shadow {
+  @apply border border-black;
+  @apply shadow-black;
+}
+.shadow-card {
+  @apply card shadow;
+}
+
+.hover-outline {
+  @apply hover:outline hover:outline-offset-4 hover:outline-2 hover:outline-yellow-500 hover:border-transparent;
+}
+.double-wide-cards {
+  @apply grid gap-5 grid-cols-1 lg:grid-cols-2;
+}
+.card-listing {
+  @apply grid gap-5 grid-cols-1;
+  @apply sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4;
+}
+
+.error {
+  @apply p-6;
+  @apply border-red-600 bg-red-500 text-white;
+  @apply items-center space-x-5 flex;
+}
+
+.minor {
+  /* @apply font-mono; */
+  @apply text-gray-500;
+}

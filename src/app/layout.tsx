@@ -5,6 +5,7 @@ import { Inter } from "next/font/google";
 import { SITE, TWITTER } from "@/lib/const/general";
 
 import { Analytics } from "@vercel/analytics/react";
+import { Toaster } from "react-hot-toast";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -50,6 +51,39 @@ export default function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         <MarketingHeader />
+
+        <Toaster
+          position="bottom-center"
+          gutter={8}
+          containerClassName=""
+          containerStyle={{}}
+          toastOptions={{
+            duration: 4000,
+            // className: "w-full",
+            // className: "bg-blue-500 text-white",
+            // icon: <FontAwesomeIcon icon={faInfoCircle} className="" />,
+
+            // Default options for specific types
+            success: {
+              // className: "bg-slate-100 text-black",
+              // icon: (
+              //   <FontAwesomeIcon
+              //     icon={faCircleCheck}
+              //     className="text-green-500"
+              //   />
+              // ),
+            },
+            error: {
+              className: "!bg-red-500 !text-white",
+              // icon: <FontAwesomeIcon icon={faCircleExclamation} className="" />,
+            },
+            loading: {
+              className: "bg-blue-500 text-white",
+            },
+          }}
+        />
+
+        {/* make sure to keep Toaster above the `children` */}
 
         {children}
 
