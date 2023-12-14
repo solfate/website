@@ -35,7 +35,8 @@ const nextConfig = {
       },
       {
         source: "/spotify",
-        destination: "https://open.spotify.com/show/5YnYJdFDfEM16Om3v4VRcs",
+        destination:
+          "https://open.spotify.com/show/5YnYJdFDfEM16Om3v4VRcs?si=4SW7C3wNS_eWYz7YCFfdcw",
         permanent: true,
       },
       {
@@ -46,6 +47,12 @@ const nextConfig = {
       },
       {
         source: "/pcast",
+        destination:
+          "https://pca.st/podcast/f7e2e7d0-7293-013b-f273-0acc26574db2",
+        permanent: true,
+      },
+      {
+        source: "/pocketcasts",
         destination:
           "https://pca.st/podcast/f7e2e7d0-7293-013b-f273-0acc26574db2",
         permanent: true,
