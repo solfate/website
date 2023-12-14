@@ -19,6 +19,13 @@ const config: Config = {
         "underline-sm": "0px -3px 0px 0px inset",
         underline: "0px -5px 0px 0px inset",
         "underline-lg": "0px -8px 0px 0px inset",
+        "black-sm": "2px 2px 0px 0px rgba(18, 21, 30) !important",
+        black: "3px 3px 0px 0px rgba(18, 21, 30) !important",
+        "black-lg": "5px 5px 0px 0px rgba(18, 21, 30) !important",
+        "hot-pink": "0px -3px 0px 0px rgba(253, 45, 120) inset !important",
+      },
+      scale: {
+        flip: "-1",
       },
     },
   },
