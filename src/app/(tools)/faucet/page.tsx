@@ -18,7 +18,7 @@ export const metadata: Metadata = {
 
 export default function Page() {
   return (
-    <main className="container md:py-16">
+    <main className="container md:py-16 min-h-[80vh]">
       <section className="max-w-2xl mx-auto space-y-8 text-center container">
         <h1 className="justify-around space-x-5 text-4xl font-bold md:text-5xl inline-flex items-center align-middle">
           <Image
