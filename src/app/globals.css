@@ -61,6 +61,11 @@ body {
 .prose a {
   @apply hover:text-hot-pink hover:underline;
 }
+.prose img {
+  max-width: 120%;
+  --child-width: 120%;
+  @apply rounded-2xl overflow-hidden border border-gray-400 bg-slate-500 child-past-parent;
+}
 .child-past-parent {
   position: relative;
   width: 100vw;
