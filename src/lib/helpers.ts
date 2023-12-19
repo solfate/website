@@ -53,3 +53,15 @@ export function computePagination({
 
   return data;
 }
+
+/**
+ * Debug logger for use in development mode, or when DEBUG is enabled
+ */
+export function debug(...props: any) {
+  if (
+    process?.env.NODE_ENV == "development" ||
+    !!process?.env?.DEBUG ||
+    !!process?.env?.NEXT_PUBLIC_DEBUG
+  )
+    console.debug("[DEBUG]", ...props);
+}
