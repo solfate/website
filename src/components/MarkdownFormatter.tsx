@@ -23,9 +23,18 @@ const components: MDXComponentProps = {
   //   code: (props) => <code></code>,
   // todo: handle relative links? including making them part of the authors list?
   a: ({ ref, children, href, ...props }) => (
-    <Link {...props} href={href || "#"} target="_blank">
+    <Link
+      {...props}
+      href={href?.replace(/^\/content\//i, "/") || "#"}
+      target="_blank"
+    >
       {children}
     </Link>
+  ),
+  img: ({ ref, children, src, ...props }) => (
+    <img {...props} src={src?.replace(/^\/content\//i, "/")}>
+      {children}
+    </img>
   ),
 };
 
