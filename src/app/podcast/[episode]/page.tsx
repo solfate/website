@@ -52,7 +52,7 @@ export async function generateMetadata(
     alternates: {
       canonical: episode.href,
     },
-    title: `${PODCAST.name} #${episode.ep} - ${episode.title}`,
+    title: `${episode.title} - ${PODCAST.name} #${episode.ep}`,
     description: episode.description,
     openGraph: {
       title: `${PODCAST.name} #${episode.ep} - ${
