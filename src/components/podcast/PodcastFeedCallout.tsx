@@ -10,7 +10,7 @@ type PodcastFeedHeroProps = {
 
 export const PodcastFeedHero = memo(
   ({ title, description, href }: PodcastFeedHeroProps) => (
-    <div className="col-span-2 items-center flex flex-grow">
+    <div className="col-span-2 items-center flex text-center md:text-left">
       <div>
         <section className={"py-4 max-w-lg space-y-2"}>
           <h1 className="text-4xl md:text-5xl font-bold">
@@ -22,7 +22,7 @@ export const PodcastFeedHero = memo(
           )}
         </section>
 
-        <PodcastFeedLinkButtons />
+        <PodcastFeedLinkButtons className="justify-center md:justify-start" />
       </div>
     </div>
   ),
