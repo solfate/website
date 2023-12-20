@@ -36,8 +36,8 @@ body {
   @apply hover:bg-opacity-90 hover:border-opacity-90;
 }
 .btn:disabled {
-  /* @apply bg-opacity-70 text-opacity-80 border-opacity-50; */
-  @apply opacity-60;
+  @apply opacity-70;
+  @apply pointer-events-none;
 }
 
 .btn-blue {
