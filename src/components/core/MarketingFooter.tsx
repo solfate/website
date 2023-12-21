@@ -7,7 +7,7 @@ import { PODCAST, PODCAST_FEED_LOCATIONS } from "@/lib/const/podcast";
 
 export default function MarketingFooter() {
   return (
-    <footer className="border-t border-gray-400 bg-gray-100">
+    <footer className="border-t border-gray-300 bg-gray-100">
       <section className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 container gap-8 py-8">
         <section className="col-span-full max-w-lg lg:col-span-2 space-y-6">
           <Link
