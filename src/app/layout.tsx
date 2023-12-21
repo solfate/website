@@ -6,6 +6,7 @@ import { SITE, TWITTER } from "@/lib/const/general";
 
 import { Analytics } from "@vercel/analytics/react";
 import { Toaster } from "react-hot-toast";
+import { SolanaProvider } from "@/context/SolanaProviders";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -85,7 +86,7 @@ export default function RootLayout({
 
         {/* make sure to keep Toaster above the `children` */}
 
-        {children}
+        <SolanaProvider>{children}</SolanaProvider>
 
         {/* <main className="min-h-[85vh]">{children}</main> */}
         <Analytics />
