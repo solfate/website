@@ -214,19 +214,25 @@ export const AuthForm = memo(({ className, callbackPath }: AuthFormProps) => {
             disabled={processingStage !== PROCESSING_STAGE.IDLE}
             className={`btn w-full btn-black inline-flex items-center py-3 justify-center text-center gap-2`}
           >
-            <SignInButtonLabel stage={processingStage} />
+            {!!wallet.connected || !!wallet.connecting ? (
+              <SignInButtonLabel stage={processingStage} />
+            ) : (
+              <>Connect a Solana wallet</>
+            )}
           </button>
           <div className="flex items-center justify-center">
-            <a
-              className="link hover:underline hover:text-hot-pink"
-              href="#"
-              onClick={(e) => {
-                e.preventDefault();
-                wallet.disconnect().then(() => walletModal.setVisible(true));
-              }}
-            >
-              Connect a different wallet?
-            </a>
+            {!!wallet.connected && (
+              <a
+                className="link hover:underline hover:text-hot-pink"
+                href="#"
+                onClick={(e) => {
+                  e.preventDefault();
+                  wallet.disconnect().then(() => walletModal.setVisible(true));
+                }}
+              >
+                Connect a different wallet?
+              </a>
+            )}
           </div>
         </Suspense>
       </section>
