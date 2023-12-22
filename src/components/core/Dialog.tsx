@@ -1,4 +1,4 @@
-import { Dispatch, Fragment, SetStateAction } from "react";
+import { Dispatch, Fragment, SetStateAction, memo } from "react";
 
 import { Dialog as HeadlessDialog, Transition } from "@headlessui/react";
 import styles from "@/styles/Dialog.module.css";
@@ -59,3 +59,12 @@ export default function Dialog({
     </Transition>
   );
 }
+
+export const DialogHeader = memo(
+  ({ title, description }: { title: string; description?: string }) => (
+    <section className="p-5 text-center border-b h-min border-slate-200">
+      <h4 className="text-xl font-semibold">{title}</h4>
+      {!!description && <p className="text-sm text-gray-500">{description}</p>}
+    </section>
+  ),
+);
