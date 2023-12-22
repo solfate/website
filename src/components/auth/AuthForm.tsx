@@ -45,8 +45,12 @@ export const AuthForm = memo(({ className, callbackPath }: AuthFormProps) => {
    * after the user connects their wallet, they will be auto prompted to sign the message!
    */
   const handleSignInWithSolana = useCallback(async () => {
-    if (processingStage !== PROCESSING_STAGE.IDLE) {
+    if (
+      processingStage !== PROCESSING_STAGE.IDLE &&
+      processingStage !== PROCESSING_STAGE.WALLET_CONNECT
+    ) {
       console.warn("Invalid processing stage");
+      console.warn(processingStage);
       return;
     }
 
@@ -196,7 +200,7 @@ export const AuthForm = memo(({ className, callbackPath }: AuthFormProps) => {
       else if (wallet.connecting == false)
         setProcessingStage(PROCESSING_STAGE.IDLE);
       // the user just connected their wallet
-      // if (wallet.connected && !!wallet.publicKey) handleSignInWithSolana();
+      if (wallet.connected && !!wallet.publicKey) handleSignInWithSolana();
     }
 
     setPreviousWalletState(wallet);
@@ -221,18 +225,16 @@ export const AuthForm = memo(({ className, callbackPath }: AuthFormProps) => {
             )}
           </button>
           <div className="flex items-center justify-center">
-            {!!wallet.connected && (
-              <a
-                className="link hover:underline hover:text-hot-pink"
-                href="#"
-                onClick={(e) => {
-                  e.preventDefault();
-                  wallet.disconnect().then(() => walletModal.setVisible(true));
-                }}
-              >
-                Connect a different wallet?
-              </a>
-            )}
+            <a
+              className="link hover:underline hover:text-hot-pink"
+              href="#"
+              onClick={(e) => {
+                e.preventDefault();
+                wallet.disconnect().then(() => walletModal.setVisible(true));
+              }}
+            >
+              Connect a different wallet?
+            </a>
           </div>
         </Suspense>
       </section>
