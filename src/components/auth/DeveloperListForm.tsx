@@ -6,6 +6,7 @@ import Image, { ImageProps } from "next/image";
 import Dialog, { DialogHeader, DialogProps } from "@/components/core/Dialog";
 import type { Session } from "next-auth";
 import type { AccountsGroupByProvider } from "@/types";
+import { signIn, signOut } from "next-auth/react";
 
 import solanaIcon from "@/../public/icons/solana-black.svg";
 import githubIcon from "@/../public/icons/github-square.svg";
@@ -14,11 +15,14 @@ import infoIcon from "@/../public/icons/info.svg";
 import Link from "next/link";
 import { shortWalletAddress } from "@/lib/helpers";
 import clsx from "clsx";
+import { PulseLoader } from "react-spinners";
+import toast from "react-hot-toast";
 
 enum TaskStatus {
   IDLE,
   CONNECTED,
   COMPLETE,
+  DISABLED,
 }
 
 type DeveloperListFormProps = {
@@ -37,6 +41,79 @@ export const DeveloperListForm = memo(
     // simplified status of if the user has connected ANY other social accounts
     const hasOtherAccounts =
       !!groupedAccounts?.github.length || !!groupedAccounts?.twitter.length;
+
+    // simplified status of having connected all accounts
+    const hasAllAccounts =
+      hasSolanaAccount &&
+      !!groupedAccounts?.github.length &&
+      !!groupedAccounts?.twitter.length;
+
+    /**
+     * Authenticate to Twitter / X
+     */
+    const twitterAuth = useCallback(
+      () =>
+        signIn("twitter", {
+          redirect: true,
+          // force override the callback data
+          callbackUrl: window.location.href,
+        }),
+      [],
+    );
+
+    /**
+     * Authenticate to GitHub
+     */
+    const githubAuth = useCallback(
+      () =>
+        signIn("github", {
+          redirect: true,
+          // force override the callback data
+          callbackUrl: window.location.href,
+        }),
+      [],
+    );
+
+    /**
+     * Solana signout with callback
+     */
+    const handleSolana = useCallback(() => {
+      // construct a callback url to bring the user back to the `/developers` page after signin
+      const url = new URL(
+        "/signin",
+        `${window.location.protocol}//${window.location.host}`,
+      );
+      url.searchParams.set(
+        "callbackUrl",
+        `${window.location.protocol}//${window.location.host}/developers`,
+      );
+
+      // if the user is not signed in, redirect to the signin page
+      if (!hasSolanaAccount) window.location.href = url.toString();
+      // if user has connected a wallet and any other account, do nothing
+      else if (hasSolanaAccount && hasOtherAccounts) return;
+      // if the user has connected a solana account, but not other socials, aid them in swapping wallets
+      else
+        return signOut({
+          redirect: true,
+          callbackUrl: url.toString(),
+        });
+    }, [hasSolanaAccount, hasOtherAccounts]);
+
+    /**
+     * Developer questionnaire callback
+     */
+    const handleQuestions = useCallback(() => {
+      if (!hasSolanaAccount)
+        return toast.error("You must sign in with a Solana wallet");
+      else if (
+        !groupedAccounts?.github.length ||
+        !groupedAccounts?.twitter.length
+      )
+        return toast.error("Connect your GitHub and Twitter first");
+      // actually open the dialog
+      else return setDialogOpen(true);
+    }, [hasSolanaAccount, hasOtherAccounts]);
 
     return (
       <>
@@ -67,15 +144,25 @@ export const DeveloperListForm = memo(
                 </>
               )
             }
-            buttonLabel={
-              hasSolanaAccount
-                ? hasOtherAccounts
-                  ? "Locked"
-                  : "Change"
-                : "Connect"
+            button={
+              <ButtonWithLoader
+                status={
+                  hasSolanaAccount
+                    ? hasOtherAccounts
+                      ? TaskStatus.COMPLETE
+                      : TaskStatus.CONNECTED
+                    : TaskStatus.IDLE
+                }
+                children={
+                  hasSolanaAccount
+                    ? hasOtherAccounts
+                      ? "Locked"
+                      : "Change"
+                    : "Connect"
+                }
+                onClick={handleSolana}
+              />
             }
-            status={TaskStatus.CONNECTED}
-            onClick={() => alert("wallet")}
           />
           {!hasOtherAccounts && (
             <div className="text-center card text-sm border-yellow-500 bg-yellow-300">
@@ -93,25 +180,53 @@ export const DeveloperListForm = memo(
             imageSrc={githubIcon}
             title="GitHub"
             description="Prove your contributions to the Solana ecosystem"
-            buttonLabel={"Connect"}
-            status={TaskStatus.IDLE}
-            onClick={() => alert("github")}
+            button={
+              <ButtonWithLoader
+                onClick={
+                  !!groupedAccounts?.github.length ? undefined : githubAuth
+                }
+                status={
+                  !!groupedAccounts?.github.length
+                    ? TaskStatus.COMPLETE
+                    : TaskStatus.IDLE
+                }
+                children={
+                  !!groupedAccounts?.github.length ? "Completed" : "Connect"
+                }
+              />
+            }
           />
           <TaskItemCard
             imageSrc={xIcon}
             title="X / Twitter"
             description="Prove you participate in the Solana community"
-            buttonLabel={"Connect"}
-            status={TaskStatus.IDLE}
-            onClick={() => alert("twitter")}
+            button={
+              <ButtonWithLoader
+                onClick={
+                  !!groupedAccounts?.twitter.length ? undefined : twitterAuth
+                }
+                status={
+                  !!groupedAccounts?.twitter.length
+                    ? TaskStatus.COMPLETE
+                    : TaskStatus.IDLE
+                }
+                children={
+                  !!groupedAccounts?.twitter.length ? "Completed" : "Connect"
+                }
+              />
+            }
           />
           <TaskItemCard
             imageSrc={infoIcon}
             title="Answer these 2 questions"
             description="Quick and to the point. ~2 minutes to complete."
-            buttonLabel={"Start"}
-            status={TaskStatus.IDLE}
-            onClick={() => setDialogOpen(true)}
+            button={
+              <ButtonWithLoader
+                status={hasAllAccounts ? TaskStatus.IDLE : TaskStatus.DISABLED}
+                onClick={handleQuestions}
+                children={"Start"}
+              />
+            }
           />
         </div>
       </>
@@ -119,29 +234,26 @@ export const DeveloperListForm = memo(
   },
 );
 
-type TaskItemCardProps = {
-  title: string;
+type ButtonWithLoaderProps = {
+  children: React.ReactNode;
+  loading?: boolean;
   status: TaskStatus;
-  buttonLabel: string;
-  description: React.ReactNode;
-  imageSrc: ImageProps["src"];
   onClick?: React.ComponentProps<"button">["onClick"];
 };
 
-export const TaskItemCard = ({
-  title,
-  buttonLabel,
+export const ButtonWithLoader = ({
+  children,
+  loading,
   status,
-  description,
-  imageSrc,
   onClick,
-}: TaskItemCardProps) => {
+}: ButtonWithLoaderProps) => {
   const buttonClass = useMemo(() => {
     switch (status) {
       case TaskStatus.COMPLETE:
-        return "";
+      case TaskStatus.COMPLETE:
       case TaskStatus.CONNECTED:
         return "btn-ghost";
+      case TaskStatus.DISABLED:
       case TaskStatus.IDLE:
         return "btn-black";
     }
@@ -150,6 +262,40 @@ export const TaskItemCard = ({
     return "btn-ghost";
   }, [status]);
 
+  return (
+    <button
+      type="button"
+      className={clsx("btn w-28 justify-center", buttonClass)}
+      disabled={status == TaskStatus.COMPLETE || status == TaskStatus.DISABLED}
+      aria-disabled={
+        status == TaskStatus.COMPLETE || status == TaskStatus.DISABLED
+      }
+      onClick={onClick}
+    >
+      {!!loading ? (
+        <div>
+          <PulseLoader size={8} color="white" />
+        </div>
+      ) : (
+        children
+      )}
+    </button>
+  );
+};
+
+type TaskItemCardProps = {
+  title: string;
+  description: React.ReactNode;
+  imageSrc: ImageProps["src"];
+  button: React.ReactNode;
+};
+
+export const TaskItemCard = ({
+  title,
+  description,
+  imageSrc,
+  button,
+}: TaskItemCardProps) => {
   return (
     <div className="card flex items-center justify-between">
       <div className="flex gap-3 items-center">
@@ -165,26 +311,7 @@ export const TaskItemCard = ({
         </div>
       </div>
 
-      <button
-        type="button"
-        className={clsx("btn w-28 justify-center", buttonClass)}
-        disabled={status == TaskStatus.COMPLETE}
-        aria-disabled={status == TaskStatus.COMPLETE}
-        onClick={onClick}
-      >
-        {buttonLabel}
-        {/* <FeatherIcon
-            name="Check"
-            strokeWidth={2}
-            size={20}
-            className="bg-green-600 text-white rounded-full p-[4px] flex-shrink-0"
-          /> */}
-        {/* <FeatherIcon
-            name="X"
-            strokeWidth={2}
-            className="bg-red-600 text-white rounded-full p-[5px] h-7 w-7 flex-shrink-0"
-          /> */}
-      </button>
+      {button}
     </div>
   );
 };
@@ -293,7 +420,7 @@ export const DeveloperListQuestionsDialog = (props: DialogProps) => {
                 disabled={!hasChanges}
                 className="order-2 btn w-full btn-black justify-center"
               >
-                Save Changes
+                Submit
               </button>
               <button
                 type="button"
