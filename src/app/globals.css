@@ -23,7 +23,7 @@ body {
 
 .input {
   @apply px-3 py-2 rounded-lg;
-  @apply border bg-white border-gray-400;
+  @apply border bg-white border-gray-300;
 }
 .input:disabled {
   @apply bg-gray-100 text-gray-400 border-gray-300;
