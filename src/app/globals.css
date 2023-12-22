@@ -50,7 +50,7 @@ body {
   @apply bg-hot-pink border-hot-pink text-white;
 }
 .btn-ghost {
-  @apply bg-transparent border-gray-500;
+  @apply bg-transparent border-gray-300;
 }
 
 .prose-cover-image {
