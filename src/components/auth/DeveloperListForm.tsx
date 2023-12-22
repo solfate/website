@@ -1,62 +1,129 @@
 "use client";
 
-import React, { memo, useCallback, useState } from "react";
+import React, { memo, useCallback, useMemo, useState } from "react";
+
+import Image, { ImageProps } from "next/image";
+import Dialog, { DialogHeader, DialogProps } from "@/components/core/Dialog";
+import type { Session } from "next-auth";
+import type { AccountsGroupByProvider } from "@/types";
 
 import solanaIcon from "@/../public/icons/solana-black.svg";
 import githubIcon from "@/../public/icons/github-square.svg";
 import xIcon from "@/../public/icons/x-square.svg";
 import infoIcon from "@/../public/icons/info.svg";
-import Image, { ImageProps } from "next/image";
-import Dialog, { DialogHeader, DialogProps } from "@/components/core/Dialog";
+import Link from "next/link";
+import { shortWalletAddress } from "@/lib/helpers";
+import clsx from "clsx";
 
-export const DeveloperListForm = memo(() => {
-  const [dialogOpen, setDialogOpen] = useState(false);
+enum TaskStatus {
+  IDLE,
+  CONNECTED,
+  COMPLETE,
+}
 
-  return (
-    <>
-      <DeveloperListQuestionsDialog
-        isOpen={dialogOpen}
-        setIsOpen={setDialogOpen}
-      />
+type DeveloperListFormProps = {
+  session: Option<Session>;
+  groupedAccounts: Option<AccountsGroupByProvider>;
+};
 
-      <div className="max-w-2xl mx-auto space-y-4">
-        <TaskItemCard
-          title="Solana Wallet"
-          description="Connect any Solana wallet. Even a burner."
-          imageSrc={solanaIcon}
-          buttonLabel={"Connect"}
-          onClick={() => alert("wallet")}
+export const DeveloperListForm = memo(
+  ({ session, groupedAccounts }: DeveloperListFormProps) => {
+    const [dialogOpen, setDialogOpen] = useState(false);
+
+    // simplified status of the user having connected their wallet
+    const hasSolanaAccount =
+      !!session?.user.id && !!groupedAccounts?.solana.length;
+
+    // simplified status of if the user has connected ANY other social accounts
+    const hasOtherAccounts =
+      !!groupedAccounts?.github.length || !!groupedAccounts?.twitter.length;
+
+    return (
+      <>
+        <DeveloperListQuestionsDialog
+          isOpen={dialogOpen}
+          setIsOpen={setDialogOpen}
         />
-        <TaskItemCard
-          title="GitHub"
-          description="Prove your contributions to the Solana ecosystem"
-          imageSrc={githubIcon}
-          buttonLabel={"Connect"}
-          onClick={() => alert("github")}
-        />
-        <TaskItemCard
-          title="X / Twitter"
-          description="Prove you participate in the Solana community"
-          imageSrc={xIcon}
-          buttonLabel={"Connect"}
-          onClick={() => alert("twitter")}
-        />
-        <TaskItemCard
-          title="Answer these 2 questions"
-          description="Quick and to the point. ~2 minutes to complete."
-          imageSrc={infoIcon}
-          buttonLabel={"Start"}
-          onClick={() => setDialogOpen(true)}
-        />
-      </div>
-    </>
-  );
-});
+
+        <div className="max-w-2xl mx-auto space-y-4">
+          <TaskItemCard
+            imageSrc={solanaIcon}
+            title="Solana Wallet"
+            description={
+              !hasSolanaAccount ? (
+                "Connect any Solana wallet. Even a burner."
+              ) : (
+                <>
+                  Connected to{" "}
+                  <Link
+                    href={`https://solana.fm/address/${groupedAccounts.solana[0].providerAccountId}`}
+                    target="_blank"
+                    className="underline hover:text-hot-pink"
+                  >
+                    {shortWalletAddress(
+                      groupedAccounts.solana[0].providerAccountId,
+                    )}
+                  </Link>
+                </>
+              )
+            }
+            buttonLabel={
+              hasSolanaAccount
+                ? hasOtherAccounts
+                  ? "Locked"
+                  : "Change"
+                : "Connect"
+            }
+            status={TaskStatus.CONNECTED}
+            onClick={() => alert("wallet")}
+          />
+          {!hasOtherAccounts && (
+            <div className="text-center card text-sm border-yellow-500 bg-yellow-300">
+              <h4 className="font-semibold text-base">Caution</h4>
+              <p>
+                Once you connect <span className="font-bold">ANY</span> other
+                accounts below, you will <span className="font-bold">NOT</span>{" "}
+                be able to change your wallet address. Be sure this is the
+                wallet address you want listed{" "}
+                <span className="font-bold">publicly</span> on this list.
+              </p>
+            </div>
+          )}
+          <TaskItemCard
+            imageSrc={githubIcon}
+            title="GitHub"
+            description="Prove your contributions to the Solana ecosystem"
+            buttonLabel={"Connect"}
+            status={TaskStatus.IDLE}
+            onClick={() => alert("github")}
+          />
+          <TaskItemCard
+            imageSrc={xIcon}
+            title="X / Twitter"
+            description="Prove you participate in the Solana community"
+            buttonLabel={"Connect"}
+            status={TaskStatus.IDLE}
+            onClick={() => alert("twitter")}
+          />
+          <TaskItemCard
+            imageSrc={infoIcon}
+            title="Answer these 2 questions"
+            description="Quick and to the point. ~2 minutes to complete."
+            buttonLabel={"Start"}
+            status={TaskStatus.IDLE}
+            onClick={() => setDialogOpen(true)}
+          />
+        </div>
+      </>
+    );
+  },
+);
 
 type TaskItemCardProps = {
   title: string;
+  status: TaskStatus;
   buttonLabel: string;
-  description: string;
+  description: React.ReactNode;
   imageSrc: ImageProps["src"];
   onClick?: React.ComponentProps<"button">["onClick"];
 };
@@ -64,10 +131,25 @@ type TaskItemCardProps = {
 export const TaskItemCard = ({
   title,
   buttonLabel,
+  status,
   description,
   imageSrc,
   onClick,
 }: TaskItemCardProps) => {
+  const buttonClass = useMemo(() => {
+    switch (status) {
+      case TaskStatus.COMPLETE:
+        return "";
+      case TaskStatus.CONNECTED:
+        return "btn-ghost";
+      case TaskStatus.IDLE:
+        return "btn-black";
+    }
+
+    // default return something always
+    return "btn-ghost";
+  }, [status]);
+
   return (
     <div className="card flex items-center justify-between">
       <div className="flex gap-3 items-center">
@@ -85,8 +167,9 @@ export const TaskItemCard = ({
 
       <button
         type="button"
-        className="btn btn-black w-28 justify-center"
-        // disabled={true}
+        className={clsx("btn w-28 justify-center", buttonClass)}
+        disabled={status == TaskStatus.COMPLETE}
+        aria-disabled={status == TaskStatus.COMPLETE}
         onClick={onClick}
       >
         {buttonLabel}
