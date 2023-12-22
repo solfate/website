@@ -20,28 +20,28 @@ export const DeveloperListForm = memo(() => {
       />
 
       <div className="max-w-2xl mx-auto space-y-4">
-        <ConnectionCard
+        <TaskItemCard
           title="Solana Wallet"
           description="Connect any Solana wallet. Even a burner."
           imageSrc={solanaIcon}
           buttonLabel={"Connect"}
           onClick={() => alert("wallet")}
         />
-        <ConnectionCard
+        <TaskItemCard
           title="GitHub"
           description="Prove your contributions to the Solana ecosystem"
           imageSrc={githubIcon}
           buttonLabel={"Connect"}
           onClick={() => alert("github")}
         />
-        <ConnectionCard
+        <TaskItemCard
           title="X / Twitter"
           description="Prove you participate in the Solana community"
           imageSrc={xIcon}
           buttonLabel={"Connect"}
           onClick={() => alert("twitter")}
         />
-        <ConnectionCard
+        <TaskItemCard
           title="Answer these 2 questions"
           description="Quick and to the point. ~2 minutes to complete."
           imageSrc={infoIcon}
@@ -53,7 +53,7 @@ export const DeveloperListForm = memo(() => {
   );
 });
 
-type ConnectionCardProps = {
+type TaskItemCardProps = {
   title: string;
   buttonLabel: string;
   description: string;
@@ -61,13 +61,13 @@ type ConnectionCardProps = {
   onClick?: React.ComponentProps<"button">["onClick"];
 };
 
-export const ConnectionCard = ({
+export const TaskItemCard = ({
   title,
   buttonLabel,
   description,
   imageSrc,
   onClick,
-}: ConnectionCardProps) => {
+}: TaskItemCardProps) => {
   return (
     <div className="card flex items-center justify-between">
       <div className="flex gap-3 items-center">
