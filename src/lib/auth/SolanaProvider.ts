@@ -105,11 +105,11 @@ export function SolanaProvider({}: SolanaProviderConfig) {
                   type: "wallet",
                 },
               },
-              profile: {
-                create: {
-                  status: "ACTIVE",
-                },
-              },
+              // profile: {
+              //   create: {
+              //     status: "ACTIVE",
+              //   },
+              // },
             },
           });
 
