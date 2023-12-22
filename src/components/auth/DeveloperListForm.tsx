@@ -164,7 +164,7 @@ export const DeveloperListForm = memo(
               />
             }
           />
-          {!hasOtherAccounts && (
+          {hasSolanaAccount && !hasOtherAccounts && (
             <div className="text-center card text-sm border-yellow-500 bg-yellow-300">
               <h4 className="font-semibold text-base">Caution</h4>
               <p>
