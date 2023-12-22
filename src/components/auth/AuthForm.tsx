@@ -113,30 +113,32 @@ export const AuthForm = memo(({ className, callbackPath }: AuthFormProps) => {
 
       try {
         // get the user's wallet to sign the requests (`signIn` is preferred if supported)
-        // if (!!wallet.signIn) {
-        //   await wallet.signIn(signInMessage.message).then((res) => {
-        //     // store the wallet signed data
-        //     signInMessage.storeSignature({
-        //       // note: the wallet could sign with a different wallet...
-        //       address: res.account.address,
-        //       signature: base58.encode(res.signature),
-        //       signedMessage: base58.encode(res.signedMessage),
-        //     });
-        //   });
-        // } else {
-        const messageToSign = new TextEncoder().encode(signInMessage.prepare());
-
-        // request the user sign the message using the fallback methods
-        // i.e wallets that do not support the SIWS spec (aka the `signIn` function)
-        await wallet.signMessage(messageToSign).then((sig) => {
-          // store the wallet signed data
-          signInMessage.storeSignature({
-            address: wallet.publicKey?.toBase58(),
-            signature: base58.encode(sig),
-            signedMessage: base58.encode(messageToSign),
+        if (!!wallet.signIn) {
+          await wallet.signIn(signInMessage.message).then((res) => {
+            // store the wallet signed data
+            signInMessage.storeSignature({
+              // note: the wallet could sign with a different wallet...
+              address: res.account.address,
+              signature: base58.encode(res.signature),
+              signedMessage: base58.encode(res.signedMessage),
+            });
           });
-        });
-        // }
+        } else {
+          const messageToSign = new TextEncoder().encode(
+            signInMessage.prepare(),
+          );
+
+          // request the user sign the message using the fallback methods
+          // i.e wallets that do not support the SIWS spec (aka the `signIn` function)
+          await wallet.signMessage(messageToSign).then((sig) => {
+            // store the wallet signed data
+            signInMessage.storeSignature({
+              address: wallet.publicKey?.toBase58(),
+              signature: base58.encode(sig),
+              signedMessage: base58.encode(messageToSign),
+            });
+          });
+        }
 
         // ensure we actually have a signature after attempting all wallet sign attempts
         if (!signInMessage.signedData) throw Error("Unknown signature");
@@ -218,11 +220,7 @@ export const AuthForm = memo(({ className, callbackPath }: AuthFormProps) => {
             disabled={processingStage !== PROCESSING_STAGE.IDLE}
             className={`btn w-full btn-black inline-flex items-center py-3 justify-center text-center gap-2`}
           >
-            {!!wallet.connected || !!wallet.connecting ? (
-              <SignInButtonLabel stage={processingStage} />
-            ) : (
-              <>Connect a Solana wallet</>
-            )}
+            <SignInButtonLabel stage={processingStage} />
           </button>
           <div className="flex items-center justify-center">
             <a
