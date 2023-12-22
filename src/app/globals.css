@@ -14,11 +14,11 @@ body {
 
 .container {
   @apply mx-auto max-w-7xl;
-  @apply p-5;
+  @apply px-5 py-8;
 }
 .page-container {
   @apply container min-h-[90vh];
-  @apply space-y-8 py-8 md:space-y-20;
+  @apply space-y-8 md:space-y-20;
 }
 
 .input {
