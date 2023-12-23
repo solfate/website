@@ -102,7 +102,7 @@ export function SolanaProvider({}: SolanaProviderConfig) {
                 create: {
                   provider: SolanaProviderId,
                   providerAccountId: signinMessage.message.address,
-                  type: "wallet",
+                  type: "credentials",
                 },
               },
               // profile: {
