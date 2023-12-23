@@ -51,6 +51,7 @@ body {
 }
 .btn-ghost {
   @apply bg-transparent border-gray-300;
+  @apply hover:border-gray-400;
 }
 
 .prose-cover-image {
