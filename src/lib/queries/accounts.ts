@@ -42,12 +42,12 @@ export async function getAccountsByUserId({
 export async function createAccount({
   userId,
   account,
-  data,
+  provider_profile,
 }: {
   userId: User["id"];
   account: AuthAccount;
   /** `profile` data returned by the provider upon successful authentication */
-  data?: object;
+  provider_profile?: object;
 }) {
   // todo: save the external profile `data` returned from the external authentication provider
   return prisma.account.create({
@@ -55,6 +55,7 @@ export async function createAccount({
       ...account,
       // force override the account user connection
       userId,
+      provider_profile,
     },
   });
 }
