@@ -57,7 +57,7 @@ export function computePagination({
 /**
  * Create a short string wallet address for UI display
  */
-export function shortWalletAddress(text: string, length: number = 5) {
+export function shortWalletAddress(text: string = "", length: number = 5) {
   let str = `${text.substring(0, length)}...`;
 
   if (text.length > length * 2)
