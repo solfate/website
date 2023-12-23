@@ -178,9 +178,9 @@ export const AuthForm = memo(({ className, callbackPath }: AuthFormProps) => {
         .catch((err) => {
           console.warn("signIn error:", err);
           toast.error("Unable to Sign in with Solana");
-
           throw err;
-        });
+        })
+        .finally(() => setProcessingStage(PROCESSING_STAGE.IDLE));
     } catch (err) {
       console.error("handleSignInWithSolana failed::", err);
 
