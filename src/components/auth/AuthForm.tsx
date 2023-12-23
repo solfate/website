@@ -144,7 +144,7 @@ export const AuthForm = memo(({ className, callbackPath }: AuthFormProps) => {
         if (!signInMessage.signedData) throw Error("Unknown signature");
       } catch (err) {
         console.error("Wallet failed to sign message:", err);
-        toast.error("You must sign the message with your wallet to signin");
+        toast.error("You must sign the message with your wallet to sign in");
 
         // stop processing when the user did not actually sign the message
         setProcessingStage(PROCESSING_STAGE.IDLE);
