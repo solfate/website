@@ -4,7 +4,6 @@ import React, { memo, useCallback, useMemo, useState } from "react";
 
 import Image, { ImageProps } from "next/image";
 import Dialog, { DialogHeader, DialogProps } from "@/components/core/Dialog";
-import type { Session } from "next-auth";
 import type { AccountsGroupByProvider } from "@/types";
 import { signIn, signOut } from "next-auth/react";
 
