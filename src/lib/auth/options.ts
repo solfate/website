@@ -125,14 +125,19 @@ export const authOptions: NextAuthOptions = {
 
         // manually create the new Account and link it to the User
         // saving any additional info as desired
-        const linkUser = await createAccount({
-          userId: session.user.id,
-          account: account,
-          // save the profile information provided from the external provider
-          data: profile,
-        });
+        try {
+          const linkUser = await createAccount({
+            userId: session.user.id,
+            account: account,
+            // save the profile information provided from the external provider
+            provider_profile: profile,
+          });
 
-        debug("linkUser:", linkUser);
+          debug("linkUser:", linkUser);
+        } catch (err) {
+          console.warn("error linking account");
+          console.warn(err);
+        }
 
         // we can force override the UI provided `callbackUrl` by returning a new callback url
         // but this is likely not a good idea if we want to have multiple client pages have auth flows
