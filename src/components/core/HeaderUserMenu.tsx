@@ -22,14 +22,18 @@ export const HeaderUserMenu = memo(({}: SimpleComponentProps) => {
   return (
     <Menu as="div" className={styles.menu}>
       <div>
-        <Menu.Button className={`${styles.button} btn btn-ghost`}>
+        <Menu.Button
+          className={`${styles.button} btn btn-ghost border-transparent md:border-gray-300`}
+        >
           <FeatherIcon
             name="User"
             size={24}
             strokeWidth={1.4}
             aria-hidden="true"
           />
-          {shortWalletAddress(session.user.username) || "[err]"}
+          <span className="hidden md:block">
+            {shortWalletAddress(session.user.username) || "[err]"}
+          </span>
 
           {/* {!!session?.user.image ? (
             <Image
