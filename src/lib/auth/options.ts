@@ -78,8 +78,14 @@ export const authOptions: NextAuthOptions = {
 
       // we only allow creating new accounts using the "solana" provider
       // all other new accounts should fail
-      if (!session && account?.provider == "solana") {
+      if (account?.provider == "solana") {
         // todo: we may want to handle other things here in the future
+
+        // do not allow signing in with a solana wallet if the user already has a session
+        if (!!session) {
+          debug("Solana wallet-session error");
+          throw Error("Solana wallet error");
+        }
 
         return true;
       }
