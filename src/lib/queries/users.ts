@@ -48,7 +48,7 @@ export async function getUserByProviderAccountId({
     .findMany({
       where: {
         accounts: {
-          every: {
+          some: {
             providerAccountId,
           },
         },
