@@ -431,41 +431,30 @@ export const DeveloperListQuestionsDialog = (props: DialogProps) => {
       <form onSubmit={onSubmitHandler} className={"grid h-full w-full"}>
         <section className="gap-0 bg-white">
           <DialogHeader
-            title={"Answer these 2 questions"}
+            title={"Answer these simple questions"}
             description={"Quick and to the point. ~2 minutes to complete."}
           />
 
           <section className="p-5 space-y-5 w-full">
-            <div className="space-y-3">
-              <div className="flex gap-3">
-                <div className="rounded-full flex items-center justify-center text-sm flex-shrink-0 bg-gray-200 w-6 h-6">
-                  1
-                </div>
-                <h5 className="font-semibold text-base">
-                  Why should you be on this list?
-                </h5>
-              </div>
+            <DeveloperQuestion
+              count={1}
+              label={"Why should you be on this list?"}
+            >
               <textarea
                 onChange={(e) => updateFormState("why", e.target.value)}
                 className="input w-full h-28"
+                maxLength={250}
                 placeholder="Share details that may be relevant (max 250 chars)"
               ></textarea>
-            </div>
-            <div className="space-y-3">
-              <div className="flex gap-3">
-                <div className="rounded-full flex items-center justify-center text-sm flex-shrink-0 bg-gray-200 w-6 h-6">
-                  2
-                </div>
-                <h5 className="font-semibold text-base">
-                  Who can vouch for you?
-                </h5>
-              </div>
+            </DeveloperQuestion>
+            <DeveloperQuestion count={2} label={"Who can vouch for you?"}>
               <textarea
                 onChange={(e) => updateFormState("who", e.target.value)}
                 className="input w-full h-28"
+                maxLength={250}
                 placeholder="Share anyone you think will vouch for you and your contributions to the Solana ecosystem (i.e. people, entities, communities) (max 250 chars)"
               ></textarea>
-            </div>
+            </DeveloperQuestion>
           </section>
 
           <section className="h-full px-8 py-4 bg-slate-100">
@@ -491,3 +480,25 @@ export const DeveloperListQuestionsDialog = (props: DialogProps) => {
     </Dialog>
   );
 };
+
+const DeveloperQuestion = memo(
+  ({
+    count,
+    label,
+    children,
+  }: {
+    count: number;
+    label: string;
+    children: React.ReactNode;
+  }) => (
+    <div className="space-y-3">
+      <div className="flex gap-3">
+        <div className="rounded-full flex items-center justify-center text-sm flex-shrink-0 bg-gray-200 w-6 h-6">
+          {count}
+        </div>
+        <h5 className="font-semibold text-base">{label}</h5>
+      </div>
+      {children}
+    </div>
+  ),
+);
