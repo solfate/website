@@ -17,6 +17,8 @@ import { shortWalletAddress } from "@/lib/helpers";
 import clsx from "clsx";
 import { PulseLoader } from "react-spinners";
 import toast from "react-hot-toast";
+import { TwitterProfile } from "next-auth/providers/twitter";
+import { GithubProfile } from "next-auth/providers/github";
 
 enum TaskStatus {
   IDLE,
@@ -34,19 +36,41 @@ export const DeveloperListForm = memo(
   ({ session, groupedAccounts }: DeveloperListFormProps) => {
     const [dialogOpen, setDialogOpen] = useState(false);
 
-    // simplified status of the user having connected their wallet
-    const hasSolanaAccount =
-      !!session?.user.id && !!groupedAccounts?.solana.length;
+    /**
+     * Simplified tracking data for the connected accounts
+     */
+    const accounts = useMemo(() => {
+      const data = {
+        // extract the connected solana wallet address
+        solana: !!groupedAccounts?.solana.length
+          ? groupedAccounts.solana[0].providerAccountId
+          : false,
+        // extract the connected twitter username
+        twitter: !!groupedAccounts?.twitter.length
+          ? (
+              groupedAccounts.twitter[0]
+                .provider_profile as object as TwitterProfile
+            ).data.username
+          : false,
+        // extract the connected github username
+        github: !!groupedAccounts?.github.length
+          ? (
+              groupedAccounts.github[0]
+                .provider_profile as object as GithubProfile
+            ).login
+          : false,
+        // assorted other state trackers
+        hasOtherAccounts: false,
+        hasAllAccounts: false,
+      };
 
-    // simplified status of if the user has connected ANY other social accounts
-    const hasOtherAccounts =
-      !!groupedAccounts?.github.length || !!groupedAccounts?.twitter.length;
+      // simplified status of if the user has connected ANY other social accounts
+      data.hasOtherAccounts = !!data.github || !!data.twitter;
+      // simplified status of having connected all accounts
+      data.hasAllAccounts = !!data.solana && !!data.github && !!data.twitter;
 
-    // simplified status of having connected all accounts
-    const hasAllAccounts =
-      hasSolanaAccount &&
-      !!groupedAccounts?.github.length &&
-      !!groupedAccounts?.twitter.length;
+      return data;
+    }, [groupedAccounts]);
 
     /**
      * Authenticate to Twitter / X
@@ -89,22 +113,22 @@ export const DeveloperListForm = memo(
       );
 
       // if the user is not signed in, redirect to the signin page
-      if (!hasSolanaAccount) window.location.href = url.toString();
+      if (!accounts.solana) window.location.href = url.toString();
       // if user has connected a wallet and any other account, do nothing
-      else if (hasSolanaAccount && hasOtherAccounts) return;
+      else if (!!accounts.solana && accounts.hasOtherAccounts) return;
       // if the user has connected a solana account, but not other socials, aid them in swapping wallets
       else
         return signOut({
           redirect: true,
           callbackUrl: url.toString(),
         });
-    }, [hasSolanaAccount, hasOtherAccounts]);
+    }, [accounts]);
 
     /**
      * Developer questionnaire callback
      */
     const handleQuestions = useCallback(() => {
-      if (!hasSolanaAccount)
+      if (!accounts.solana)
         return toast.error("You must sign in with a Solana wallet");
       else if (
         !groupedAccounts?.github.length ||
@@ -113,7 +137,7 @@ export const DeveloperListForm = memo(
         return toast.error("Connect your GitHub and Twitter first");
       // actually open the dialog
       else return setDialogOpen(true);
-    }, [hasSolanaAccount, hasOtherAccounts]);
+    }, [accounts]);
 
     return (
       <>
@@ -127,35 +151,33 @@ export const DeveloperListForm = memo(
             imageSrc={solanaIcon}
             title="Solana Wallet"
             description={
-              !hasSolanaAccount ? (
-                "Connect any Solana wallet. Even a burner."
-              ) : (
+              !!accounts.solana ? (
                 <>
-                  Connected to{" "}
+                  {"Connected to "}
                   <Link
-                    href={`https://solana.fm/address/${groupedAccounts.solana[0].providerAccountId}`}
+                    href={`https://solana.fm/address/${accounts.solana}`}
                     target="_blank"
                     className="underline hover:text-hot-pink"
                   >
-                    {shortWalletAddress(
-                      groupedAccounts.solana[0].providerAccountId,
-                    )}
+                    {shortWalletAddress(accounts.solana as string)}
                   </Link>
                 </>
+              ) : (
+                "Connect any Solana wallet. Even a burner."
               )
             }
             button={
               <ButtonWithLoader
                 status={
-                  hasSolanaAccount
-                    ? hasOtherAccounts
+                  !!accounts.solana
+                    ? accounts.hasOtherAccounts
                       ? TaskStatus.COMPLETE
                       : TaskStatus.CONNECTED
                     : TaskStatus.IDLE
                 }
                 children={
-                  hasSolanaAccount
-                    ? hasOtherAccounts
+                  !!accounts.solana
+                    ? accounts.hasOtherAccounts
                       ? "Locked"
                       : "Change"
                     : "Connect"
@@ -164,7 +186,7 @@ export const DeveloperListForm = memo(
               />
             }
           />
-          {hasSolanaAccount && !hasOtherAccounts && (
+          {!!accounts.solana && !accounts.hasOtherAccounts && (
             <div className="text-center card text-sm border-yellow-500 bg-yellow-300">
               <h4 className="font-semibold text-base">Caution</h4>
               <p>
@@ -179,7 +201,22 @@ export const DeveloperListForm = memo(
           <TaskItemCard
             imageSrc={githubIcon}
             title="GitHub"
-            description="Prove your contributions to the Solana ecosystem"
+            description={
+              !!accounts.github ? (
+                <>
+                  {"Connected to "}
+                  <Link
+                    href={`https://github.com/${accounts.github}`}
+                    target="_blank"
+                    className="underline hover:text-hot-pink"
+                  >
+                    @{accounts.github}
+                  </Link>
+                </>
+              ) : (
+                "Prove your code contributions to the Solana ecosystem."
+              )
+            }
             button={
               <ButtonWithLoader
                 onClick={
@@ -199,7 +236,22 @@ export const DeveloperListForm = memo(
           <TaskItemCard
             imageSrc={xIcon}
             title="X / Twitter"
-            description="Prove you participate in the Solana community"
+            description={
+              !!accounts.twitter ? (
+                <>
+                  {"Connected to "}
+                  <Link
+                    href={`https://twitter.com/${accounts.twitter}`}
+                    target="_blank"
+                    className="underline hover:text-hot-pink"
+                  >
+                    @{accounts.twitter}
+                  </Link>
+                </>
+              ) : (
+                "Prove you participate in the Solana community."
+              )
+            }
             button={
               <ButtonWithLoader
                 onClick={
@@ -222,7 +274,11 @@ export const DeveloperListForm = memo(
             description="Quick and to the point. ~2 minutes to complete."
             button={
               <ButtonWithLoader
-                status={hasAllAccounts ? TaskStatus.IDLE : TaskStatus.DISABLED}
+                status={
+                  accounts.hasAllAccounts
+                    ? TaskStatus.IDLE
+                    : TaskStatus.DISABLED
+                }
                 onClick={handleQuestions}
                 children={"Start"}
               />
@@ -307,7 +363,7 @@ export const TaskItemCard = ({
         />
         <div className="space-y-0">
           <h4 className="font-semibold text-xl inline-flex gap-2">{title}</h4>
-          <p className="text-sm">{description}</p>
+          <p className="text-sm text-gray-600">{description}</p>
         </div>
       </div>
 
