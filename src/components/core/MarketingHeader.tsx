@@ -1,11 +1,10 @@
 "use client";
 
-import Link from "next/link";
-import { Suspense, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 
 import styles from "@/styles/Nav.module.css";
-import { Menu as MenuIcon, X as XIcon, Mic as MicIcon } from "react-feather";
+import { Menu as MenuIcon, X as XIcon } from "react-feather";
 import { AppLogo } from "@/components/core/AppLogo";
 import { AppNav } from "@/components/core/AppNav";
 import { HeaderUserMenu } from "./HeaderUserMenu";
@@ -60,9 +59,9 @@ export default function MarketingHeader({
           </div>
 
           <div className={styles.mobileActionMenu}>
-            <Link href="/podcast" className="icon-md">
+            {/* <Link href="/podcast" className="icon-md">
               <MicIcon className="w-full" />
-            </Link>
+            </Link> */}
 
             <button className="icon-lg" onClick={(e) => setShowMenu(!showMenu)}>
               {showMenu ? (
