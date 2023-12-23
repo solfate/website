@@ -54,7 +54,7 @@ export default async function Page() {
         </p>
       </section>
 
-      <DeveloperListForm session={session} groupedAccounts={groupedAccounts} />
+      <DeveloperListForm groupedAccounts={groupedAccounts} />
     </main>
   );
 }

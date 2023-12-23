@@ -28,12 +28,11 @@ enum TaskStatus {
 }
 
 type DeveloperListFormProps = {
-  session: Option<Session>;
   groupedAccounts: Option<AccountsGroupByProvider>;
 };
 
 export const DeveloperListForm = memo(
-  ({ session, groupedAccounts }: DeveloperListFormProps) => {
+  ({ groupedAccounts }: DeveloperListFormProps) => {
     const [dialogOpen, setDialogOpen] = useState(false);
 
     /**
