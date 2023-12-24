@@ -6,6 +6,7 @@ import Image from "next/image";
 import { DeveloperListForm } from "@/components/auth/DeveloperListForm";
 import { getUserSession, groupAccountsByProvider } from "@/lib/auth";
 import { getAccountsByUserId } from "@/lib/queries/accounts";
+import prisma from "@/lib/prisma";
 
 export const metadata: Metadata = {
   title: `${SITE.name} - Verified Solana Developers`,
@@ -21,6 +22,18 @@ export default async function Page() {
   const groupedAccounts = await getAccountsByUserId({
     userId: session?.user.id,
   }).then((accounts) => groupAccountsByProvider(accounts, true));
+
+  // get the current users list record
+  let listRecord = null;
+  if (!!session?.user.id) {
+    listRecord = await prisma.walletList.findFirst({
+      where: {
+        type: "DEVELOPER",
+        wallet: groupedAccounts.solana[0].providerAccountId,
+      },
+    });
+  }
+  console.log("listRecord:", listRecord);
 
   return (
     <main className="container min-h-[80vh] space-y-8">
@@ -54,7 +67,10 @@ export default async function Page() {
         </p>
       </section>
 
-      <DeveloperListForm groupedAccounts={groupedAccounts} />
+      <DeveloperListForm
+        groupedAccounts={groupedAccounts}
+        onList={!!listRecord}
+      />
     </main>
   );
 }
