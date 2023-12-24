@@ -41,6 +41,7 @@ export async function fetcher<ApiInputType>(
     // always stringify the body because this is json land and we always use it every time
     body: JSON.stringify(init.body),
   }).then(async (res) => {
-    return res.text();
+    if (res.ok) return await res.text();
+    else throw await res.text();
   });
 }
