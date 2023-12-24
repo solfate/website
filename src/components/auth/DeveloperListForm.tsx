@@ -29,11 +29,13 @@ enum TaskStatus {
 }
 
 type DeveloperListFormProps = {
+  onList: boolean;
   groupedAccounts: Option<AccountsGroupByProvider>;
 };
 
 export const DeveloperListForm = memo(
-  ({ groupedAccounts }: DeveloperListFormProps) => {
+  ({ groupedAccounts, onList }: DeveloperListFormProps) => {
+    const [isOnList, setIsOnList] = useState(onList);
     const [dialogOpen, setDialogOpen] = useState(false);
 
     /**
@@ -139,11 +141,46 @@ export const DeveloperListForm = memo(
       else return setDialogOpen(true);
     }, [accounts]);
 
+    if (!!isOnList) {
+      return (
+        <div className="text-center card text-sm max-w-2xl mx-auto space-y-4 border-yellow-500 bg-yellow-300">
+          <h4 className="font-semibold text-base">
+            GitHub Contributions Under Review
+          </h4>
+          <p>
+            Your GitHub account (
+            <Link
+              href={`https://github.com/${accounts.github}`}
+              target="_blank"
+              className="underline hover:text-hot-pink"
+            >
+              @{accounts.github}
+            </Link>
+            ) is the waitlist to join the Verified Solana Developers. Your
+            contributions to the Solana ecosystem are currently under review.
+          </p>
+          <p>
+            If approved, you will be able to mint the soul-bound NFT to your
+            selected wallet (
+            <Link
+              href={`https://solana.fm/address/${accounts.solana}`}
+              target="_blank"
+              className="underline hover:text-hot-pink"
+            >
+              {shortWalletAddress(accounts.solana as string)}
+            </Link>
+            ). Granting you access to special goodies!
+          </p>
+        </div>
+      );
+    }
+
     return (
       <>
         <DeveloperListQuestionsDialog
           isOpen={dialogOpen}
           setIsOpen={setDialogOpen}
+          setIsOnList={setIsOnList}
         />
 
         <div className="max-w-2xl mx-auto space-y-4">
@@ -374,7 +411,11 @@ export const TaskItemCard = ({
   );
 };
 
-export const DeveloperListQuestionsDialog = (props: DialogProps) => {
+export const DeveloperListQuestionsDialog = (
+  props: DialogProps & {
+    setIsOnList: React.Dispatch<React.SetStateAction<boolean>>;
+  },
+) => {
   //   const {
   //     profileData,
   //     updateProfileData,
@@ -423,6 +464,7 @@ export const DeveloperListQuestionsDialog = (props: DialogProps) => {
           body: formData,
         })
           .then((res) => {
+            props.setIsOnList(true);
             props.setIsOpen(false);
             toast.success(res);
             setHasChanges(false);
@@ -462,17 +504,20 @@ export const DeveloperListQuestionsDialog = (props: DialogProps) => {
           <section className="p-5 space-y-5 w-full">
             <DeveloperQuestion
               count={1}
-              label={"Why should you be on this list?"}
+              label={"Why should you be on this list? (required)"}
             >
               <textarea
                 onChange={(e) => updateFormState("why", e.target.value)}
                 className="input w-full h-28"
                 maxLength={250}
                 // required={true}
-                placeholder="Share details that may be relevant (max 250 chars)"
+                placeholder="Share any details that may be relevant (max 250 chars)"
               ></textarea>
             </DeveloperQuestion>
-            <DeveloperQuestion count={2} label={"Who can vouch for you?"}>
+            <DeveloperQuestion
+              count={2}
+              label={"Who will vouch for you?  (optional)"}
+            >
               <textarea
                 onChange={(e) => updateFormState("who", e.target.value)}
                 className="input w-full h-28"
