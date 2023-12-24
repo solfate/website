@@ -18,6 +18,8 @@ import { PulseLoader } from "react-spinners";
 import toast from "react-hot-toast";
 import { TwitterProfile } from "next-auth/providers/twitter";
 import { GithubProfile } from "next-auth/providers/github";
+import { fetcher } from "@/lib/api";
+import { ApiDevelopersPostInput } from "@/types/api/developers";
 
 enum TaskStatus {
   IDLE,
@@ -382,8 +384,9 @@ export const DeveloperListQuestionsDialog = (props: DialogProps) => {
   //   } = useContext(ProfileEditorContext);
 
   // initialize the state tracker for the on-page form state
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [hasChanges, setHasChanges] = useState<boolean>(false);
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<ApiDevelopersPostInput>({
     why: "",
     who: "",
   });
@@ -405,25 +408,45 @@ export const DeveloperListQuestionsDialog = (props: DialogProps) => {
   }
 
   /**
-   *
+   * Process the user data submission
    */
   const onSubmitHandler = useCallback(
-    (e: React.FormEvent<HTMLFormElement>) => {
+    async (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
-      // if (!profileData || !elementToEdit || !formData) return;
+      if (isLoading) return;
 
-      // todo:
+      try {
+        setIsLoading(true);
+        await fetcher<ApiDevelopersPostInput>("/api/lists/developers", {
+          method: "POST",
+          // send the current working data
+          body: formData,
+        })
+          .then((res) => {
+            props.setIsOpen(false);
+            toast.success(res);
+            setHasChanges(false);
+            return true;
+          })
+          .catch((err: string) => {
+            toast.error(err || "An error occurred");
+            console.error(err);
+          });
+      } catch (err) {
+        toast.error("An unknown error occurred...");
+        console.error("An unknown error occurred", "[0x1235]");
+        console.error(err);
+      }
 
-      // reset the dialog state
-      // resetDialog(null);
+      // finally reset the loading state
+      setIsLoading(false);
     },
     [
       // comment for better diffs
       formData,
-      // profileData,
-      // elementToEdit,
-      // updateProfileData,
-      // resetDialog,
+      setHasChanges,
+      isLoading,
+      setIsLoading,
     ],
   );
 
@@ -445,6 +468,7 @@ export const DeveloperListQuestionsDialog = (props: DialogProps) => {
                 onChange={(e) => updateFormState("why", e.target.value)}
                 className="input w-full h-28"
                 maxLength={250}
+                // required={true}
                 placeholder="Share details that may be relevant (max 250 chars)"
               ></textarea>
             </DeveloperQuestion>
@@ -462,13 +486,20 @@ export const DeveloperListQuestionsDialog = (props: DialogProps) => {
             <section className="flex items-center w-full gap-3 place-self-end">
               <button
                 type="submit"
-                disabled={!hasChanges}
+                disabled={!hasChanges || isLoading}
                 className="order-2 btn w-full btn-black justify-center"
               >
-                Submit
+                {isLoading ? (
+                  <div>
+                    <PulseLoader size={8} color="white" />
+                  </div>
+                ) : (
+                  <>Submit</>
+                )}
               </button>
               <button
                 type="button"
+                disabled={isLoading}
                 className="order-1 w-full btn btn-ghost justify-center !border-gray-300"
                 onClick={() => props.setIsOpen(false)}
               >
