@@ -23,9 +23,9 @@ export default async function Page() {
   }).then((accounts) => groupAccountsByProvider(accounts, true));
 
   return (
-    <main className="container min-h-[80vh]">
-      <section className="max-w-2xl mx-auto space-y-8 text-center container">
-        <h1 className="justify-around gap-3 space-x-5 text-4xl font-bold md:text-5xl inline-flex items-center align-middle">
+    <main className="container min-h-[80vh] space-y-8">
+      <section className="max-w-2xl mx-auto space-y-8 text-center">
+        <h1 className="justify-around gap-3 space-x-5 text-3xl font-bold md:text-5xl inline-flex items-center align-middle">
           <Image
             priority
             src={dropEmoji}

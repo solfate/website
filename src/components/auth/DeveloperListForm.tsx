@@ -319,7 +319,7 @@ export const ButtonWithLoader = ({
   return (
     <button
       type="button"
-      className={clsx("btn w-28 justify-center", buttonClass)}
+      className={clsx("btn w-full md:w-32 justify-center", buttonClass)}
       disabled={status == TaskStatus.COMPLETE || status == TaskStatus.DISABLED}
       aria-disabled={
         status == TaskStatus.COMPLETE || status == TaskStatus.DISABLED
@@ -351,7 +351,7 @@ export const TaskItemCard = ({
   button,
 }: TaskItemCardProps) => {
   return (
-    <div className="card flex items-center justify-between">
+    <div className="card md:flex space-y-2 items-center justify-between">
       <div className="flex gap-3 items-center">
         <Image
           priority
@@ -360,7 +360,9 @@ export const TaskItemCard = ({
           className="w-10 h-10 md:w-12 md:h-12"
         />
         <div className="space-y-0">
-          <h4 className="font-semibold text-xl inline-flex gap-2">{title}</h4>
+          <h4 className="font-semibold text-lg md:text-xl inline-flex gap-2">
+            {title}
+          </h4>
           <p className="text-sm text-gray-600">{description}</p>
         </div>
       </div>
