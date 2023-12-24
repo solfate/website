@@ -73,6 +73,26 @@ model Profile {
     @@index([username], name: "user_username_idx")
 }
 
+// Listing of people and their wallets that have particiapted in our special lists
+model WalletList {
+    id Int @unique @default(autoincrement()) @db.UnsignedInt
+
+    type      ListPersonType
+    cohort    Int?           @default(0)
+    wallet    String
+    twitter   String?
+    questions Json?          @default("{}")
+    data      Json?          @default("{}")
+    flags     String?        @db.VarChar(500)
+    status    Status?        @default(PENDING)
+    // track a single unique asset per record
+    assetId   String?
+
+    @@unique([type, wallet])
+    @@index([wallet], name: "wallet_id_idx")
+    @@index([twitter], name: "twitter_id_idx")
+}
+
 // User types to be used for access controls
 enum UserType {
     USER
@@ -96,6 +116,12 @@ enum Status {
     PENDING
     FAILED
     UNCLAIMED
+}
+
+// Broad category of people
+enum ListPersonType {
+    DEVELOPER
+    ARTIST
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////
