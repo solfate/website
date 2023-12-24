@@ -85,13 +85,13 @@ export const POST = withUserAuth(async ({ req, session }) => {
   }
 
   // verify the current user/wallet is not already a member of the wallet list
-  const currentList = await prisma.walletList.findMany({
+  const currentRecord = await prisma.walletList.findFirst({
     where: {
       type: "DEVELOPER",
       wallet: accounts.solanaWallet,
     },
   });
-  if (currentList.length > 0) {
+  if (!!currentRecord) {
     return new Response("Your wallet is already on this list!", {
       status: 400,
     });
