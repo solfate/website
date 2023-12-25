@@ -44,18 +44,18 @@ export const DeveloperListForm = memo(
     const accounts = useMemo(() => {
       const data = {
         // extract the connected solana wallet address
-        solana: !!groupedAccounts?.solana.length
+        solana: !!groupedAccounts?.solana?.length
           ? groupedAccounts.solana[0].providerAccountId
           : false,
         // extract the connected twitter username
-        twitter: !!groupedAccounts?.twitter.length
+        twitter: !!groupedAccounts?.twitter?.length
           ? (
               groupedAccounts.twitter[0]
                 .provider_profile as object as TwitterProfile
             ).data.username
           : false,
         // extract the connected github username
-        github: !!groupedAccounts?.github.length
+        github: !!groupedAccounts?.github?.length
           ? (
               groupedAccounts.github[0]
                 .provider_profile as object as GithubProfile
@@ -133,8 +133,8 @@ export const DeveloperListForm = memo(
       if (!accounts.solana)
         return toast.error("You must sign in with a Solana wallet");
       else if (
-        !groupedAccounts?.github.length ||
-        !groupedAccounts?.twitter.length
+        !groupedAccounts?.github?.length ||
+        !groupedAccounts?.twitter?.length
       )
         return toast.error("Connect your GitHub and Twitter first");
       // actually open the dialog
@@ -257,15 +257,15 @@ export const DeveloperListForm = memo(
             button={
               <ButtonWithLoader
                 onClick={
-                  !!groupedAccounts?.github.length ? undefined : githubAuth
+                  !!groupedAccounts?.github?.length ? undefined : githubAuth
                 }
                 status={
-                  !!groupedAccounts?.github.length
+                  !!groupedAccounts?.github?.length
                     ? TaskStatus.COMPLETE
                     : TaskStatus.IDLE
                 }
                 children={
-                  !!groupedAccounts?.github.length ? "Completed" : "Connect"
+                  !!groupedAccounts?.github?.length ? "Completed" : "Connect"
                 }
               />
             }
@@ -292,15 +292,15 @@ export const DeveloperListForm = memo(
             button={
               <ButtonWithLoader
                 onClick={
-                  !!groupedAccounts?.twitter.length ? undefined : twitterAuth
+                  !!groupedAccounts?.twitter?.length ? undefined : twitterAuth
                 }
                 status={
-                  !!groupedAccounts?.twitter.length
+                  !!groupedAccounts?.twitter?.length
                     ? TaskStatus.COMPLETE
                     : TaskStatus.IDLE
                 }
                 children={
-                  !!groupedAccounts?.twitter.length ? "Completed" : "Connect"
+                  !!groupedAccounts?.twitter?.length ? "Completed" : "Connect"
                 }
               />
             }

@@ -57,17 +57,17 @@ export const POST = withUserAuth(async ({ req, session }) => {
     .then((accounts) => groupAccountsByProvider(accounts, true))
     .then((accounts) => {
       return {
-        solanaWallet: accounts.solana[0].providerAccountId,
+        solanaWallet: accounts.solana?.[0].providerAccountId,
         twitter: {
-          id: accounts.twitter[0].providerAccountId,
+          id: accounts.twitter?.[0].providerAccountId,
           username: (
-            accounts.twitter[0].provider_profile as object as TwitterProfile
+            accounts.twitter?.[0].provider_profile as object as TwitterProfile
           ).data.username,
         },
         github: {
-          id: accounts.github[0].providerAccountId,
+          id: accounts.github?.[0].providerAccountId,
           username: (
-            accounts.github[0].provider_profile as object as GithubProfile
+            accounts.github?.[0].provider_profile as object as GithubProfile
           ).login,
         },
       };

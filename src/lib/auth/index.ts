@@ -49,9 +49,9 @@ export const withUserSession =
 export function groupAccountsByProvider(accounts: Account[], sanitize = true) {
   // init a keyed group tracker (giving type save keys for the supported providers)
   const groupedAccounts: AccountsGroupByProvider = {
-    solana: [],
-    twitter: [],
-    github: [],
+    solana: undefined,
+    twitter: undefined,
+    github: undefined,
   };
 
   // actually perform the grouping action
@@ -63,7 +63,7 @@ export function groupAccountsByProvider(accounts: Account[], sanitize = true) {
       AccountSanitizeKeys.forEach((key) => delete account[key]);
     }
 
-    groupedAccounts[account.provider].push(account);
+    groupedAccounts[account.provider]?.push(account);
   });
 
   return groupedAccounts;

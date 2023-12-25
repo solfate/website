@@ -37,9 +37,9 @@ export type WithSessionHandler = {
  */
 export type AccountsGroupByProvider = Record<
   "twitter" | "github" | "solana",
-  Account[]
+  Account[] | undefined
 > & {
-  [key: string]: Account[];
+  [key: string]: Account[] | undefined;
 };
 
 /**
