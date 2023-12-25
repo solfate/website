@@ -25,7 +25,7 @@ export default async function Page() {
 
   // get the current users list record
   let listRecord = null;
-  if (!!session?.user.id) {
+  if (!!session?.user.id && !!groupedAccounts.solana?.[0].providerAccountId) {
     listRecord = await prisma.walletList.findFirst({
       where: {
         type: "DEVELOPER",
@@ -33,7 +33,6 @@ export default async function Page() {
       },
     });
   }
-  console.log("listRecord:", listRecord);
 
   return (
     <main className="container min-h-[80vh] space-y-8">
