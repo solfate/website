@@ -139,7 +139,7 @@ export const DeveloperListForm = memo(
         return toast.error("Connect your GitHub and Twitter first");
       // actually open the dialog
       else return setDialogOpen(true);
-    }, [accounts]);
+    }, [accounts, groupedAccounts]);
 
     if (!!isOnList) {
       return (
@@ -212,15 +212,14 @@ export const DeveloperListForm = memo(
                       : TaskStatus.CONNECTED
                     : TaskStatus.IDLE
                 }
-                children={
-                  !!accounts.solana
-                    ? accounts.hasOtherAccounts
-                      ? "Locked"
-                      : "Change"
-                    : "Connect"
-                }
                 onClick={handleSolana}
-              />
+              >
+                {!!accounts.solana
+                  ? accounts.hasOtherAccounts
+                    ? "Locked"
+                    : "Change"
+                  : "Connect"}
+              </ButtonWithLoader>
             }
           />
           {!!accounts.solana && !accounts.hasOtherAccounts && (
@@ -264,10 +263,9 @@ export const DeveloperListForm = memo(
                     ? TaskStatus.COMPLETE
                     : TaskStatus.IDLE
                 }
-                children={
-                  !!groupedAccounts?.github?.length ? "Completed" : "Connect"
-                }
-              />
+              >
+                {!!groupedAccounts?.github?.length ? "Completed" : "Connect"}
+              </ButtonWithLoader>
             }
           />
           <TaskItemCard
@@ -299,10 +297,9 @@ export const DeveloperListForm = memo(
                     ? TaskStatus.COMPLETE
                     : TaskStatus.IDLE
                 }
-                children={
-                  !!groupedAccounts?.twitter?.length ? "Completed" : "Connect"
-                }
-              />
+              >
+                {!!groupedAccounts?.twitter?.length ? "Completed" : "Connect"}
+              </ButtonWithLoader>
             }
           />
           <TaskItemCard
@@ -317,8 +314,9 @@ export const DeveloperListForm = memo(
                     : TaskStatus.DISABLED
                 }
                 onClick={handleQuestions}
-                children={"Start"}
-              />
+              >
+                Start
+              </ButtonWithLoader>
             }
           />
         </div>
@@ -489,6 +487,8 @@ export const DeveloperListQuestionsDialog = (
       setHasChanges,
       isLoading,
       setIsLoading,
+      props.setIsOpen,
+      props.setIsOnList,
     ],
   );
 

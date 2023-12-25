@@ -188,7 +188,7 @@ export const AuthForm = memo(({ className, callbackPath }: AuthFormProps) => {
 
       toast.error("An unknown signin error occurred");
     }
-  }, [wallet, processingStage, walletModal, setProcessingStage]);
+  }, [wallet, processingStage, walletModal, setProcessingStage, callbackPath]);
 
   /**
    * handle the various wallet state changes to provider better ux
@@ -206,7 +206,12 @@ export const AuthForm = memo(({ className, callbackPath }: AuthFormProps) => {
     }
 
     setPreviousWalletState(wallet);
-  }, [wallet]);
+  }, [
+    wallet,
+    handleSignInWithSolana,
+    previousWalletState,
+    setPreviousWalletState,
+  ]);
 
   return (
     <div className={`space-y-8 ${className}`}>
