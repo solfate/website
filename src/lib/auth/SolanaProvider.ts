@@ -5,6 +5,7 @@ import { SolanaSignInMessage } from "@/lib/solana/SignInMessage";
 import { debug } from "@/lib/helpers";
 import { getUserByProviderAccountId } from "@/lib//queries/users";
 import { NextAuthOptions, User } from "next-auth";
+import { getCsrfToken } from "next-auth/react";
 
 /***/
 export type SolanaProviderConfig = {};
@@ -41,9 +42,12 @@ export function SolanaProvider({}: SolanaProviderConfig) {
           throw new Error("Invalid Solana credentials provided");
 
         // manually get the CSRF token since `getCsrfToken` seems to not work in NextJS app router?
+        console.error("cookies()", cookies());
         const csrfToken =
           cookies().get("next-auth.csrf-token")?.value.split("|")[0] || "";
-        // const csrfToken = await getCsrfToken();
+        console.error("csrfToken:", csrfToken);
+        const csrfToken2 = await getCsrfToken();
+        console.error("csrfToken2:", csrfToken2);
 
         // parse the signed message provided within the request
         const signinMessage = new SolanaSignInMessage({
