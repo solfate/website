@@ -487,8 +487,7 @@ export const DeveloperListQuestionsDialog = (
       setHasChanges,
       isLoading,
       setIsLoading,
-      props.setIsOpen,
-      props.setIsOnList,
+      props,
     ],
   );
 
