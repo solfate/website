@@ -8,6 +8,7 @@
     "postbuild": "next-sitemap",
     "start": "next start",
     "contentlayer": "contentlayer build --clearCache",
+    "db:connect": "pscale connect solfate-main --port 3309 ",
     "lint": "next lint"
   },
   "dependencies": {
