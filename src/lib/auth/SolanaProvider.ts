@@ -52,8 +52,13 @@ export function SolanaProvider({}: SolanaProviderConfig) {
           "next-auth.csrf-token:",
           cookies().get("next-auth.csrf-token"),
         );
-        console.error("await getCsrfToken:", await getCsrfToken());
+        const csrfToken2 = await getCsrfToken();
+        console.error("csrfToken2:", csrfToken2);
         console.error("csrfToken:", csrfToken);
+        const cookieVal = cookies()
+          .getAll()
+          .find((item) => item.name.includes("next-auth.csrf-token"));
+        console.error("cookieVal:", cookieVal);
 
         // parse the signed message provided within the request
         const signinMessage = new SolanaSignInMessage({
