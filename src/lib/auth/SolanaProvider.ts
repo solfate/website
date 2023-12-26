@@ -45,28 +45,7 @@ export function SolanaProvider({}: SolanaProviderConfig) {
         const cookieVal = cookies()
           .getAll()
           .find((item) => item.name.includes("next-auth.csrf-token"));
-        console.error("cookieVal:", cookieVal);
         const csrfToken = decodeURI(cookieVal?.value || "").split("|")[0];
-
-        // const csrfToken =
-        //   (await getCsrfToken()) ||
-        //   cookies().get("next-auth.csrf-token")?.value.split("|")[0] ||
-        //   "";
-
-        console.error("cookies:", cookies());
-        console.error(
-          "next-auth.csrf-token:",
-          cookies().get("next-auth.csrf-token"),
-        );
-        const csrfToken2 = await getCsrfToken({
-          req: {
-            headers: {
-              cookies: cookies().toString(),
-            },
-          },
-        });
-        console.error("csrfToken2:", csrfToken2);
-        console.error("csrfToken:", csrfToken);
 
         // parse the signed message provided within the request
         const signinMessage = new SolanaSignInMessage({
@@ -78,10 +57,6 @@ export function SolanaProvider({}: SolanaProviderConfig) {
             // todo: domain?
           },
         });
-
-        console.error("signinMessage:", signinMessage);
-        console.error("nonce:", signinMessage.message.nonce);
-        console.error("csrfToken:", csrfToken);
 
         // todo: perform a proper domain check using allowed domains
         // if (signinMessage.domain !== nextAuthUrl.host) {
