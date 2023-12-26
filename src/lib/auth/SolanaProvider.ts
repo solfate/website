@@ -44,10 +44,9 @@ export function SolanaProvider({}: SolanaProviderConfig) {
         // manually get the CSRF token since `getCsrfToken` seems to not work in NextJS app router?
         console.error("cookies()", cookies());
         const csrfToken =
-          cookies().get("next-auth.csrf-token")?.value.split("|")[0] || "";
-        console.error("csrfToken:", csrfToken);
-        const csrfToken2 = await getCsrfToken();
-        console.error("csrfToken2:", csrfToken2);
+          (await getCsrfToken()) ||
+          cookies().get("next-auth.csrf-token")?.value.split("|")[0] ||
+          "";
 
         // parse the signed message provided within the request
         const signinMessage = new SolanaSignInMessage({
@@ -59,12 +58,6 @@ export function SolanaProvider({}: SolanaProviderConfig) {
             // todo: domain?
           },
         });
-
-        console.error("csrfToken:", csrfToken);
-        console.error("signinMessage:", signinMessage);
-        // @ts-ignore
-        const nextAuthUrl = new URL(process.env.NEXTAUTH_URL);
-        console.error("nextAuthUrl:", nextAuthUrl);
 
         // todo: perform a proper domain check using allowed domains
         // if (signinMessage.domain !== nextAuthUrl.host) {
