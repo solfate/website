@@ -47,6 +47,12 @@ export function SolanaProvider({}: SolanaProviderConfig) {
           cookies().get("next-auth.csrf-token")?.value.split("|")[0] ||
           "";
 
+        console.error("cookies:", cookies());
+        console.error(
+          "next-auth.csrf-token:",
+          cookies().get("next-auth.csrf-token"),
+        );
+        console.error("await getCsrfToken:", await getCsrfToken());
         console.error("csrfToken:", csrfToken);
 
         // parse the signed message provided within the request
