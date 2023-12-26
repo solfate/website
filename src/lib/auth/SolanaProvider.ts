@@ -56,9 +56,11 @@ export function SolanaProvider({}: SolanaProviderConfig) {
           },
         });
 
-        // const nextAuthUrl = new URL(process.env.NEXTAUTH_URL);
-        // debug("nextAuthUrl:", nextAuthUrl);
-        // debug("signinMessage.domain:", signinMessage.domain);
+        // @ts-ignore
+        const nextAuthUrl = new URL(process.env.NEXTAUTH_URL);
+        debug("csrfToken:", csrfToken);
+        debug("nextAuthUrl:", nextAuthUrl);
+        debug("signinMessage:", signinMessage);
 
         // todo: perform a proper domain check using allowed domains
         // if (signinMessage.domain !== nextAuthUrl.host) {
