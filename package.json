@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "yarn contentlayer && next dev",
-    "build": "yarn contentlayer && next build",
+    "build": "yarn prisma generate && yarn contentlayer && next build",
     "postbuild": "next-sitemap",
     "start": "next start",
     "contentlayer": "contentlayer build --clearCache",
