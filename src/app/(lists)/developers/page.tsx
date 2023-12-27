@@ -10,7 +10,9 @@ import prisma from "@/lib/prisma";
 
 export const metadata: Metadata = {
   title: `${SITE.name} - Verified Solana Developers`,
-  description: "" + "",
+  description:
+    "The community of Solana developers is doing thankless work building. " +
+    "We aim to help support ways to provide value back to dedicated Solana developers.",
   alternates: {
     canonical: "/developers",
   },
@@ -62,7 +64,8 @@ export default async function Page() {
           building, often for thankless work. Especially{" "}
           <span>open source</span> contributors.
           <br />
-          We aim to help fix this.
+          We aim to help fix this by supporting ways to provide value back to
+          those dedicated developers.
         </p>
       </section>
 
