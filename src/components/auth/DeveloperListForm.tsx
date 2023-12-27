@@ -523,6 +523,12 @@ export const DeveloperListQuestionsDialog = (
                 maxLength={250}
                 placeholder="Share anyone you think will vouch for you and your contributions to the Solana ecosystem (i.e. people, entities, communities) (max 250 chars)"
               ></textarea>
+
+              <p className="text-sm text-gray-500">
+                No more than 3 recommendations are needed, pick your strongest
+                ones. Especially those that would be willing to vouch for you
+                publicly!
+              </p>
             </DeveloperQuestion>
           </section>
 
