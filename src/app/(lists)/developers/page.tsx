@@ -16,6 +16,9 @@ export const metadata: Metadata = {
   alternates: {
     canonical: "/developers",
   },
+  openGraph: {
+    images: "/img/social/developers.png?9786yr",
+  },
 };
 
 export default async function Page() {
