@@ -6,7 +6,7 @@ import { SITE, TWITTER } from "@/lib/const/general";
 
 import { Analytics } from "@vercel/analytics/react";
 import { Toaster } from "react-hot-toast";
-import { SolanaProvider } from "@/context/SolanaProviders";
+import { SolanaProvider } from "@/context/SolanaProvider";
 import { getUserSession } from "@/lib/auth";
 
 const inter = Inter({ subsets: ["latin"] });
