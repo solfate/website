@@ -69,7 +69,9 @@ export const AuthForm = memo(({ className, callbackPath }: AuthFormProps) => {
       ? `${window.location.protocol}//${window.location.host}${
           !!callbackPath ? callbackPath : window.location.pathname
         }`
-      : window.location.href;
+      : `${window.location.protocol}//${window.location.host}`;
+
+    if (callbackPath == "self") callbackUrl = window.location.href;
 
     try {
       let url = new URL(
