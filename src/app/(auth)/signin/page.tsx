@@ -1,12 +1,17 @@
 import { Metadata } from "next";
 import { SITE } from "@/lib/const/general";
 import { AuthForm } from "@/components/auth/AuthForm";
+import { getUserSession } from "@/lib/auth";
 
 export const metadata: Metadata = {
   title: `${SITE.name} - Sign In`,
 };
 
 export default async function Page() {
+  const session = await getUserSession();
+  console.error("page session:", session);
+
+
   return (
     <main className="container w-full max-w-md px-4 py-8 md:py-12 space-y-6">
       <section className="max-w-2xl mx-auto space-y-2 text-center container">
