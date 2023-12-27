@@ -389,7 +389,7 @@ export const TaskItemCard = ({
 }: TaskItemCardProps) => {
   return (
     <div className="card md:flex space-y-2 items-center justify-between">
-      <div className="flex gap-3 items-center">
+      <div className="flex gap-3 items-start">
         <Image
           priority
           src={imageSrc}
