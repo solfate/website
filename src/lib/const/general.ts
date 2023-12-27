@@ -4,6 +4,7 @@
 
 export const SITE = {
   name: "Solfate",
+  domain: "solfate.com",
   url:
     process.env.NODE_ENV == "development"
       ? "http://localhost:3000"

@@ -1,0 +1,177 @@
+datasource db {
+    provider     = "mysql"
+    url          = env("DATABASE_URL")
+    relationMode = "prisma"
+}
+
+generator client {
+    provider = "prisma-client-js"
+}
+
+// next-auth and custom
+model User {
+    username String @unique @default(uuid()) @db.VarChar(255)
+
+    // start next-auth required
+    uid           Int       @unique @default(autoincrement()) @db.UnsignedInt
+    id            String    @id @default(cuid())
+    name          String?
+    email         String?   @unique
+    emailVerified DateTime?
+    image         String?
+    accounts      Account[]
+    sessions      Session[]
+    // end next-auth required
+
+    // basic user status info
+    type      UserType? @default(USER)
+    status    Status?   @default(ACTIVE)
+    flags     String?   @db.VarChar(500)
+    createdAt DateTime? @default(now()) @db.DateTime(0)
+    updatedAt DateTime? @updatedAt
+
+    // billing information and settings
+    // customerId    String?       @unique @db.VarChar(128)
+    // billingPlan   String?       @db.VarChar(128)
+    // billingStatus String?       @db.VarChar(128)
+    // customerType  CustomerType? @default(NONE)
+
+    // connections to other model structures
+    profile Profile? @relation("username")
+
+    @@index([id], name: "user_id_idx")
+    @@index([email], name: "user_email_idx")
+    @@index([username], name: "user_username_idx")
+    @@index([uid], name: "user_uid_idx")
+}
+
+// User Profile information
+model Profile {
+    // id       Int    @unique @default(autoincrement()) @db.UnsignedInt
+    username String @unique @db.VarChar(255)
+    user     User   @relation("username", fields: [username], references: [username])
+
+    // 
+    title    String?
+    name     String?
+    image    String?
+    oneLiner String? @default("") @db.VarChar(255)
+    bio      String? @default("") @db.VarChar(255)
+    verified Boolean @default(false)
+
+    // json array of the block elements to be rendered on the page
+    elements      Json? @default("[]")
+    // json array of the featured links
+    featuredLinks Json? @default("[]")
+
+    // 
+    flags  String? @db.VarChar(500)
+    status Status? @default(ACTIVE)
+
+    @@index([username], name: "user_username_idx")
+}
+
+// Listing of people and their wallets that have particiapted in our special lists
+model WalletList {
+    id Int @unique @default(autoincrement()) @db.UnsignedInt
+
+    type      ListPersonType
+    cohort    Int?           @default(0)
+    wallet    String
+    twitter   String?
+    questions Json?          @default("{}")
+    data      Json?          @default("{}")
+    flags     String?        @db.VarChar(500)
+    status    Status?        @default(PENDING)
+    // track a single unique asset per record
+    assetId   String?
+
+    @@unique([type, wallet])
+    @@index([wallet], name: "wallet_id_idx")
+    @@index([twitter], name: "twitter_id_idx")
+}
+
+// User types to be used for access controls
+enum UserType {
+    USER
+    MANAGER
+    ADMIN
+    SUPER
+    OWNER
+    UNKNOWN
+}
+
+// Common statuses to be used throughout the app
+enum Status {
+    INACTIVE
+    ACTIVE
+    CLOSED
+    CANCELED
+    DISABLED
+    LOCKED
+    DELETED
+    PAID
+    PENDING
+    FAILED
+    UNCLAIMED
+}
+
+// Broad category of people
+enum ListPersonType {
+    DEVELOPER
+    ARTIST
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////
+
+// next-auth specific models
+// note: these normally do not change
+
+// Required for next-auth
+model Account {
+    id                       String  @id @default(cuid())
+    userId                   String
+    type                     String
+    provider                 String
+    providerAccountId        String
+    refresh_token            String? @db.Text
+    // this is required by GitHub
+    refresh_token_expires_in Int?
+    access_token             String? @db.Text
+    expires_at               Int?
+    token_type               String?
+    scope                    String?
+    id_token                 String? @db.Text
+    session_state            String?
+    provider_profile         Json?   @default("{}")
+
+    user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+    @@unique([provider, providerAccountId])
+    @@index([providerAccountId], name: "provider_account_id_idx")
+    @@index(userId)
+}
+
+// required for next-auth
+model VerificationToken {
+    identifier String
+    token      String   @unique
+    expires    DateTime
+
+    @@unique([identifier, token])
+}
+
+// required for next-auth
+model Session {
+    id           String   @id @default(cuid())
+    sessionToken String   @unique
+    userId       String
+    expires      DateTime
+    user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+    @@index(userId)
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////

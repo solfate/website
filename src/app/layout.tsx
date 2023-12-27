@@ -6,6 +6,8 @@ import { SITE, TWITTER } from "@/lib/const/general";
 
 import { Analytics } from "@vercel/analytics/react";
 import { Toaster } from "react-hot-toast";
+import { SolanaProvider } from "@/context/SolanaProviders";
+import { getUserSession } from "@/lib/auth";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -42,15 +44,17 @@ export const viewport: Viewport = {
   maximumScale: 1,
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const session = await getUserSession();
+
   return (
     <html lang="en">
       <body className={inter.className}>
-        <MarketingHeader />
+        <MarketingHeader session={session} />
 
         <Toaster
           position="bottom-center"
@@ -85,7 +89,7 @@ export default function RootLayout({
 
         {/* make sure to keep Toaster above the `children` */}
 
-        {children}
+        <SolanaProvider>{children}</SolanaProvider>
 
         {/* <main className="min-h-[85vh]">{children}</main> */}
         <Analytics />

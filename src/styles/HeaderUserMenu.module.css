@@ -1,0 +1,41 @@
+.menu {
+  @apply relative inline-block text-left;
+}
+
+.button {
+  @apply px-3 py-3 items-center inline-flex w-full justify-center text-sm;
+}
+.button svg {
+  @apply h-5 w-5;
+}
+
+.items {
+  @apply absolute right-0 mt-2 w-56 origin-top-right p-1 space-y-1;
+  @apply divide-y bg-white divide-gray-200 border border-gray-300;
+  @apply rounded-md shadow-xl ring-1 ring-black/5 focus:outline-none;
+}
+.items .section {
+  @apply px-1 py-1 space-y-1;
+}
+
+.heading {
+  @apply px-2 py-2 font-medium text-sm;
+  @apply flex items-center gap-2 line-clamp-1;
+  @apply rounded-md;
+  /* @apply hover:bg-gray-100; */
+}
+
+.item {
+  @apply flex gap-2 w-full items-center justify-between;
+  @apply rounded-md px-2 py-2 text-sm;
+}
+.item.active {
+  @apply bg-gray-100;
+}
+.item.inactive {
+  @apply text-gray-900;
+}
+
+.item svg {
+  @apply h-5 w-5;
+}

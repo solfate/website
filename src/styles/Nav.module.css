@@ -47,9 +47,9 @@
 }
 
 .inner {
-  /* @apply container-inner; */
   @apply z-30 w-full;
   @apply flex items-center justify-between mx-auto;
+  @apply gap-2;
   /* @apply px-4 space-x-5 space-y-0 md:py-2; */
 }
 .linksListing {

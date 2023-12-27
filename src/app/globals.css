@@ -14,16 +14,16 @@ body {
 
 .container {
   @apply mx-auto max-w-7xl;
-  @apply p-5;
+  @apply px-5 py-8;
 }
 .page-container {
   @apply container min-h-[90vh];
-  @apply space-y-8 py-8 md:space-y-20;
+  @apply space-y-8 md:space-y-20;
 }
 
 .input {
   @apply px-3 py-2 rounded-lg;
-  @apply border bg-white border-gray-400;
+  @apply border bg-white border-gray-300;
 }
 .input:disabled {
   @apply bg-gray-100 text-gray-400 border-gray-300;
@@ -36,8 +36,8 @@ body {
   @apply hover:bg-opacity-90 hover:border-opacity-90;
 }
 .btn:disabled {
-  /* @apply bg-opacity-70 text-opacity-80 border-opacity-50; */
-  @apply opacity-60;
+  @apply opacity-70;
+  @apply pointer-events-none;
 }
 
 .btn-blue {
@@ -50,7 +50,8 @@ body {
   @apply bg-hot-pink border-hot-pink text-white;
 }
 .btn-ghost {
-  @apply bg-transparent border-gray-500;
+  @apply bg-transparent border-gray-300;
+  @apply hover:border-gray-400;
 }
 
 .prose-cover-image {
@@ -70,6 +71,15 @@ body {
   position: relative;
   width: 100vw;
   left: calc(-0.5 * var(--child-width) + 50%);
+}
+
+/* 
+  Globally reusable component styles
+*/
+.card {
+  @apply bg-white border border-gray-300;
+  @apply p-5 rounded-lg;
+  @apply space-y-1;
 }
 
 .fade-bottom {
