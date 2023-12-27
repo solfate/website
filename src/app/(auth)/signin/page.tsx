@@ -8,9 +8,9 @@ export const metadata: Metadata = {
 };
 
 export default async function Page() {
+  console.error("env:", process.env);
   const session = await getUserSession();
   console.error("page session:", session);
-
 
   return (
     <main className="container w-full max-w-md px-4 py-8 md:py-12 space-y-6">
