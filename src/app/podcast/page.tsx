@@ -54,7 +54,7 @@ export default function Page() {
           <h2 className="font-semibold text-2xl">Recent episodes</h2>
           <Link
             href={"/podcast/browse/1"}
-            className="btn inline-flex items-center gap-2"
+            className="btn btn-ghost inline-flex items-center gap-2"
           >
             View more
             <ArrowRight className="w-5 h-5" strokeWidth={2} />

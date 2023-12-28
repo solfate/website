@@ -92,14 +92,20 @@ PageProps) {
 
         <section className=" flex items-center justify-center gap-3">
           {pagination.page > 1 && (
-            <Link href={`/podcast/browse/${pagination.prev}`} className="btn">
+            <Link
+              href={`/podcast/browse/${pagination.prev}`}
+              className="btn btn-ghost"
+            >
               <ArrowLeft className="w-5 h-5" strokeWidth={2} />
               Prev
             </Link>
           )}
 
           {pagination.page < pagination.totalPages && (
-            <Link href={`/podcast/browse/${pagination.next}`} className="btn">
+            <Link
+              href={`/podcast/browse/${pagination.next}`}
+              className="btn btn-ghost"
+            >
               Next
               <ArrowRight className="w-5 h-5" strokeWidth={2} />
             </Link>
