@@ -54,7 +54,7 @@ pscale deploy-request create solfate-main <feature-branch-name>
    production database:
 
 ```shell
-pscale deploy-request deploy <feature-branch-name> <number>
+pscale deploy-request deploy solfate-main <number|feature-branch-name>
 ```
 
 Done!

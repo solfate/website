@@ -9,6 +9,9 @@
     "start": "next start",
     "contentlayer": "contentlayer build --clearCache",
     "db:connect": "pscale connect solfate-main --port 3309 ",
+    "db:branch": "pscale branch create solfate-main ",
+    "db:deploy-request": "pscale deploy-request create solfate-main ",
+    "db:deploy-merge": "pscale deploy-request deploy ",
     "lint": "next lint"
   },
   "dependencies": {
