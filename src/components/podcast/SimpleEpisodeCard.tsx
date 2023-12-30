@@ -14,6 +14,7 @@ type SimpleEpisodeCardProps = {
   imageAlt?: string;
   date?: PodcastEpisode["date"];
   duration?: PodcastEpisode["duration"];
+  priority?: boolean
 };
 
 export const SimpleEpisodeCard = memo(
@@ -25,6 +26,7 @@ export const SimpleEpisodeCard = memo(
     imageSrc,
     imageAlt,
     duration,
+    priority
   }: SimpleEpisodeCardProps) => {
     return (
       <div className={styles.card}>
@@ -35,7 +37,7 @@ export const SimpleEpisodeCard = memo(
               layout={"fill"}
               alt={imageAlt ?? title}
               title={imageAlt ?? title}
-              //   priority={true}
+                priority={priority}
             />
           </Link>
         )}

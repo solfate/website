@@ -29,6 +29,7 @@ export const PodcastHero = memo(
           </h2>
 
           <SimpleEpisodeCard
+          priority={true}
             title={featuredEpisode.title}
             href={featuredEpisode.href}
             date={featuredEpisode.date}
