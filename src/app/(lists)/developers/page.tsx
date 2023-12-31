@@ -18,7 +18,7 @@ export const metadata: Metadata = {
     canonical: "/developers",
   },
   openGraph: {
-    images: "/img/social/developers.png?9786yr",
+    images: "/img/social/devlist.png?9786yr",
   },
 };
 
