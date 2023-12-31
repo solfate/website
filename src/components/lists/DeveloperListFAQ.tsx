@@ -20,17 +20,17 @@ export const DeveloperListFAQ = () => {
           <p>
             Consider this Frequently Asked Questions (FAQ) and the following
             information as the Terms of Service (TOS) for this Verified
-            Developers List ("list"):
+            Developers List (&quot;list&quot;):
           </p>
           <p>
             By providing any information to Solfate and/or the maintainers of
-            this list ("the maintainers"), including linking external accounts
-            like GitHub, you agree that you have read and understand the
-            information herein. You herby are eligible to join this list and are
-            opting in to be a member of this list, should you be approved. As a
-            member of this list, no monetary value has been promised or
-            guaranteed, however implied or inferred, either implicitly or
-            explicitly.
+            this list (&quot;the maintainers&quot;), including linking external
+            accounts like GitHub, you agree that you have read and understand
+            the information herein. By submitting information or an official
+            membership request to join this list, you are opting in to be a
+            member of this list. As a member of this list, no monetary value has
+            been promised or guaranteed, however implied or inferred, either
+            implicitly or explicitly.
           </p>
           <p>
             Applying to join this list is in no way a promise or guarantee you
@@ -44,8 +44,8 @@ export const DeveloperListFAQ = () => {
             claiming and/or having minted the non-transferrable digital asset
             for this public list on the blockchain, anyone may or may-not
             permissionlessly interact with the owner of the digital asset via
-            the owner's blockchain address, with or without affiliation to the
-            maintainers. These interactions do not and should not convey or
+            the owner&apos;s blockchain address, with or without affiliation to
+            the maintainers. These interactions do not and should not convey or
             imply affiliation or endorsement or approval on behalf of the
             maintainers.
           </p>
@@ -60,17 +60,17 @@ export const DeveloperListFAQ = () => {
           <p>
             Finally, the information described within this FAQ and Terms of
             Service may be updated or revised at any time, with or without
-            notice. The specific changes are trackable in this website's code
-            repository via git commit history and are your responsibility to
-            know and understand the changes. Furthermore, by opting in to this
-            list you accept these future changes.
+            notice. The specific changes are trackable in this website&apos;s
+            code repository via git commit history and are your responsibility
+            to know and understand the changes. Furthermore, by opting in to
+            this list you accept these future changes.
           </p>
         </FAQItem>
         <FAQItem statement={`What is this "Verified Developers List"?`}>
           <p>
-            The goal of this "Verified Developers List" project is to create a
-            publicly available list of wallet address for developers in the
-            Solana ecosystem.
+            The goal of this &quot;Verified Developers List&quot; project is to
+            create a publicly available list of wallet address for developers in
+            the Solana ecosystem.
           </p>
           <p>
             Specifically, a list of developers that have meaningfully
@@ -78,13 +78,14 @@ export const DeveloperListFAQ = () => {
           </p>
           <p>
             These verified contributors will be eligible to claim and mint a
-            non-transferrable ("soul-bound") membership token, joining the list
-            publicly, and allowing anyone to more easily interact with their
-            Solana wallet address.
+            non-transferrable (&quot;soul-bound&quot;) membership token, joining
+            the list publicly, and allowing anyone to more easily interact with
+            their Solana wallet address.
           </p>
           <p>
             We do not directly link the non-transferrable membership token to
-            any individual's personal information, but rather go by two ideas:
+            any individual&apos;s personal information, but rather go by two
+            ideas:
           </p>
           <ul className="ml-4">
             <li>1. one person, one token</li>
@@ -105,8 +106,9 @@ export const DeveloperListFAQ = () => {
           <p>
             Once a person is verified to having meaningfully contributed source
             code to the Solana ecosystem, they may be approved on the list and
-            become eligible to claim/mint a non-transferrable ("soul-bound")
-            token with the Solana wallet address they used to join the list.
+            become eligible to claim/mint a non-transferrable
+            (&quot;soul-bound&quot;) token with the Solana wallet address they
+            used to join the list.
           </p>
           <p>
             Minting and owning this soul-bound token acts as a public notice to
@@ -132,17 +134,17 @@ export const DeveloperListFAQ = () => {
           </p>
           <p>
             In our case here, you should also be able to burn the asset and
-            remove it from existence. By doing so, you are "opting out" and
-            removing yourself from the public list. But again, you may not
-            transfer it to another wallet.
+            remove it from existence. By doing so, you are &quot;opting
+            out&quot; and removing yourself from the public list. But again, you
+            may not transfer it to another wallet.
           </p>
         </FAQItem>
         <FAQItem statement={`Is this an NFT collection?`}>
           <p>Yes, but not like the usual pfp collections you have seen.</p>
           <p>
-            Think of this "NFT collection" more like a public list of wallet
-            addresses owned by developers. Developers with verified source code
-            contributions to the Solana ecosystem.
+            Think of this &quot;NFT collection&quot; more like a public list of
+            wallet addresses owned by developers. Developers with verified
+            source code contributions to the Solana ecosystem.
           </p>
         </FAQItem>
 
@@ -151,7 +153,7 @@ export const DeveloperListFAQ = () => {
           <p>
             The only costs to claim the soul-bound NFT are the standard costs on
             the Solana blockchain (i.e. transaction fees and account storage
-            fees like "rent") which go to the network and not the list
+            fees like &quot;rent&quot;) which go to the network and not the list
             maintainers.
           </p>
           <p>
@@ -161,11 +163,11 @@ export const DeveloperListFAQ = () => {
           <p>
             As members of the list themselves, the maintainers are expected to
             receive the same onchain interactions as all other members. With the
-            one possible exception of if a "length of time on list" based system
-            is ever used, the maintainers would be expected to get the same
-            onchain interactions as other list members in the same time based
-            cohort (which could be more onchain interactions than some others on
-            the list).
+            one possible exception of if a &quot;length of time on list&quot;
+            based system is ever used, the maintainers would be expected to get
+            the same onchain interactions as other list members in the same time
+            based cohort (which could be more onchain interactions than some
+            others on the list).
           </p>
           <p>
             Again, to be clear: we do NOT charge a fee or price to mint this
@@ -176,11 +178,11 @@ export const DeveloperListFAQ = () => {
           <p>Read-only access.</p>
           <p>
             When you are connecting a GitHub and/or Twitter account, you are
-            doing so through "applications" that were registered on those
-            platforms and operated by the maintainers of Solfate website. Each
-            of these "external applications" may have platform specific names
-            for the data and access they provide, but as a general statement: we
-            only ask for read-only access.
+            doing so through &quot;applications&quot; that were registered on
+            those platforms and operated by the maintainers of Solfate website.
+            Each of these &quot;external applications&quot; may have platform
+            specific names for the data and access they provide, but as a
+            general statement: we only ask for read-only access.
           </p>
           <p>
             The data these platforms provides to Solfate is pretty standard, but
@@ -209,10 +211,10 @@ export const DeveloperListFAQ = () => {
             may collect (i.e. email address). We may however, make general
             statements about the information we have collected, like stating or
             displaying who is a member of this list. But we will NOT share
-            specific information like "person X owns Solana wallet Y and token
-            Z" (unless this information is already publicly available via other
-            data sources like simple onchain data analysis or info you have
-            shared elsewhere).
+            specific information like &quot;person X owns Solana wallet Y and
+            token Z&quot; (unless this information is already publicly available
+            via other data sources like simple onchain data analysis or info you
+            have shared elsewhere).
           </p>
           <p>
             For transparency, we do request read-only access to private GitHub
@@ -258,7 +260,7 @@ export const DeveloperListFAQ = () => {
             No catch. We see this as a public good for the Solana ecosystem.
           </p>
           <p>
-            It's a public list of wallet addresses owned by verified
+            It&apos;s a public list of wallet addresses owned by verified
             contributors to the Solana ecosystem. Publicly available and ripe
             for anyone to easily provide interact with or provide value to.
           </p>
