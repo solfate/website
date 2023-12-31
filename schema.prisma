@@ -74,9 +74,9 @@ model Profile {
 
 // Listing of people and their wallets that have particiapted in our special lists
 model WalletList {
-    id     Int     @unique @default(autoincrement()) @db.UnsignedInt
-    userId String?
-    user   User?   @relation("userId", fields: [userId], references: [id])
+    id     Int    @unique @default(autoincrement()) @db.UnsignedInt
+    userId String
+    user   User   @relation("userId", fields: [userId], references: [id])
 
     type      ListPersonType
     cohort    Int?           @default(0)
