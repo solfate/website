@@ -253,7 +253,13 @@ export const DeveloperListForm = memo(
                     </Link>
                   </>
                 ) : (
-                  "Connect a Solana wallet to get started"
+                  <>
+                    Connect{" "}
+                    <span className="hidden md:inline-block">
+                      a Solana wallet
+                    </span>{" "}
+                    to get started
+                  </>
                   // "Connect any Solana wallet. Even a burner."
                 )
               }

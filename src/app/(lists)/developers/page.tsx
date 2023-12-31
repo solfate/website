@@ -1,7 +1,7 @@
 import { Metadata } from "next";
 import { SITE } from "@/lib/const/general";
 
-import dropEmoji from "@/../public/icons/drop.svg";
+import crownEmoji from "@/../public/icons/crown.svg";
 import Image from "next/image";
 import { DeveloperListForm } from "@/components/lists/DeveloperListForm";
 import { getUserSession, groupAccountsByProvider } from "@/lib/auth";
@@ -10,10 +10,11 @@ import prisma from "@/lib/prisma";
 import { DeveloperListFAQ } from "@/components/lists/DeveloperListFAQ";
 
 export const metadata: Metadata = {
-  title: `${SITE.name} - Verified Solana Developers`,
+  title: `Verified Solana Developers (the DevList) | ${SITE.name}`,
   description:
-    "The community of Solana developers is doing thankless work building. " +
-    "We aim to help support ways to provide value back to dedicated Solana developers.",
+    "A verified list of Solana developers. " +
+    "The community of developers is doing thankless work building. " +
+    "This helps make it easier to provide value back to them",
   alternates: {
     canonical: "/developers",
   },
@@ -43,33 +44,31 @@ export default async function Page() {
   return (
     <main className="container min-h-[80vh] space-y-8">
       <section className="max-w-2xl mx-auto space-y-8 text-center">
-        <h1 className="justify-around gap-3 space-x-5 text-3xl font-bold md:text-5xl inline-flex items-center align-middle">
-          <Image
-            priority
-            src={dropEmoji}
-            alt="Solana Airdrop"
-            className="scale-x-flip icon-xl"
-          />
-          <span className="leading-tight">
-            Verified
-            <br />
-            Solana Developers
-          </span>
-          <Image
-            priority
-            src={dropEmoji}
-            alt="Solana Airdrop"
-            className="icon-xl"
-          />
-        </h1>
+        <section className="space-y-1">
+          <h1 className="relative justify-around text-4xl font-bold md:text-5xl inline-flex items-center align-middle">
+            <span className="leading-tight">Solana DevList</span>
+            <Image
+              priority
+              src={crownEmoji}
+              alt=""
+              // width={32}
+              // height={32}
+              className="absolute left-[-14px] scale-x-flip top-[-10px] rotate-[-35deg] w-7 h-7 md:w-8 md:h-8"
+            />
+          </h1>
 
-        <p className="mx-auto text-lg text-gray-700">
-          The community of <span>Solana developers</span> is always busy
-          building, often for thankless work. Especially{" "}
-          <span>open source</span> contributors.
-          <br />
-          We aim to help fix this by supporting ways to provide value back to
-          those dedicated developers.
+          <h4 className="font-medium text-xl">
+            a <span className="shadow-hot-pink">verified list</span> of Solana
+            Developers
+          </h4>
+        </section>
+
+        <p className="mx-auto text-base md:text-lg text-gray-700">
+          The community of <span className="">Solana Developers</span> is always
+          busy building, often for thankless work. Especially{" "}
+          <span className="shadow-hot-pink">open source contributors</span>. The{" "}
+          Solana DevList aims to help support ways to provide value back to
+          these <span className="shadow-hot-pink">dedicated developers</span>.
         </p>
       </section>
 
