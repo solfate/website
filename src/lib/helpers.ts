@@ -77,3 +77,33 @@ export function debug(...props: any) {
   )
     console.debug("[DEBUG]", ...props);
 }
+
+/**
+ * Retry a promise with exponential backoff
+ */
+export async function retryWithBackoff(
+  operation: Promise<any>,
+  maxAttempts: number = 5,
+  baseDelay: number = 1000,
+) {
+  let attempt = 1;
+
+  const execute: Function = async () => {
+    try {
+      return await operation;
+    } catch (err) {
+      if (attempt >= maxAttempts) {
+        throw err;
+      }
+
+      const delayMs = baseDelay * 2 ** attempt;
+      console.log(`Retry attempt ${attempt} after ${delayMs}ms`);
+      await new Promise((resolve) => setTimeout(resolve, delayMs));
+
+      attempt++;
+      return execute();
+    }
+  };
+
+  return execute();
+}
