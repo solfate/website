@@ -19,7 +19,10 @@ export function JsonResponse<InputType>(
  */
 export async function fetcher<ApiInputType>(
   apiUrl: string,
-  init: Omit<RequestInit, "body"> & { body: ApiInputType },
+  init: Omit<RequestInit, "body"> & {
+    body: ApiInputType;
+    method: "DELETE" | "GET" | "POST" | "PATCH";
+  },
   //   apiVersion = "v0",
 ): Promise<string> {
   // auto-magically add in the correct api version (when not included)
