@@ -43,38 +43,42 @@ export const DeveloperListForm = memo(
     /**
      * Simplified tracking data for the connected accounts
      */
-    const accounts = useMemo(() => {
-      const data = {
-        // extract the connected solana wallet address
-        solana: !!groupedAccounts?.solana?.length
-          ? groupedAccounts.solana[0].providerAccountId
-          : false,
-        // extract the connected twitter username
-        twitter: !!groupedAccounts?.twitter?.length
-          ? (
-              groupedAccounts.twitter[0]
-                .provider_profile as object as TwitterProfile
-            ).data.username
-          : false,
-        // extract the connected github username
-        github: !!groupedAccounts?.github?.length
-          ? (
-              groupedAccounts.github[0]
-                .provider_profile as object as GithubProfile
-            ).login
-          : false,
-        // assorted other state trackers
-        hasOtherAccounts: false,
-        hasAllAccounts: false,
-      };
+    const accounts = useMemo(
+      () => {
+        const data = {
+          // extract the connected solana wallet address
+          solana: !!groupedAccounts?.solana?.length
+            ? groupedAccounts.solana[0].providerAccountId
+            : false,
+          // extract the connected twitter username
+          twitter: !!groupedAccounts?.twitter?.length
+            ? (
+                groupedAccounts.twitter[0]
+                  .provider_profile as object as TwitterProfile
+              ).data.username
+            : false,
+          // extract the connected github username
+          github: !!groupedAccounts?.github?.length
+            ? (
+                groupedAccounts.github[0]
+                  .provider_profile as object as GithubProfile
+              ).login
+            : false,
+          // assorted other state trackers
+          hasOtherAccounts: false,
+          hasAllAccounts: false,
+        };
 
-      // simplified status of if the user has connected ANY other social accounts
-      data.hasOtherAccounts = !!data.github || !!data.twitter;
-      // simplified status of having connected all accounts
-      data.hasAllAccounts = !!data.solana && !!data.github && !!data.twitter;
+        // simplified status of if the user has connected ANY other social accounts
+        data.hasOtherAccounts = !!data.github || !!data.twitter;
+        // simplified status of having connected all accounts
+        data.hasAllAccounts = !!data.solana && !!data.github && !!data.twitter;
 
-      return data;
-    }, [groupedAccounts, loading]);
+        return data;
+      },
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+      [groupedAccounts, loading],
+    );
 
     /**
      * Authenticate to Twitter / X
