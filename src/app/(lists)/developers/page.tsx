@@ -7,6 +7,7 @@ import { DeveloperListForm } from "@/components/lists/DeveloperListForm";
 import { getUserSession, groupAccountsByProvider } from "@/lib/auth";
 import { getAccountsByUserId } from "@/lib/queries/accounts";
 import prisma from "@/lib/prisma";
+import { DeveloperListFAQ } from "@/components/lists/DeveloperListFAQ";
 
 export const metadata: Metadata = {
   title: `${SITE.name} - Verified Solana Developers`,
@@ -76,6 +77,8 @@ export default async function Page() {
         groupedAccounts={groupedAccounts}
         onList={!!listRecord}
       />
+
+      <DeveloperListFAQ />
     </main>
   );
 }

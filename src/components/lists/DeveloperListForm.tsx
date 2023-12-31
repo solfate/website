@@ -611,6 +611,18 @@ export const DeveloperListQuestionsDialog = (
                 publicly!
               </p>
             </DeveloperQuestion>
+            <p className="text-sm text-gray-500">
+              <input type="checkbox" name="tos" id="tos" required /> I have read
+              the{" "}
+              <Link href={"/developers#faq"} className="underline">
+                FAQ
+              </Link>{" "}
+              and agree to the{" "}
+              <Link href={"/developers#tos"} className="underline">
+                Terms of Service
+              </Link>
+              .
+            </p>
           </section>
 
           <section className="h-full px-8 py-4 bg-slate-100">
