@@ -37,7 +37,8 @@ model User {
     // customerType  CustomerType? @default(NONE)
 
     // connections to other model structures
-    profile Profile? @relation("username")
+    profile    Profile?     @relation("username")
+    walletList WalletList[] @relation("userId")
 
     @@index([id], name: "user_id_idx")
     @@index([email], name: "user_email_idx")
@@ -73,7 +74,9 @@ model Profile {
 
 // Listing of people and their wallets that have particiapted in our special lists
 model WalletList {
-    id Int @unique @default(autoincrement()) @db.UnsignedInt
+    id     Int     @unique @default(autoincrement()) @db.UnsignedInt
+    userId String?
+    user   User?   @relation("userId", fields: [userId], references: [id])
 
     type      ListPersonType
     cohort    Int?           @default(0)
@@ -87,6 +90,7 @@ model WalletList {
     assetId   String?
 
     @@unique([type, wallet])
+    @@index([userId], name: "user_id_idx")
     @@index([wallet], name: "wallet_id_idx")
     @@index([twitter], name: "twitter_id_idx")
 }
