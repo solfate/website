@@ -237,47 +237,51 @@ export const DeveloperListForm = memo(
           setIsOpen={setDialogOpen}
           setIsOnList={setIsOnList}
         />
-
-        <div className="max-w-2xl mx-auto space-y-4">
-          <TaskItemCard
-            imageSrc={solanaIcon}
-            title="Solana Wallet"
-            description={
-              !!accounts.solana ? (
-                <>
-                  {"Connected to "}
-                  <Link
-                    href={`https://solana.fm/address/${accounts.solana}`}
-                    target="_blank"
-                    className="underline hover:text-hot-pink"
-                  >
-                    {shortWalletAddress(accounts.solana as string)}
-                  </Link>
-                </>
-              ) : (
-                "Connect any Solana wallet. Even a burner."
-              )
-            }
-            button={
-              <ButtonWithLoader
-                status={
-                  !!accounts.solana
+        {!accounts.solana ? (
+          <div className="max-w-2xl mx-auto space-y-4">
+            <TaskItemCard
+              imageSrc={solanaIcon}
+              title="Solana Wallet"
+              description={
+                !!accounts.solana ? (
+                  <>
+                    {"Connected to "}
+                    <Link
+                      href={`https://solana.fm/address/${accounts.solana}`}
+                      target="_blank"
+                      className="underline hover:text-hot-pink"
+                    >
+                      {shortWalletAddress(accounts.solana as string)}
+                    </Link>
+                  </>
+                ) : (
+                  "Connect a Solana wallet to get started"
+                  // "Connect any Solana wallet. Even a burner."
+                )
+              }
+              button={
+                <ButtonWithLoader
+                  status={
+                    !!accounts.solana
+                      ? accounts.hasOtherAccounts
+                        ? TaskStatus.DISABLED
+                        : TaskStatus.CONNECTED
+                      : TaskStatus.IDLE
+                  }
+                  onClick={handleSolana}
+                >
+                  {!!accounts.solana
                     ? accounts.hasOtherAccounts
-                      ? TaskStatus.DISABLED
-                      : TaskStatus.CONNECTED
-                    : TaskStatus.IDLE
-                }
-                onClick={handleSolana}
-              >
-                {!!accounts.solana
-                  ? accounts.hasOtherAccounts
-                    ? "Locked"
-                    : "Change"
-                  : "Connect"}
-              </ButtonWithLoader>
-            }
-          />
-          {/* {!!accounts.solana && !accounts.hasOtherAccounts && (
+                      ? "Locked"
+                      : "Change"
+                    : "Connect"}
+                </ButtonWithLoader>
+              }
+            />
+          </div>
+        ) : (
+          <div className="max-w-2xl mx-auto space-y-4">
+            {/* {!!accounts.solana && !accounts.hasOtherAccounts && (
             <div className="text-center card text-sm border-yellow-500 bg-yellow-300">
               <h4 className="font-semibold text-base">Caution</h4>
               <p>
@@ -289,108 +293,111 @@ export const DeveloperListForm = memo(
               </p>
             </div>
           )} */}
-          <TaskItemCard
-            imageSrc={githubIcon}
-            title="GitHub"
-            description={
-              !!accounts.github ? (
-                <>
-                  {"Connected to "}
-                  <Link
-                    href={`https://github.com/${accounts.github}`}
-                    target="_blank"
-                    className="underline hover:text-hot-pink"
-                  >
-                    @{accounts.github}
-                  </Link>
-                </>
-              ) : (
-                "Prove your code contributions to the Solana ecosystem."
-              )
-            }
-            button={
-              <ButtonWithLoader
-                loading={!!loading && loading == "github"}
-                onClick={
-                  !!groupedAccounts?.github?.length
-                    ? () =>
-                        disconnectAccount({
-                          provider: "github",
-                          providerAccountId: groupedAccounts.github?.[0]
-                            .providerAccountId as string,
-                        })
-                    : githubAuth
-                }
-                status={
-                  !!groupedAccounts?.github?.length
-                    ? TaskStatus.COMPLETE
-                    : TaskStatus.IDLE
-                }
-              >
-                {!!groupedAccounts?.github?.length ? "Disconnect" : "Connect"}
-              </ButtonWithLoader>
-            }
-          />
-          <TaskItemCard
-            imageSrc={xIcon}
-            title="X / Twitter"
-            description={
-              !!accounts.twitter ? (
-                <>
-                  {"Connected to "}
-                  <Link
-                    href={`https://twitter.com/${accounts.twitter}`}
-                    target="_blank"
-                    className="underline hover:text-hot-pink"
-                  >
-                    @{accounts.twitter}
-                  </Link>
-                </>
-              ) : (
-                "Prove you participate in the Solana community."
-              )
-            }
-            button={
-              <ButtonWithLoader
-                loading={!!loading && loading == "twitter"}
-                onClick={
-                  !!groupedAccounts?.twitter?.length
-                    ? () =>
-                        disconnectAccount({
-                          provider: "twitter",
-                          providerAccountId: groupedAccounts.twitter?.[0]
-                            .providerAccountId as string,
-                        })
-                    : twitterAuth
-                }
-                status={
-                  !!groupedAccounts?.twitter?.length
-                    ? TaskStatus.COMPLETE
-                    : TaskStatus.IDLE
-                }
-              >
-                {!!groupedAccounts?.twitter?.length ? "Disconnect" : "Connect"}
-              </ButtonWithLoader>
-            }
-          />
-          <TaskItemCard
-            imageSrc={infoIcon}
-            title="Answer these 2 questions"
-            description="Quick and to the point. ~2 minutes to complete."
-            button={
-              <ButtonWithLoader
-                status={
-                  accounts.hasAllAccounts
-                    ? TaskStatus.IDLE
-                    : TaskStatus.DISABLED
-                }
-                onClick={handleQuestions}
-              >
-                Start
-              </ButtonWithLoader>
-            }
-          />
-        </div>
+            <TaskItemCard
+              imageSrc={githubIcon}
+              title="GitHub"
+              description={
+                !!accounts.github ? (
+                  <>
+                    {"Connected to "}
+                    <Link
+                      href={`https://github.com/${accounts.github}`}
+                      target="_blank"
+                      className="underline hover:text-hot-pink"
+                    >
+                      @{accounts.github}
+                    </Link>
+                  </>
+                ) : (
+                  "Prove your code contributions to the Solana ecosystem."
+                )
+              }
+              button={
+                <ButtonWithLoader
+                  loading={!!loading && loading == "github"}
+                  onClick={
+                    !!groupedAccounts?.github?.length
+                      ? () =>
+                          disconnectAccount({
+                            provider: "github",
+                            providerAccountId: groupedAccounts.github?.[0]
+                              .providerAccountId as string,
+                          })
+                      : githubAuth
+                  }
+                  status={
+                    !!groupedAccounts?.github?.length
+                      ? TaskStatus.COMPLETE
+                      : TaskStatus.IDLE
+                  }
+                >
+                  {!!groupedAccounts?.github?.length ? "Disconnect" : "Connect"}
+                </ButtonWithLoader>
+              }
+            />
+            <TaskItemCard
+              imageSrc={xIcon}
+              title="X / Twitter"
+              description={
+                !!accounts.twitter ? (
+                  <>
+                    {"Connected to "}
+                    <Link
+                      href={`https://twitter.com/${accounts.twitter}`}
+                      target="_blank"
+                      className="underline hover:text-hot-pink"
+                    >
+                      @{accounts.twitter}
+                    </Link>
+                  </>
+                ) : (
+                  "Prove you participate in the Solana community."
+                )
+              }
+              button={
+                <ButtonWithLoader
+                  loading={!!loading && loading == "twitter"}
+                  onClick={
+                    !!groupedAccounts?.twitter?.length
+                      ? () =>
+                          disconnectAccount({
+                            provider: "twitter",
+                            providerAccountId: groupedAccounts.twitter?.[0]
+                              .providerAccountId as string,
+                          })
+                      : twitterAuth
+                  }
+                  status={
+                    !!groupedAccounts?.twitter?.length
+                      ? TaskStatus.COMPLETE
+                      : TaskStatus.IDLE
+                  }
+                >
+                  {!!groupedAccounts?.twitter?.length
+                    ? "Disconnect"
+                    : "Connect"}
+                </ButtonWithLoader>
+              }
+            />
+            <TaskItemCard
+              imageSrc={infoIcon}
+              title="Answer these 2 questions"
+              description="Quick and to the point. ~2 minutes to complete."
+              button={
+                <ButtonWithLoader
+                  status={
+                    accounts.hasAllAccounts
+                      ? TaskStatus.IDLE
+                      : TaskStatus.DISABLED
+                  }
+                  onClick={handleQuestions}
+                >
+                  Start
+                </ButtonWithLoader>
+              }
+            />
+          </div>
+        )}{" "}
       </>
     );
   },
