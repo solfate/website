@@ -3,7 +3,7 @@ import { SITE } from "@/lib/const/general";
 
 import dropEmoji from "@/../public/icons/drop.svg";
 import Image from "next/image";
-import { DeveloperListForm } from "@/components/auth/DeveloperListForm";
+import { DeveloperListForm } from "@/components/lists/DeveloperListForm";
 import { getUserSession, groupAccountsByProvider } from "@/lib/auth";
 import { getAccountsByUserId } from "@/lib/queries/accounts";
 import prisma from "@/lib/prisma";
