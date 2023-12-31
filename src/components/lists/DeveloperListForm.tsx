@@ -79,28 +79,26 @@ export const DeveloperListForm = memo(
     /**
      * Authenticate to Twitter / X
      */
-    const twitterAuth = useCallback(
-      () =>
-        signIn("twitter", {
-          redirect: true,
-          // force override the callback data
-          callbackUrl: window.location.href,
-        }),
-      [],
-    );
+    const twitterAuth = useCallback(() => {
+      setLoading("twitter");
+      return signIn("twitter", {
+        redirect: true,
+        // force override the callback data
+        callbackUrl: window.location.href,
+      });
+    }, []);
 
     /**
      * Authenticate to GitHub
      */
-    const githubAuth = useCallback(
-      () =>
-        signIn("github", {
-          redirect: true,
-          // force override the callback data
-          callbackUrl: window.location.href,
-        }),
-      [],
-    );
+    const githubAuth = useCallback(() => {
+      setLoading("github");
+      return signIn("github", {
+        redirect: true,
+        // force override the callback data
+        callbackUrl: window.location.href,
+      });
+    }, []);
 
     /**
      * Solana signout with callback
