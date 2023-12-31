@@ -20,6 +20,7 @@ import { TwitterProfile } from "next-auth/providers/twitter";
 import { GithubProfile } from "next-auth/providers/github";
 import { fetcher } from "@/lib/api";
 import { ApiDevelopersPostInput } from "@/types/api/developers";
+import { ApiAuthDisconnectDeleteInput } from "@/types/api/auth";
 
 enum TaskStatus {
   IDLE,
@@ -35,6 +36,7 @@ type DeveloperListFormProps = {
 
 export const DeveloperListForm = memo(
   ({ groupedAccounts, onList }: DeveloperListFormProps) => {
+    const [loading, setLoading] = useState<false | string>(false);
     const [isOnList, setIsOnList] = useState(onList);
     const [dialogOpen, setDialogOpen] = useState(false);
 
@@ -72,7 +74,7 @@ export const DeveloperListForm = memo(
       data.hasAllAccounts = !!data.solana && !!data.github && !!data.twitter;
 
       return data;
-    }, [groupedAccounts]);
+    }, [groupedAccounts, loading]);
 
     /**
      * Authenticate to Twitter / X
@@ -125,6 +127,59 @@ export const DeveloperListForm = memo(
           callbackUrl: url.toString(),
         });
     }, [accounts]);
+
+    /**
+     * Process an account disconnect request
+     */
+    const disconnectAccount = useCallback(
+      async ({ provider, providerAccountId }: ApiAuthDisconnectDeleteInput) => {
+        if (!!loading) return;
+
+        if (!provider || !providerAccountId) {
+          return toast.error("Missing account details");
+        }
+
+        try {
+          setLoading(provider);
+          await fetcher<ApiAuthDisconnectDeleteInput>("/api/auth/disconnect", {
+            method: "DELETE",
+            body: {
+              provider,
+              providerAccountId,
+            },
+          })
+            .then((res) => {
+              // console.log(res);
+
+              if (groupedAccounts) {
+                delete groupedAccounts[provider as unknown as any];
+              }
+
+              toast.success(res);
+
+              return true;
+            })
+            .catch((err) => {
+              console.error(err);
+              if (typeof err == "string") toast.error(err);
+              else if (err instanceof Error) toast.error(err.message);
+              else toast.error("An error occurred");
+            });
+        } catch (err) {
+          console.error("An unknown error occurred", "[0x1235]");
+          console.error(err);
+          toast.error("An unknown error occurred...");
+        }
+
+        // finally reset the loading state
+        setLoading(false);
+      },
+      [
+        // comment for better diffs
+        loading,
+        setLoading,
+      ],
+    );
 
     /**
      * Developer questionnaire callback
@@ -208,7 +263,7 @@ export const DeveloperListForm = memo(
                 status={
                   !!accounts.solana
                     ? accounts.hasOtherAccounts
-                      ? TaskStatus.COMPLETE
+                      ? TaskStatus.DISABLED
                       : TaskStatus.CONNECTED
                     : TaskStatus.IDLE
                 }
@@ -222,7 +277,7 @@ export const DeveloperListForm = memo(
               </ButtonWithLoader>
             }
           />
-          {!!accounts.solana && !accounts.hasOtherAccounts && (
+          {/* {!!accounts.solana && !accounts.hasOtherAccounts && (
             <div className="text-center card text-sm border-yellow-500 bg-yellow-300">
               <h4 className="font-semibold text-base">Caution</h4>
               <p>
@@ -233,7 +288,7 @@ export const DeveloperListForm = memo(
                 <span className="font-bold">publicly</span> on this list.
               </p>
             </div>
-          )}
+          )} */}
           <TaskItemCard
             imageSrc={githubIcon}
             title="GitHub"
@@ -255,8 +310,16 @@ export const DeveloperListForm = memo(
             }
             button={
               <ButtonWithLoader
+                loading={!!loading && loading == "github"}
                 onClick={
-                  !!groupedAccounts?.github?.length ? undefined : githubAuth
+                  !!groupedAccounts?.github?.length
+                    ? () =>
+                        disconnectAccount({
+                          provider: "github",
+                          providerAccountId: groupedAccounts.github?.[0]
+                            .providerAccountId as string,
+                        })
+                    : githubAuth
                 }
                 status={
                   !!groupedAccounts?.github?.length
@@ -264,7 +327,7 @@ export const DeveloperListForm = memo(
                     : TaskStatus.IDLE
                 }
               >
-                {!!groupedAccounts?.github?.length ? "Completed" : "Connect"}
+                {!!groupedAccounts?.github?.length ? "Disconnect" : "Connect"}
               </ButtonWithLoader>
             }
           />
@@ -289,8 +352,16 @@ export const DeveloperListForm = memo(
             }
             button={
               <ButtonWithLoader
+                loading={!!loading && loading == "twitter"}
                 onClick={
-                  !!groupedAccounts?.twitter?.length ? undefined : twitterAuth
+                  !!groupedAccounts?.twitter?.length
+                    ? () =>
+                        disconnectAccount({
+                          provider: "twitter",
+                          providerAccountId: groupedAccounts.twitter?.[0]
+                            .providerAccountId as string,
+                        })
+                    : twitterAuth
                 }
                 status={
                   !!groupedAccounts?.twitter?.length
@@ -298,7 +369,7 @@ export const DeveloperListForm = memo(
                     : TaskStatus.IDLE
                 }
               >
-                {!!groupedAccounts?.twitter?.length ? "Completed" : "Connect"}
+                {!!groupedAccounts?.twitter?.length ? "Disconnect" : "Connect"}
               </ButtonWithLoader>
             }
           />
@@ -357,15 +428,20 @@ export const ButtonWithLoader = ({
     <button
       type="button"
       className={clsx("btn w-full md:w-32 justify-center", buttonClass)}
-      disabled={status == TaskStatus.COMPLETE || status == TaskStatus.DISABLED}
-      aria-disabled={
-        status == TaskStatus.COMPLETE || status == TaskStatus.DISABLED
-      }
+      disabled={loading || status == TaskStatus.DISABLED}
+      aria-disabled={loading || status == TaskStatus.DISABLED}
       onClick={onClick}
     >
       {!!loading ? (
         <div>
-          <PulseLoader size={8} color="white" />
+          <PulseLoader
+            size={8}
+            color={
+              status == TaskStatus.DISABLED || status == TaskStatus.COMPLETE
+                ? "black"
+                : "white"
+            }
+          />
         </div>
       ) : (
         children
@@ -423,7 +499,7 @@ export const DeveloperListQuestionsDialog = (
   //   } = useContext(ProfileEditorContext);
 
   // initialize the state tracker for the on-page form state
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
   const [hasChanges, setHasChanges] = useState<boolean>(false);
   const [formData, setFormData] = useState<ApiDevelopersPostInput>({
     why: "",
@@ -452,10 +528,10 @@ export const DeveloperListQuestionsDialog = (
   const onSubmitHandler = useCallback(
     async (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
-      if (isLoading) return;
+      if (loading) return;
 
       try {
-        setIsLoading(true);
+        setLoading(true);
         await fetcher<ApiDevelopersPostInput>("/api/lists/developers", {
           method: "POST",
           // send the current working data
@@ -479,14 +555,14 @@ export const DeveloperListQuestionsDialog = (
       }
 
       // finally reset the loading state
-      setIsLoading(false);
+      setLoading(false);
     },
     [
       // comment for better diffs
       formData,
       setHasChanges,
-      isLoading,
-      setIsLoading,
+      loading,
+      setLoading,
       props,
     ],
   );
@@ -536,10 +612,10 @@ export const DeveloperListQuestionsDialog = (
             <section className="flex items-center w-full gap-3 place-self-end">
               <button
                 type="submit"
-                disabled={!hasChanges || isLoading}
+                disabled={!hasChanges || loading}
                 className="order-2 btn w-full btn-black justify-center"
               >
-                {isLoading ? (
+                {loading ? (
                   <div>
                     <PulseLoader size={8} color="white" />
                   </div>
@@ -549,7 +625,7 @@ export const DeveloperListQuestionsDialog = (
               </button>
               <button
                 type="button"
-                disabled={isLoading}
+                disabled={loading}
                 className="order-1 w-full btn btn-ghost justify-center !border-gray-300"
                 onClick={() => props.setIsOpen(false)}
               >
