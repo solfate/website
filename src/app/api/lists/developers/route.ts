@@ -103,6 +103,7 @@ export const POST = withUserAuth(async ({ req, session }) => {
   // add the user to the waitlist
   const newMember = await prisma.walletList.create({
     data: {
+      userId: session.user.id,
       type: WALLET_LIST_DEFAULTS.type,
       status: WALLET_LIST_DEFAULTS.status,
       cohort: WALLET_LIST_DEFAULTS.cohort,
