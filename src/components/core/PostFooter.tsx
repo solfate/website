@@ -1,6 +1,7 @@
 import { SITE } from "@/lib/const/general";
 import Image from "next/image";
 import Link from "next/link";
+import icon from "@/../public/icon-orange.svg";
 
 export default function AppFooter() {
   return (
@@ -18,11 +19,11 @@ export default function AppFooter() {
         </div>
 
         <div className="">
-          <Link href={"/"} className="btn text-sm px-3 border-gray-400 ">
+          <Link href={"/"} className="btn text-sm px-3 border-gray-400">
             <Image
               width={24}
               height={24}
-              src={"/icon.svg"}
+              src={icon}
               alt={SITE.name}
               className="object-cover object-center rounded-full overflow-hidden w-6 h-6"
             />

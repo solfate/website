@@ -37,7 +37,7 @@ export default function MarketingHeader({
 
         <div className={`${styles.inner} container`}>
           <div className={styles.linksListing}>
-            <AppLogo /*className="pr-8" showImage={true}*/ />
+            <AppLogo logoSize={36} /*className="pr-8" showImage={true}*/ />
 
             <AppNav className={styles.desktopMenu} />
 

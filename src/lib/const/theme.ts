@@ -11,4 +11,18 @@ export const Colors = {
   "color-dark": "#f9eddd",
   "hot-red": "#dd2e44",
   twitter: "#1d9bf0",
+  "solfate-orange": "#f5820b",
+  yellow: {
+    "50": "#fff9eb",
+    "100": "#feecc7",
+    "200": "#fddc96",
+    "300": "#fcbe4d",
+    "400": "#fba524",
+    "500": "#f5820b",
+    "600": "#d95e06",
+    "700": "#b43e09",
+    "800": "#92300e",
+    "900": "#78280f",
+    "950": "#451203",
+  },
 };

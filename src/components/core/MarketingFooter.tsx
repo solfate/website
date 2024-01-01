@@ -4,26 +4,14 @@ import { Twitter, Youtube } from "react-feather";
 import { SocialButtonLink } from "@/components/SocialButtons";
 import { SITE, TWITTER, YOUTUBE } from "@/lib/const/general";
 import { PODCAST, PODCAST_FEED_LOCATIONS } from "@/lib/const/podcast";
+import { AppLogo } from "@/components/core/AppLogo";
 
 export default function MarketingFooter() {
   return (
     <footer className="border-t border-gray-300 bg-gray-100">
       <section className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 container gap-8 py-8">
         <section className="col-span-full max-w-lg lg:col-span-2 space-y-6">
-          <Link
-            href="/"
-            className="inline-flex items-center gap-2 font-bold text-3xl"
-          >
-            <Image
-              width={48}
-              height={48}
-              src={"/icon.svg"}
-              alt={SITE.name}
-              className="object-cover object-center rounded-full h-12 w-12"
-              priority={false}
-            />
-            {SITE.name}
-          </Link>
+          <AppLogo logoSize={48} className="md:!text-4xl" />
 
           <p className="text-lg">
             Interviews with blockchain founders and builders in the Solana
@@ -59,8 +47,8 @@ export default function MarketingFooter() {
         </ul> */}
       </section>
 
-      <section className="container grid gap-4 md:flex items-center justify-center md:justify-between text-gray-500">
-        <div className="order-2 md:order-1">
+      <section className="container grid gap-4  md:flex items-center justify-center md:justify-between text-gray-500">
+        <div className="order-2 md:order-1 text-center md:text-left">
           &copy;{new Date().getFullYear()}{" "}
           <Link href={"/"} className="underline">
             {SITE.name}
