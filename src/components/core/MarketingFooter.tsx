@@ -1,9 +1,8 @@
-import Image from "next/image";
 import Link from "next/link";
 import { Twitter, Youtube } from "react-feather";
 import { SocialButtonLink } from "@/components/SocialButtons";
 import { SITE, TWITTER, YOUTUBE } from "@/lib/const/general";
-import { PODCAST, PODCAST_FEED_LOCATIONS } from "@/lib/const/podcast";
+import { PODCAST } from "@/lib/const/podcast";
 import { AppLogo } from "@/components/core/AppLogo";
 
 export default function MarketingFooter() {
@@ -14,7 +13,7 @@ export default function MarketingFooter() {
           <AppLogo logoSize={48} className="md:!text-4xl" />
 
           <p className="text-lg">
-            Interviews with blockchain founders and builders in the Solana
+            Discover tools, resources, and people in the Solana blockchain
             ecosystem.
           </p>
         </section>
@@ -24,18 +23,14 @@ export default function MarketingFooter() {
           {/* <FooterSectionLink href="/podcast" label="Subscribe" /> */}
           <FooterSectionLink href="/podcast#hosts" label="Meet the Hosts" />
           <FooterSectionLink href="/podcast/browse" label="Browse Episodes" />
-          <FooterSectionLink href="/podcast" label="Rate & Review" />
+          <FooterSectionLink href="/podcast" label="Leave a Review" />
+          <FooterSectionLink href="/apple" label="Apple Podcasts" />
+          <FooterSectionLink href="/spotify" label="Spotify" />
         </ul>
         <ul className="space-y-2">
-          <FooterSectionTitle title="Subscribe" />
-          {PODCAST_FEED_LOCATIONS.slice(0, 4).map((item, key) => (
-            <FooterSectionLink
-              key={key}
-              href={item.href}
-              target="_blank"
-              label={item.label}
-            />
-          ))}
+          <FooterSectionTitle title="Tools & Resources" />
+          <FooterSectionLink href="/developers" label="Solana DevList" />
+          <FooterSectionLink href="/faucet" label="Solana Faucet" />
         </ul>
         {/* <ul className="space-y-2">
           <FooterSectionTitle title="Resources" />
