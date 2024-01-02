@@ -10,8 +10,8 @@ export const runtime = "nodejs";
 export const contentType = "image/png";
 
 export const size = {
-  width: 1280,
-  height: 720,
+  width: 1200,
+  height: 630,
 };
 
 // Image generation
