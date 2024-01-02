@@ -25,7 +25,7 @@ export default async function RedirectMiddleware(
       "text",
       `I want to mint ${
         TWITTER.handle
-      } episodes as NFTs!\nPlease gib @nickfrosty and @jamesrp13 🙏\nLike this one 👇${new URL(
+      } episodes as NFTs on @solana!\nPlease gib @nickfrosty and @jamesrp13 🙏\nLike this one 👇\n${new URL(
         SHORT_LINKS[fullKey as never],
         SITE.url,
       )}`,
