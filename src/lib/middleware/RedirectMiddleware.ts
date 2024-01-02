@@ -8,8 +8,9 @@ export default async function RedirectMiddleware(
 ) {
   const { domain, fullKey } = parse(req);
 
+  // prevent using the root route for anything
   if (!domain || !fullKey) {
-    return NextResponse.next();
+    return NextResponse.redirect(new URL("/", SITE.url));
   }
 
   // define the set list of known redirects
