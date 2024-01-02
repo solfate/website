@@ -29,7 +29,9 @@ declare namespace NodeJS {
     TWITTER_CLIENT_ID: string;
     TWITTER_CLIENT_SECRET: string;
     GITHUB_ID: string;
+    GITHUB_APP_ID: string;
     GITHUB_SECRET: string;
+    GITHUB_ACCESS_TOKEN: string;
 
     /**
      * Assorted service API keys
