@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import { SITE } from "@/lib/const/general";
 
 import { serialize } from "next-mdx-remote/serialize";
 import MarkdownFormatter from "@/components/MarkdownFormatter";
@@ -44,8 +45,17 @@ export async function generateMetadata(
 
   // get the parent images, and add the episode specific ones
   const openGraphImages = (await parent).openGraph?.images || [];
-  if (episode.image) {
-    openGraphImages.unshift(`/podcast/${episode.ep}/opengraph-image`);
+  openGraphImages.unshift(`/podcast/${episode.ep}/opengraph-image`);
+
+  // when an episode image is set, always make that the primary image
+  if (!!episode.image) {
+    const url = new URL(episode.image, SITE.url);
+    // make the url unique to support cache busting
+    url.searchParams.set(
+      "v",
+      Math.floor(new Date().getTime() / 1000).toString(),
+    );
+    openGraphImages.unshift(url.toString());
   }
 
   return {
@@ -60,7 +70,7 @@ export async function generateMetadata(
       }`,
       description: episode.description,
       // note: `images` will be auto populated by the `opengraph-image` generator
-      // images: openGraphImages,
+      images: openGraphImages,
     },
   };
 }
