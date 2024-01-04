@@ -25,7 +25,7 @@ export const walletButtonLabel = ({
     case WALLET_STAGE.WALLET_CONNECT:
       return "Connecting to wallet...";
     case WALLET_STAGE.WALLET_SIGN:
-      return "Waiting for wallet approval...";
+      return "Waiting for wallet...";
     case WALLET_STAGE.SUCCESS:
       return success;
     case WALLET_STAGE.IDLE:
