@@ -16,7 +16,7 @@ export const metadata: Metadata = {
     "The community of developers is doing thankless work building. " +
     "This helps make it easier to provide value back to them",
   alternates: {
-    canonical: "/developers",
+    canonical: "/devlist",
   },
   openGraph: {
     images: "/img/social/devlist.png?786yr",

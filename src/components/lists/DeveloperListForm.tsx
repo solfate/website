@@ -108,14 +108,14 @@ export const DeveloperListForm = memo(
      * Solana signout with callback
      */
     const handleSolana = useCallback(() => {
-      // construct a callback url to bring the user back to the `/developers` page after signin
+      // construct a callback url to bring the user back to the `/devlist` page after signin
       const url = new URL(
         "/signin",
         `${window.location.protocol}//${window.location.host}`,
       );
       url.searchParams.set(
         "callbackUrl",
-        `${window.location.protocol}//${window.location.host}/developers`,
+        `${window.location.protocol}//${window.location.host}/devlist`,
       );
 
       // if the user is not signed in, redirect to the signin page
@@ -624,11 +624,11 @@ export const DeveloperListQuestionsDialog = (
             <p className="text-sm text-gray-500">
               <input type="checkbox" name="tos" id="tos" required /> I have read
               the{" "}
-              <Link href={"/developers#faq"} className="underline">
+              <Link href={"/devlist#faq"} target="_blank" className="underline">
                 FAQ
               </Link>{" "}
               and agree to the{" "}
-              <Link href={"/developers#tos"} className="underline">
+              <Link href={"/devlist#tos"} target="_blank" className="underline">
                 Terms of Service
               </Link>
               .
