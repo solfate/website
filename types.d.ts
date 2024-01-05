@@ -35,5 +35,7 @@ declare namespace NodeJS {
      * Assorted service API keys
      */
     UNDERDOG_API_KEY: string;
+    UNDERDOG_API_URL: string;
+    UNDERDOG_PROJECT_ID: string;
   }
 }
