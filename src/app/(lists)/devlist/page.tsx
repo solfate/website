@@ -10,7 +10,7 @@ import prisma from "@/lib/prisma";
 import { DeveloperListFAQ } from "@/components/lists/DeveloperListFAQ";
 
 export const metadata: Metadata = {
-  title: `Verified Solana Developers (the DevList) | ${SITE.name}`,
+  title: `Solana DevList - Verified Solana Developers | ${SITE.name}`,
   description:
     "A verified list of Solana developers. " +
     "The community of developers is doing thankless work building. " +
