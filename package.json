@@ -29,7 +29,6 @@
     "@solana/web3.js": "^1.87.6",
     "@vercel/analytics": "^1.1.1",
     "add": "^2.0.6",
-    "api": "^6.1.1",
     "bs58": "^5.0.0",
     "clsx": "^2.0.0",
     "contentlayer": "^0.3.4",
@@ -41,6 +40,7 @@
     "next-sitemap": "^4.2.3",
     "react": "18.2.0",
     "react-dom": "18.2.0",
+    "react-dom-confetti": "^0.2.0",
     "react-feather": "^2.0.10",
     "react-hot-toast": "^2.4.1",
     "react-spinners": "^0.13.8"

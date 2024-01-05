@@ -24,7 +24,10 @@ export const NextPrevButtons = memo(
       {prev?.href ? (
         <Link
           href={prev.href}
-          className={clsx("btn flex items-center gap-4", prev.className)}
+          className={clsx(
+            "btn btn-ghost flex items-center gap-4",
+            prev.className,
+          )}
         >
           <ArrowLeft strokeWidth={2} className="w-5 h-5" />
           {prev.component ?? <span>{prev.label ?? "Previous"}</span>}
@@ -36,7 +39,10 @@ export const NextPrevButtons = memo(
       {next?.href ? (
         <Link
           href={next.href}
-          className={clsx("btn flex items-center gap-4", next.className)}
+          className={clsx(
+            "btn btn-ghost flex items-center gap-4",
+            next.className,
+          )}
         >
           {next.component ?? <span>{next.label ?? "Next"}</span>}
           <ArrowRight strokeWidth={2} className="w-5 h-5" />

@@ -9,19 +9,8 @@ import { SolanaSignInMessage } from "@/lib/solana/SignInMessage";
 import { getCsrfToken, signIn } from "next-auth/react";
 import { WalletContextState, useWallet } from "@solana/wallet-adapter-react";
 import { useWalletModal } from "@solana/wallet-adapter-react-ui";
+import { WALLET_STAGE, walletButtonLabel } from "@/lib/solana/const";
 // import { WalletButton } from "@/context/SolanaProviders";
-
-// define a list of known processing steps
-enum PROCESSING_STAGE {
-  /** idle state, awaiting a user action */
-  IDLE,
-  /** completed status! */
-  SUCCESS,
-  /** awaiting the user to authorize their wallet to connect to the app */
-  WALLET_CONNECT,
-  /** awaiting the user to sign or reject the message */
-  WALLET_SIGN,
-}
 
 type AuthFormProps = {
   className?: string;
@@ -35,8 +24,8 @@ export const AuthForm = memo(({ className, callbackPath }: AuthFormProps) => {
   // state for tracking the current working step
   const [previousWalletState, setPreviousWalletState] =
     useState<WalletContextState>(wallet);
-  const [processingStage, setProcessingStage] = useState<PROCESSING_STAGE>(
-    PROCESSING_STAGE.IDLE,
+  const [processingStage, setProcessingStage] = useState<WALLET_STAGE>(
+    WALLET_STAGE.IDLE,
   );
 
   /**
@@ -46,23 +35,31 @@ export const AuthForm = memo(({ className, callbackPath }: AuthFormProps) => {
    */
   const handleSignInWithSolana = useCallback(async () => {
     if (
-      processingStage !== PROCESSING_STAGE.IDLE &&
-      processingStage !== PROCESSING_STAGE.WALLET_CONNECT
+      processingStage !== WALLET_STAGE.IDLE &&
+      processingStage !== WALLET_STAGE.WALLET_CONNECT
     ) {
       console.warn("Invalid processing stage");
       console.warn(processingStage);
       return;
     }
 
-    // when the user has not connected their wallet, trigger the modal
-    if (!wallet.connected) {
-      walletModal.setVisible(true);
-      console.info("wallet not connected");
+    try {
+      if (!!wallet.wallet?.adapter) {
+        setProcessingStage(WALLET_STAGE.WALLET_CONNECT);
+        await wallet.connect();
+      } else if (!wallet.connected) {
+        walletModal.setVisible(true);
+        return;
+      }
+    } catch (err) {}
+
+    if (!wallet.publicKey?.toBase58()) {
+      console.log("still no wallet connected");
       return;
     }
 
     // if (wallet.connecting)
-    setProcessingStage(PROCESSING_STAGE.WALLET_CONNECT);
+    setProcessingStage(WALLET_STAGE.WALLET_CONNECT);
 
     // set the default callback url
     let callbackUrl = !!callbackPath
@@ -100,7 +97,7 @@ export const AuthForm = memo(({ className, callbackPath }: AuthFormProps) => {
         return;
       }
 
-      setProcessingStage(PROCESSING_STAGE.WALLET_SIGN);
+      setProcessingStage(WALLET_STAGE.WALLET_SIGN);
 
       // create the message for the user to sign
       const signInMessage = new SolanaSignInMessage({
@@ -149,7 +146,7 @@ export const AuthForm = memo(({ className, callbackPath }: AuthFormProps) => {
         toast.error("You must sign the message with your wallet to sign in");
 
         // stop processing when the user did not actually sign the message
-        setProcessingStage(PROCESSING_STAGE.IDLE);
+        setProcessingStage(WALLET_STAGE.IDLE);
         return;
       }
 
@@ -170,7 +167,7 @@ export const AuthForm = memo(({ className, callbackPath }: AuthFormProps) => {
 
           if (!res?.ok) throw `Bad response: ${res?.error || "unknown"}`;
 
-          setProcessingStage(PROCESSING_STAGE.SUCCESS);
+          setProcessingStage(WALLET_STAGE.SUCCESS);
 
           toast.success("Successfully signed in!");
 
@@ -180,13 +177,13 @@ export const AuthForm = memo(({ className, callbackPath }: AuthFormProps) => {
         .catch((err) => {
           console.warn("signIn error:", err);
           toast.error("Unable to Sign in with Solana");
-          setProcessingStage(PROCESSING_STAGE.IDLE);
+          setProcessingStage(WALLET_STAGE.IDLE);
           throw err;
         });
     } catch (err) {
       console.error("handleSignInWithSolana failed::", err);
 
-      setProcessingStage(PROCESSING_STAGE.IDLE);
+      setProcessingStage(WALLET_STAGE.IDLE);
 
       toast.error("An unknown signin error occurred");
     }
@@ -199,12 +196,18 @@ export const AuthForm = memo(({ className, callbackPath }: AuthFormProps) => {
     if (previousWalletState.connected == false) {
       // not connected, but now connecting
       if (wallet.connecting == true)
-        setProcessingStage(PROCESSING_STAGE.WALLET_CONNECT);
+        setProcessingStage(WALLET_STAGE.WALLET_CONNECT);
       // use canceled the wallet connection without connecting
       else if (wallet.connecting == false)
-        setProcessingStage(PROCESSING_STAGE.IDLE);
+        setProcessingStage(WALLET_STAGE.IDLE);
       // the user just connected their wallet
       if (wallet.connected && !!wallet.publicKey) handleSignInWithSolana();
+      else if (
+        !previousWalletState.wallet?.adapter &&
+        !!wallet.wallet?.adapter
+      ) {
+        handleSignInWithSolana();
+      }
     }
 
     setPreviousWalletState(wallet);
@@ -224,10 +227,14 @@ export const AuthForm = memo(({ className, callbackPath }: AuthFormProps) => {
           <button
             type="button"
             onClick={handleSignInWithSolana}
-            disabled={processingStage !== PROCESSING_STAGE.IDLE}
+            disabled={processingStage !== WALLET_STAGE.IDLE}
             className={`btn w-full btn-black inline-flex items-center py-3 justify-center text-center gap-2`}
           >
-            <SignInButtonLabel stage={processingStage} />
+            {walletButtonLabel({
+              stage: processingStage,
+              placeholder: "Sign in with Solana",
+              success: "Success! Redirecting...",
+            })}
           </button>
           <div className="flex items-center justify-center">
             <a
@@ -246,18 +253,3 @@ export const AuthForm = memo(({ className, callbackPath }: AuthFormProps) => {
     </div>
   );
 });
-
-const SignInButtonLabel = ({ stage }: { stage: PROCESSING_STAGE }) => {
-  switch (stage) {
-    case PROCESSING_STAGE.WALLET_CONNECT:
-      return <>Connecting to wallet...</>;
-    case PROCESSING_STAGE.WALLET_SIGN:
-      return <>Waiting for wallet approval...</>;
-    case PROCESSING_STAGE.SUCCESS:
-      return <>Success! Redirecting...</>;
-    case PROCESSING_STAGE.IDLE:
-    // note: idle uses default
-    default:
-      return <>Sign in with Solana</>;
-  }
-};

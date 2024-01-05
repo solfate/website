@@ -20,8 +20,8 @@ export function JsonResponse<InputType>(
 export async function fetcher<ApiInputType>(
   apiUrl: string,
   init: Omit<RequestInit, "body"> & {
-    body: ApiInputType;
     method: "DELETE" | "GET" | "POST" | "PATCH";
+    body?: ApiInputType;
   },
   //   apiVersion = "v0",
 ): Promise<string> {

@@ -26,5 +26,5 @@ export default async function Layout({
   //   redirect("/");
   // }
 
-  return <SolanaProvider>{children}</SolanaProvider>;
+  return <SolanaProvider autoConnect={true}>{children}</SolanaProvider>;
 }

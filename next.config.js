@@ -24,6 +24,11 @@ const nextConfig = {
   async redirects() {
     return [
       {
+        source: "/developers",
+        destination: "/devlist",
+        permanent: true,
+      },
+      {
         source: "/twitter",
         destination: "https://twitter.com/SolfatePod",
         permanent: true,
