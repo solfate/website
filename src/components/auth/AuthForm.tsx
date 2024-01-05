@@ -43,10 +43,18 @@ export const AuthForm = memo(({ className, callbackPath }: AuthFormProps) => {
       return;
     }
 
-    // when the user has not connected their wallet, trigger the modal
-    if (!wallet.connected) {
-      walletModal.setVisible(true);
-      console.info("wallet not connected");
+    try {
+      if (!!wallet.wallet?.adapter) {
+        setProcessingStage(WALLET_STAGE.WALLET_CONNECT);
+        await wallet.connect();
+      } else if (!wallet.connected) {
+        walletModal.setVisible(true);
+        return;
+      }
+    } catch (err) {}
+
+    if (!wallet.publicKey?.toBase58()) {
+      console.log("still no wallet connected");
       return;
     }
 
@@ -194,6 +202,12 @@ export const AuthForm = memo(({ className, callbackPath }: AuthFormProps) => {
         setProcessingStage(WALLET_STAGE.IDLE);
       // the user just connected their wallet
       if (wallet.connected && !!wallet.publicKey) handleSignInWithSolana();
+      else if (
+        !previousWalletState.wallet?.adapter &&
+        !!wallet.wallet?.adapter
+      ) {
+        handleSignInWithSolana();
+      }
     }
 
     setPreviousWalletState(wallet);
