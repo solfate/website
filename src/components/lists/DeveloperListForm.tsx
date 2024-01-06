@@ -257,7 +257,7 @@ export const DeveloperListForm = memo(
           </div>
 
           <p className="mx-auto max-w-lg text-center">
-            👋 PS: Followers of the{" "}
+            👋 PS: Followers of{" "}
             <Link
               href={"https://twitter.com/SolfateHQ"}
               target="_target"
