@@ -255,6 +255,18 @@ export const DeveloperListForm = memo(
               Tell your Twitter frens to vote for you
             </Link>
           </div>
+
+          <p className="mx-auto max-w-lg text-center">
+            👋 PS: Followers of the{" "}
+            <Link
+              href={"https://twitter.com/SolfateHQ"}
+              target="_target"
+              className="underline hover:text-hot-pink"
+            >
+              SolfateHQ
+            </Link>{" "}
+            will be reviewed first 💜
+          </p>
         </>
       );
     }
