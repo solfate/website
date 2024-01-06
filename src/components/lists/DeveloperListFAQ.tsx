@@ -189,8 +189,12 @@ export const DeveloperListFAQ = () => {
             for transparency: we initially did request read-only permission to
             private repos. We no longer do this and have force revoked all
             access permissions we initially collected. More details posted in
-            [this tweet
-            thread](https://twitter.com/SolfateHQ/status/1743399473433157986)
+            <Link
+              href="https://twitter.com/SolfateHQ/status/1743399473433157986"
+              target="_blank"
+            >
+              this tweet thread
+            </Link>
             too.
           </p>
         </FAQItem>
@@ -224,8 +228,12 @@ export const DeveloperListFAQ = () => {
             For transparency, we initially did request read-only permission to
             private repos. We no longer do this and have force revoked all
             access permissions we initially collected. More details posted in
-            [this tweet
-            thread](https://twitter.com/SolfateHQ/status/1743399473433157986)
+            <Link
+              href="https://twitter.com/SolfateHQ/status/1743399473433157986"
+              target="_blank"
+            >
+              this tweet thread
+            </Link>
             too.
           </p>
           <p>
