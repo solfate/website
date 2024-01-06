@@ -316,6 +316,19 @@ export const DeveloperListForm = memo(
           </div>
         ) : (
           <div className="max-w-2xl mx-auto space-y-4">
+            <p className="mx-auto max-w-lg text-center text-sm text-gray-500">
+              By connecting any accounts (i.e GitHub, Twitter/X) or applying to
+              join the DevList, you agree that you have read the{" "}
+              <Link href={"/devlist#faq"} className="underline">
+                FAQ
+              </Link>{" "}
+              and agree to the{" "}
+              <Link href={"/devlist#tos"} className="underline">
+                Terms of Service
+              </Link>{" "}
+              detailed below.
+            </p>
+
             {/* {!!accounts.solana && !accounts.hasOtherAccounts && (
             <div className="text-center card text-sm border-yellow-500 bg-yellow-300">
               <h4 className="font-semibold text-base">Caution</h4>
@@ -432,7 +445,7 @@ export const DeveloperListForm = memo(
               }
             />
           </div>
-        )}{" "}
+        )}
       </>
     );
   },
