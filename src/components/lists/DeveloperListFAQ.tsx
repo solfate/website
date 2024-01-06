@@ -98,10 +98,10 @@ export const DeveloperListFAQ = () => {
             pieces of information: a Solana wallet address and GitHub username.
           </p>
           <p>
-            We will perform checks of the GitHub account for public and private
-            code contributions to the Solana ecosystem. Including multiple
-            popular Solana focuses repositories and libraries. (see the data
-            privacy FAQ)
+            We will perform checks of the GitHub account for public code
+            contributions to the Solana ecosystem. Including multiple popular
+            Solana focuses repositories and libraries. (see the data privacy
+            FAQ)
           </p>
           <p>
             Once a person is verified to having meaningfully contributed source
@@ -186,8 +186,12 @@ export const DeveloperListFAQ = () => {
           </p>
           <p>
             The data these platforms provides to Solfate is pretty standard, but
-            for transparency: we do request read-only access to private GitHub
-            repositories. (see the data privacy FAQ below)
+            for transparency: we initially did request read-only permission to
+            private repos. We no longer do this and have force revoked all
+            access permissions we initially collected. More details posted in
+            [this tweet
+            thread](https://twitter.com/SolfateHQ/status/1743399473433157986)
+            too.
           </p>
         </FAQItem>
         <FAQItem
@@ -217,12 +221,12 @@ export const DeveloperListFAQ = () => {
             have shared elsewhere).
           </p>
           <p>
-            For transparency, we do request read-only access to private GitHub
-            repositories. We do so to check for source code contributions and
-            verification of source code development on private repositories. We
-            will NEVER save or share the source code in these repositories. We
-            only expect to briefly review code contributions, project scope, and
-            libraries/packages used.
+            For transparency, we initially did request read-only permission to
+            private repos. We no longer do this and have force revoked all
+            access permissions we initially collected. More details posted in
+            [this tweet
+            thread](https://twitter.com/SolfateHQ/status/1743399473433157986)
+            too.
           </p>
           <p>
             You can view the specific information that each external platform
