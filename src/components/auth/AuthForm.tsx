@@ -10,6 +10,7 @@ import { getCsrfToken, signIn } from "next-auth/react";
 import { WalletContextState, useWallet } from "@solana/wallet-adapter-react";
 import { useWalletModal } from "@solana/wallet-adapter-react-ui";
 import { WALLET_STAGE, walletButtonLabel } from "@/lib/solana/const";
+import { AuthError } from "@/components/auth/AuthError";
 // import { WalletButton } from "@/context/SolanaProviders";
 
 type AuthFormProps = {
@@ -220,6 +221,8 @@ export const AuthForm = memo(({ className, callbackPath }: AuthFormProps) => {
 
   return (
     <div className={`space-y-8 ${className}`}>
+      <AuthError />
+
       <section className="z-10 flex flex-col !items-stretch gap-2 p-8 card">
         <Suspense>
           {/* <WalletButton /> */}

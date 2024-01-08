@@ -1,8 +1,8 @@
 import { Metadata } from "next";
 import { SITE } from "@/lib/const/general";
-import { getUserSession } from "@/lib/auth";
-import { redirect } from "next/navigation";
 import { SolanaProvider } from "@/context/SolanaProvider";
+// import { getUserSession } from "@/lib/auth";
+// import { redirect } from "next/navigation";
 
 export const metadata: Metadata = {
   title: `${SITE.name} - Sign In`,
@@ -26,5 +26,5 @@ export default async function Layout({
   //   redirect("/");
   // }
 
-  return <SolanaProvider autoConnect={true}>{children}</SolanaProvider>;
+  return <SolanaProvider autoConnect={false}>{children}</SolanaProvider>;
 }
