@@ -1,6 +1,7 @@
 import dotenv from "dotenv";
 import { Octokit } from "octokit";
 import prisma from "@/lib/prisma";
+import { exit, sleep } from "@/lib/scripts";
 import type { GithubProfile } from "next-auth/providers/github";
 
 dotenv.config();
@@ -33,17 +34,6 @@ const STANDARD_GITHUB_REPOS = [
   // "https://github.com/openbook-dex/openbook-ts",
   // "https://github.com/openbook-dex/openbook-dex-ui",
 ];
-
-/** helper to easily exit with a message */
-function exit(message?: string) {
-  console.log(message || "Complete.");
-  process.exit();
-}
-
-/** helper function to wait/sleep in the console */
-async function sleep(ms: number = 1000) {
-  return await new Promise((resolve) => setTimeout(resolve, ms));
-}
 
 /**
  * Get the list of all all DevList applicants that are potentially eligible
@@ -131,8 +121,7 @@ if (
   // https://docs.github.com/en/apps/creating-github-apps/authenticating-with-a-github-app/refreshing-user-access-tokens#refreshing-a-user-access-token-with-a-refresh-token
 
   // todo: fallback to a server token
-  // accessToken = process.env.GITHUB_ACCESS_TOKEN;
-  accessToken = null;
+  accessToken = process.env.GITHUB_ACCESS_TOKEN || null;
   console.info("[INFO]", "using the server's access token");
 }
 
