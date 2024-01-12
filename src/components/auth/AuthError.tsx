@@ -3,7 +3,7 @@
 import { memo, useEffect, useState } from "react";
 
 export const AuthError = memo(() => {
-  const [error, setError] = useState<string | null>("callback");
+  const [error, setError] = useState<string | null>("");
 
   // useEffect(() => {
   //   const url = new URL(window.location.href);
