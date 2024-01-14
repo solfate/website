@@ -12,7 +12,7 @@
     "db:connect": "yarn db:org && pscale connect solfate-main --port 3309 ",
     "db:branch": "yarn db:org && pscale branch create solfate-main ",
     "db:pr": "yarn db:org && pscale deploy-request create solfate-main ",
-    "db:merge": "yarn db:org && pscale deploy-request deploy ",
+    "db:merge": "yarn db:org && pscale deploy-request deploy solfate-main ",
     "lint": "next lint"
   },
   "dependencies": {
