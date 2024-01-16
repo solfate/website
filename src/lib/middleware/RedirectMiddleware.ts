@@ -16,6 +16,7 @@ export default async function RedirectMiddleware(
   // define the set list of known redirects
   const SHORT_LINKS = {
     mint42: "/podcast/42",
+    mint43: "/podcast/43",
   };
 
   // located supported redirects
