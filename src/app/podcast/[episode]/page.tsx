@@ -107,7 +107,7 @@ export default async function Page({ params }: PageProps) {
           </li>
         </ul>
 
-        {parseInt(episode.ep) >= OLDEST_MINTABLE_EPISODE && (
+        {parseInt(episode.ep) == OLDEST_MINTABLE_EPISODE && (
           <EpisodeMintButton episode={episode} />
         )}
       </section>
