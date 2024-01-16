@@ -52,20 +52,20 @@ export const mintableEpisodes: {
       clip: "intro",
     },
   },
-  // 43: {
-  //   episode: 43,
-  //   name: "EP#43 - GJ and FlipsideCrypto",
-  //   description:
-  //     "GJ Flannery, the Head of Community at Flipside Crypto, discusses how " +
-  //     "Flipside provides data the Solana ecosystem as a public good. " +
-  //     "Including how analysts can get paid SOL to create analytics dashboard.",
-  //   image: `https://.ipfs.dweb.link/`,
-  //   animationUrl: `https://bafybeiaxweucvkcdigpwht6sigmghm4f2vll6me6v6eslsiee3d2czerzi.ipfs.dweb.link/`,
-  //   attributes: {
-  //     episode: 43,
-  //     guest: "GJ",
-  //     project: "Flipside",
-  //     clip: "intro",
-  //   },
-  // },
+  43: {
+    episode: 43,
+    name: "EP#43 - GJ and FlipsideCrypto",
+    description:
+      "GJ Flannery, the Head of Community at Flipside Crypto, discusses how " +
+      "Flipside provides data the Solana ecosystem as a public good. " +
+      "Including how analysts can get paid SOL to create analytics dashboard.",
+    image: `https://bafybeiewqb2oyemqjp2edes5iplrnpymzvfajfptji52tey74bsbs2sehi.ipfs.dweb.link/`,
+    animationUrl: `https://bafybeiaxweucvkcdigpwht6sigmghm4f2vll6me6v6eslsiee3d2czerzi.ipfs.dweb.link/`,
+    attributes: {
+      episode: 43,
+      guest: "GJ",
+      project: "Flipside",
+      clip: "intro",
+    },
+  },
 };
