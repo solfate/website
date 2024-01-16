@@ -8,7 +8,7 @@ import type { GithubProfile } from "next-auth/providers/github";
 import { retryWithBackoff } from "@/lib/helpers";
 
 const COHORT_TO_APPROVE = 1;
-const REQUEST_QUANTITY = 10;
+const REQUEST_QUANTITY = 20;
 
 dotenv.config();
 
@@ -109,7 +109,7 @@ if (!applicants || applicants.length == 0) {
 
 console.log("Total applicants:", applicants.length);
 
-for (let i = 0; i < applicants.length; i++) {
+for (let i = 0; i <= applicants.length; i++) {
   const startTime = Date.now();
   const applicant = applicants[i];
 
@@ -154,7 +154,7 @@ for (let i = 0; i < applicants.length; i++) {
   /**
    * Begin the loop of all standard repos to collect the standard data
    */
-  for (let j = 0; j < STANDARD_GITHUB_REPOS.length; j++) {
+  for (let j = 0; j <= STANDARD_GITHUB_REPOS.length; j++) {
     const [_, owner, repo] = STANDARD_GITHUB_REPOS[i].split(
       /^https?\:\/\/github.com\/([\w-]*)\/([\w-\.]*)/i,
     );
@@ -268,7 +268,7 @@ for (let i = 0; i < applicants.length; i++) {
   if (
     userData.total.activity >= 30 ||
     userData.total.commits >= 30 ||
-    userData.total.commits + userData.total.commits >= 30
+    userData.total.commits + userData.total.commits >= 10
   ) {
     autoApprove = true;
   }
