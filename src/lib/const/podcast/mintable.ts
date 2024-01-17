@@ -3,11 +3,6 @@
  */
 
 /**
- * Used to control when the "mint episode" button will be displayed in the UI
- */
-export const OLDEST_MINTABLE_EPISODE = 42;
-
-/**
  * Set the default data used as a fallback when minting
  */
 export const MINTABLE_DEFAULT = {
@@ -19,7 +14,7 @@ export const MINTABLE_DEFAULT = {
   externalUrlRoot: "https://solfate.com",
 };
 
-type MintableEpisode = {
+export type MintableEpisode = {
   episode: number;
   name: string;
   description: string;
