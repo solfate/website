@@ -38,7 +38,7 @@ export const mintableEpisodes: {
     description:
       "Siong, co-founder of the Jupiter swap aggregator, details how they scaled the " +
       "protocol and thoughts and plans around the Jupiter token and JUP airdrop.",
-    image: `https://bafybeibtlkonvjiobghnslvum3o7p3wlphg6h5msztpkfpf252h4pbkura.ipfs.dweb.link/`,
+    image: `https://bafkreidhs42ecmvfzr2tn4vwdneblmvgpnk43fud3or72bqplb5i5n5b7i.ipfs.dweb.link/`,
     animationUrl: `https://bafybeienxm3zhackrdkgonm6dnkjc5nsm2tv5ejkz3dtvmxeendfp5qyje.ipfs.dweb.link/`,
     attributes: {
       episode: 42,
