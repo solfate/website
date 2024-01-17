@@ -8,7 +8,7 @@ import type { GithubProfile } from "next-auth/providers/github";
 import { retryWithBackoff } from "@/lib/helpers";
 
 const COHORT_TO_APPROVE = 1;
-const REQUEST_QUANTITY = 20;
+const REQUEST_QUANTITY = 200;
 
 dotenv.config();
 
@@ -127,7 +127,8 @@ for (let i = 0; i <= applicants.length; i++) {
   console.log("\n\n");
   console.log("-------------------------------------------------------------");
   console.log("-------------------------------------------------------------");
-  console.log("github username:", customData.github.username, "\n");
+  console.log(`github: https://github.com/${customData.github.username}`);
+  console.log(`twitter: https://twitter.com/${customData.twitter.username}\n`);
 
   const accessToken = process.env.GITHUB_ACCESS_TOKEN || null;
 
@@ -154,8 +155,8 @@ for (let i = 0; i <= applicants.length; i++) {
   /**
    * Begin the loop of all standard repos to collect the standard data
    */
-  for (let j = 0; j <= STANDARD_GITHUB_REPOS.length; j++) {
-    const [_, owner, repo] = STANDARD_GITHUB_REPOS[i].split(
+  for (let j = 0; j < STANDARD_GITHUB_REPOS.length; j++) {
+    const [_, owner, repo] = STANDARD_GITHUB_REPOS[j].split(
       /^https?\:\/\/github.com\/([\w-]*)\/([\w-\.]*)/i,
     );
     const fullRepo = `${owner}/${repo}`;
@@ -163,10 +164,12 @@ for (let i = 0; i <= applicants.length; i++) {
     // @ts-ignore
     if (!userData.repos?.[fullRepo as never]) userData.repos[fullRepo] = {};
 
-    console.log("\n-------------------------------------------");
+    console.log("-------------------------------------------");
     console.log(
       "[BEGIN]",
-      `Checking repo ${j} of ${STANDARD_GITHUB_REPOS.length} for ${username}`,
+      `Checking repo ${j + 1} of ${
+        STANDARD_GITHUB_REPOS.length
+      } for ${username}`,
     );
     console.log("[REPO]", `${fullRepo}`);
 
@@ -243,20 +246,20 @@ for (let i = 0; i <= applicants.length; i++) {
       console.log("[WARN]", `unable to save the current repo data`);
     }
 
-    // no reason to sleep on the very last repo check
-    if (i + 1 != STANDARD_GITHUB_REPOS.length) {
-      console.log(
-        `User time elapsed: ${(Date.now() - startTime) / 1000} seconds`,
-      );
+    console.log(
+      `User time elapsed: ${(Date.now() - startTime) / 1000} seconds`,
+    );
 
+    // no reason to sleep on the very last repo check
+    if (j + 1 != STANDARD_GITHUB_REPOS.length) {
       console.log("[DELAY]", "sleep\n");
-      await sleep(3000 * (1 + Math.random()));
+      await sleep(1000 * (1 + Math.random()));
     }
   }
 
   console.log(
     "\n[COMPLETE]",
-    `repo data for ${username} - ${i} / ${applicants.length}`,
+    `repo data for ${username} - ${i + 1} of ${applicants.length} in queue`,
   );
   console.log(userData.total);
   // console.log(userData);
@@ -266,9 +269,9 @@ for (let i = 0; i <= applicants.length; i++) {
 
   // check for lots of commits total
   if (
-    userData.total.activity >= 30 ||
-    userData.total.commits >= 30 ||
-    userData.total.commits + userData.total.commits >= 10
+    userData.total.activity >= 10 ||
+    userData.total.commits >= 10 ||
+    userData.total.commits + userData.total.commits >= 5
   ) {
     autoApprove = true;
   }
@@ -298,6 +301,9 @@ for (let i = 0; i <= applicants.length; i++) {
 
     console.log("🎉 auto approved!!");
   }
+
+  console.log(`github: https://github.com/${customData.github.username}`);
+  console.log(`twitter: https://twitter.com/${customData.twitter.username}\n`);
 
   console.log(
     `Total time to complete github user "${username}" was: ${
