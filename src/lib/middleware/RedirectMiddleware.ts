@@ -23,9 +23,12 @@ export default async function RedirectMiddleware(
 
       const url = new URL(`/podcast/${episode}`, SITE.url);
       url.searchParams.set("mint", "");
+      console.log(url.toString());
 
       // redirect to podcast page with the mint trigger
-      return NextResponse.redirect(url);
+      return NextResponse.redirect(
+        new URL(`/podcast/${episode}?mint`, SITE.url).toString(),
+      );
     } catch (err) {}
     // we already know this is a mint short link, so always go to the podcast page
     return NextResponse.redirect(new URL("/podcast", SITE.url));
