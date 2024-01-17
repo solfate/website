@@ -86,6 +86,7 @@ model WalletList {
     data      Json?          @default("{}")
     flags     String?        @db.VarChar(500)
     status    Status?        @default(PENDING)
+    lastCheck DateTime?      @db.DateTime(0)
     // track a single unique asset per record
     assetId   String?
 
