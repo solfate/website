@@ -24,7 +24,11 @@ export const config = {
 export default async function middleware(req: NextRequest, ev: NextFetchEvent) {
   const { domain } = parse(req);
 
-  if (domain == "solfate.link" || domain == "sulfate.link") {
+  if (
+    domain == "solfate.link" ||
+    domain == "sulfate.link" ||
+    domain == "app.localhost:3000"
+  ) {
     return RedirectMiddleware(req);
   }
 

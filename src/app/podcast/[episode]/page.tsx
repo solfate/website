@@ -15,6 +15,8 @@ import { allPodcastEpisodes } from "contentlayer/generated";
 import { NextPrevButtons } from "@/components/posts/NextPrevButtons";
 import { Metadata, ResolvingMetadata } from "next";
 import { PodcastRatingButtons } from "@/components/podcast/PodcastRatingButtons";
+import { EpisodeMintButton } from "@/components/podcast/EpisodeMintButton";
+import { OLDEST_MINTABLE_EPISODE } from "@/lib/const/podcast/mintable";
 
 type PageProps = {
   params: {
@@ -104,6 +106,10 @@ export default async function Page({ params }: PageProps) {
             </Link>
           </li>
         </ul>
+
+        {parseInt(episode.ep) >= OLDEST_MINTABLE_EPISODE && (
+          <EpisodeMintButton episode={episode} />
+        )}
       </section>
 
       <h1 className="font-bold text-3xl md:text-4xl max-w-5xl">
