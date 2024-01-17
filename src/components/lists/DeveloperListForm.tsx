@@ -536,7 +536,7 @@ export const TaskItemCard = ({
         <Image
           priority
           src={imageSrc}
-          alt="Connect GitHub"
+          alt="Connect"
           className="w-10 h-10 md:w-12 md:h-12"
         />
         <div className="space-y-0">
