@@ -109,7 +109,7 @@ if (!applicants || applicants.length == 0) {
 
 console.log("Total applicants:", applicants.length);
 
-for (let i = 0; i <= applicants.length; i++) {
+for (let i = 0; i < applicants.length; i++) {
   const startTime = Date.now();
   const applicant = applicants[i];
 
