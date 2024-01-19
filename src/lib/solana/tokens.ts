@@ -10,6 +10,10 @@ import { SystemProgram,Connection,Keypair,PublicKey,Transaction} from "@solana/w
 import { ASSOCIATED_TOKEN_PROGRAM_ID,ExtensionType,LENGTH_SIZE,TOKEN_2022_PROGRAM_ID,TYPE_SIZE,createInitializeMetadataPointerInstruction,createInitializeMintInstruction,getMintLen,createInitializeInstruction,createUpdateFieldInstruction,createInitializeNonTransferableMintInstruction,getAssociatedTokenAddressSync,createAssociatedTokenAccountInstruction,createMintToInstruction,createSetAuthorityInstruction, AuthorityType} from "@solana/spl-token";
 // prettier-ignore
 import { pack,TokenMetadata,createUpdateAuthorityInstruction} from "@solana/spl-token-metadata";
+import {
+  GROUP_MEMBER_POINTER_SIZE,
+  createInitializeGroupMemberPointerInstruction,
+} from "./groupPointer";
 
 /**
  * Grind for a keypair that has a public key that the desired criteria
@@ -28,7 +32,7 @@ export function grindKeypairSync({ startsWith }: { startsWith: string }) {
   };
 }
 
-type CreateDevListTokenInstructionType = {
+type CreateNonTransferableTokenTransactionType = {
   connection: Connection;
   /** end owner of the asset */
   owner: PublicKey;
@@ -38,8 +42,8 @@ type CreateDevListTokenInstructionType = {
   customMint?: PublicKey;
   /**  */
   metadata: TokenMetadata;
-  /** mint keypair */
-  mint?: Keypair;
+  /** mint address */
+  mint: PublicKey;
   /** the master authority */
   authority: PublicKey;
   /** the final update authority - note: this is not required to sign the transaction */
@@ -54,21 +58,17 @@ export async function createNonTransferableTokenTransaction({
   mint,
   authority,
   updateAuthority,
-}: CreateDevListTokenInstructionType) {
+}: CreateNonTransferableTokenTransactionType) {
   // the asset `owner` will normally pay all fees
   if (!payer) payer = owner;
 
   // make the final update authority the default authority
   if (!updateAuthority) updateAuthority = authority;
 
-  // generate a new random mint if non provided
-  if (!mint) mint = Keypair.generate();
-  if (!mint?.publicKey) throw Error("Mint keypair not found");
-
   // derive the ata for the token owner and mint
   const associatedTokenAccount = getAssociatedTokenAddressSync(
     // mint account
-    mint.publicKey,
+    mint,
     // owner of the asset
     owner,
     // do not allow the owner to be off curve or not
@@ -79,14 +79,18 @@ export async function createNonTransferableTokenTransaction({
     ASSOCIATED_TOKEN_PROGRAM_ID,
   );
 
-  // calculate the size of the mint account
-  const mintSpace = getMintLen([
-    ExtensionType.NonTransferable,
-    ExtensionType.MetadataPointer,
+  // hack: manually add the group pointer on the mint until the extension is supported in the spl-token sdk
+  const groupMemberPointerSpace =
+    GROUP_MEMBER_POINTER_SIZE + TYPE_SIZE + LENGTH_SIZE;
 
-    // todo: when spl-token updates to include the group pointer...
-    // ExtensionType.GroupPointer,
-  ]);
+  // calculate the size of the mint account
+  const mintSpace =
+    getMintLen([
+      ExtensionType.MetadataPointer,
+      ExtensionType.NonTransferable,
+      // todo: when spl-token updates to include the group pointer...
+      // ExtensionType.GroupPointer,
+    ]) + groupMemberPointerSpace;
 
   /**
    * note: token22 requires the mint account's space to be exact for the mint alone.
@@ -99,16 +103,17 @@ export async function createNonTransferableTokenTransaction({
   // calculate the metadata space needed onchain
   const metadataSpace = pack(metadata).length + TYPE_SIZE + LENGTH_SIZE;
 
-  // how much does the space cost?
-  const lamports = await connection.getMinimumBalanceForRentExemption(
-    mintSpace + metadataSpace,
-  );
+  // get the lamport cost and recent blockhash
+  const [lamports /*recentBlockhash*/] = await Promise.all([
+    connection.getMinimumBalanceForRentExemption(mintSpace + metadataSpace),
+    // connection.getLatestBlockhash().then(({ blockhash }) => blockhash),
+  ]);
 
   // create the mint account, owned by the token22 program
   const createAccountInstruction = SystemProgram.createAccount({
     programId: TOKEN_2022_PROGRAM_ID,
     fromPubkey: payer,
-    newAccountPubkey: mint.publicKey,
+    newAccountPubkey: mint,
     // total space for the mint alone (not including the variable metadata space)
     space: mintSpace,
     // cost
@@ -119,11 +124,25 @@ export async function createNonTransferableTokenTransaction({
   const initializeMetadataPointerInstruction =
     createInitializeMetadataPointerInstruction(
       // mint account address
-      mint.publicKey,
+      mint,
       // authority that can set the metadata address
       authority,
       // the token22 mint will be the metadata account
-      mint.publicKey,
+      mint,
+      // program id
+      TOKEN_2022_PROGRAM_ID,
+    );
+
+  // instruction to associate the token part of a group
+  const initializeGroupMemberPointerInstruction =
+    createInitializeGroupMemberPointerInstruction(
+      // mint account address
+      mint,
+      // authority that can update the group member pointer
+      // note: this will later be required to initialize the token as a true collection
+      updateAuthority,
+      // the token22 mint will be the group member address
+      mint,
       // program id
       TOKEN_2022_PROGRAM_ID,
     );
@@ -131,7 +150,7 @@ export async function createNonTransferableTokenTransaction({
   // instruction to initialize mint account data
   const initializeMintInstruction = createInitializeMintInstruction(
     // mint address
-    mint.publicKey,
+    mint,
     // decimals for the mint - nfts have no decimals!
     0,
     // mint authority
@@ -146,7 +165,7 @@ export async function createNonTransferableTokenTransaction({
   const initializeNonTransferrableInstruction =
     createInitializeNonTransferableMintInstruction(
       // mint account
-      mint.publicKey,
+      mint,
       // program id
       TOKEN_2022_PROGRAM_ID,
     );
@@ -156,10 +175,10 @@ export async function createNonTransferableTokenTransaction({
     // token extension program as metadata program
     programId: TOKEN_2022_PROGRAM_ID,
     // account address that holds the metadata - with token22, it is the mint
-    metadata: mint.publicKey,
+    metadata: mint,
+    mint: mint,
     // authority that can update the metadata in the future
     updateAuthority: authority,
-    mint: mint.publicKey,
     mintAuthority: authority,
     // required metadata fields
     name: metadata.name,
@@ -174,7 +193,7 @@ export async function createNonTransferableTokenTransaction({
         // token extension program as metadata program
         programId: TOKEN_2022_PROGRAM_ID,
         // account address that holds the metadata
-        metadata: mint?.publicKey as PublicKey,
+        metadata: mint,
         // authority that can update the metadata
         updateAuthority: authority,
         // custom metadata field
@@ -193,7 +212,7 @@ export async function createNonTransferableTokenTransaction({
     // owner of the asset
     owner,
     // token mint
-    mint.publicKey,
+    mint,
     // token22 program id
     TOKEN_2022_PROGRAM_ID,
     // ata program id
@@ -203,7 +222,7 @@ export async function createNonTransferableTokenTransaction({
   // mint exactly 1 token on the mint
   const mintToInstruction = createMintToInstruction(
     // mint account
-    mint.publicKey,
+    mint,
     // ata for the owner of the token
     associatedTokenAccount,
     // mint authority
@@ -217,16 +236,17 @@ export async function createNonTransferableTokenTransaction({
     TOKEN_2022_PROGRAM_ID,
   );
 
-  // clear the mint authority so no new tokens can ever be minted
-  const clearMintTokenAuthorityIx = createSetAuthorityInstruction(
+  // reset the mint authority to be the desired key for the future
+  const setMintTokenAuthorityIx = createSetAuthorityInstruction(
     // token account and/or mint
-    mint.publicKey,
+    mint,
     // current authority
     authority,
     // specific authority to update
     AuthorityType.MintTokens,
-    // new authority - aka clear it aka no more tokens can be created on this mint
-    null,
+    // new authority
+    // note: this authority does not need to sign the transaction
+    updateAuthority,
     // multi signers
     undefined,
     // token program
@@ -235,23 +255,31 @@ export async function createNonTransferableTokenTransaction({
 
   // reset the metadata update authority to be the desired key for the future
   const setUpdateAuthorityIx = createUpdateAuthorityInstruction({
-    metadata: mint.publicKey,
+    metadata: mint,
     oldAuthority: authority,
     // note: this authority does not need to sign the transaction
     newAuthority: updateAuthority,
     programId: TOKEN_2022_PROGRAM_ID,
   });
 
-  return new Transaction().add(
+  // build the transaction
+  let transaction = new Transaction().add(
     createAccountInstruction,
     initializeNonTransferrableInstruction,
     initializeMetadataPointerInstruction,
+    initializeGroupMemberPointerInstruction,
     initializeMintInstruction,
+    // instructions allowed after initializing the mint
     initializeMetadataInstruction,
     createAtaInstruction,
     mintToInstruction,
-    clearMintTokenAuthorityIx,
     ...updateFieldInstructions,
+    setMintTokenAuthorityIx,
     setUpdateAuthorityIx,
   );
+
+  transaction.feePayer = payer;
+  // transaction.recentBlockhash = recentBlockhash;
+
+  return transaction;
 }
