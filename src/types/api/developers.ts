@@ -9,9 +9,22 @@ export type ApiListDevelopersPostInput = {
 
 /**
  * API input from a `PUT` request to the `/api/lists/developers` endpoint
- * (aka submitting a person's response to the questions)
  */
 export type ApiListDevelopersPutInput = {
-  why: string;
-  who?: string;
+  /** base58 address to use as the token's mint */
+  mint: string;
+  /** unsigned data */
+  message: string;
+  /** signed version of the `message` data */
+  signedData: string;
+};
+
+/**
+ * API response from a `PUT` request to the `/api/lists/developers` endpoint
+ */
+export type ApiListDevelopersPutResponse = {
+  /** the asset id (aka mint address) for the token being created */
+  assetId: string;
+  /** base58 encoded, partially signed transaction */
+  serializedTransaction: string;
 };
