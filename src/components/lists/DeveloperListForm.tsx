@@ -19,7 +19,7 @@ import toast from "react-hot-toast";
 import { TwitterProfile } from "next-auth/providers/twitter";
 import { GithubProfile } from "next-auth/providers/github";
 import { fetcher } from "@/lib/api";
-import { ApiDevelopersPostInput } from "@/types/api/developers";
+import { ApiListDevelopersPostInput } from "@/types/api/developers";
 import { ApiAuthDisconnectDeleteInput } from "@/types/api/auth";
 import { SITE } from "@/lib/const/general";
 
@@ -568,7 +568,7 @@ export const DeveloperListQuestionsDialog = (
   // initialize the state tracker for the on-page form state
   const [loading, setLoading] = useState<boolean>(false);
   const [hasChanges, setHasChanges] = useState<boolean>(false);
-  const [formData, setFormData] = useState<ApiDevelopersPostInput>({
+  const [formData, setFormData] = useState<ApiListDevelopersPostInput>({
     why: "",
     who: "",
   });
@@ -599,7 +599,7 @@ export const DeveloperListQuestionsDialog = (
 
       try {
         setLoading(true);
-        await fetcher<ApiDevelopersPostInput>("/api/lists/developers", {
+        await fetcher<ApiListDevelopersPostInput>("/api/lists/developers", {
           method: "POST",
           // send the current working data
           body: formData,

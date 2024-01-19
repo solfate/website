@@ -3,10 +3,9 @@
  */
 
 import { groupAccountsByProvider, withUserAuth } from "@/lib/auth";
-import { debug } from "@/lib/helpers";
 import prisma from "@/lib/prisma";
 import { getAccountsByUserId } from "@/lib/queries/accounts";
-import { ApiDevelopersPostInput } from "@/types/api/developers";
+import { ApiListDevelopersPostInput } from "@/types/api/developers";
 import { WalletList } from "@prisma/client";
 import { GithubProfile } from "next-auth/providers/github";
 import { TwitterProfile } from "next-auth/providers/twitter";
@@ -28,10 +27,13 @@ const WALLET_LIST_DEFAULTS: {
   status: "PENDING",
 };
 
+/**
+ * handler for adding new applicants to the waitlist
+ */
 export const POST = withUserAuth(async ({ req, session }) => {
   // debug("developers post");
 
-  const input: ApiDevelopersPostInput = await req.json();
+  const input: ApiListDevelopersPostInput = await req.json();
 
   // perform the input validation
   if (!input.why.trim()) {
