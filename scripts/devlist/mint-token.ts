@@ -64,7 +64,7 @@ const payer = DEVLIST_SERVER_KEY.publicKey;
 const transaction = await createNonTransferableTokenTransaction({
   connection,
   payer: payer,
-  mint,
+  mint: mint.publicKey,
   owner,
   metadata,
   authority: DEVLIST_SERVER_KEY.publicKey,
