@@ -20,7 +20,7 @@ export function JsonResponse<InputType>(
 export async function fetcher<ApiInputType>(
   apiUrl: string,
   init: Omit<RequestInit, "body"> & {
-    method: "DELETE" | "GET" | "POST" | "PATCH";
+    method: "DELETE" | "GET" | "POST" | "PATCH" | "PUT";
     body?: ApiInputType;
   },
   //   apiVersion = "v0",
