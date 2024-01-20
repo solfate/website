@@ -3,11 +3,6 @@
  */
 
 /**
- * Used to control when the "mint episode" button will be displayed in the UI
- */
-export const OLDEST_MINTABLE_EPISODE = 42;
-
-/**
  * Set the default data used as a fallback when minting
  */
 export const MINTABLE_DEFAULT = {
@@ -19,7 +14,7 @@ export const MINTABLE_DEFAULT = {
   externalUrlRoot: "https://solfate.com",
 };
 
-type MintableEpisode = {
+export type MintableEpisode = {
   episode: number;
   name: string;
   description: string;
@@ -43,7 +38,7 @@ export const mintableEpisodes: {
     description:
       "Siong, co-founder of the Jupiter swap aggregator, details how they scaled the " +
       "protocol and thoughts and plans around the Jupiter token and JUP airdrop.",
-    image: `https://bafybeibtlkonvjiobghnslvum3o7p3wlphg6h5msztpkfpf252h4pbkura.ipfs.dweb.link/`,
+    image: `https://bafkreidhs42ecmvfzr2tn4vwdneblmvgpnk43fud3or72bqplb5i5n5b7i.ipfs.dweb.link/`,
     animationUrl: `https://bafybeienxm3zhackrdkgonm6dnkjc5nsm2tv5ejkz3dtvmxeendfp5qyje.ipfs.dweb.link/`,
     attributes: {
       episode: 42,

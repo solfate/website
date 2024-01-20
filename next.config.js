@@ -75,6 +75,13 @@ const nextConfig = {
       },
     ];
   },
+  images: {
+    remotePatterns: [
+      {
+        hostname: "*.ipfs.dweb.link",
+      },
+    ],
+  },
 };
 
 module.exports = withContentlayer(nextConfig);

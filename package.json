@@ -28,7 +28,6 @@
     "@solana/wallet-standard-features": "^1.1.0",
     "@solana/wallet-standard-util": "^1.1.0",
     "@solana/web3.js": "1.87.6",
-    "@vercel/analytics": "^1.1.1",
     "add": "^2.0.6",
     "bs58": "^5.0.0",
     "clsx": "^2.0.0",

@@ -1,0 +1,13 @@
+/**
+ * Structure of the `data` field on applications
+ */
+export type DevListApplicationExtraData = {
+  github: {
+    id: string;
+    username: string;
+  };
+  twitter: {
+    id: string;
+    username: string;
+  };
+};

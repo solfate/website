@@ -21,11 +21,8 @@ export default async function RedirectMiddleware(
 
       if (!episode) throw Error("Unknown episode");
 
-      const url = new URL(`/podcast/${episode}`, SITE.url);
-      url.searchParams.set("mint", "");
-
       // redirect to podcast page with the mint trigger
-      return NextResponse.redirect(url);
+      return NextResponse.redirect(`${SITE.url}/podcast/${episode}?mint`);
     } catch (err) {}
     // we already know this is a mint short link, so always go to the podcast page
     return NextResponse.redirect(new URL("/podcast", SITE.url));

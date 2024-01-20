@@ -4,7 +4,6 @@ import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
 import { SITE, TWITTER } from "@/lib/const/general";
 
-import { Analytics } from "@vercel/analytics/react";
 import { Toaster } from "react-hot-toast";
 import { getUserSession } from "@/lib/auth";
 
@@ -91,7 +90,6 @@ export default async function RootLayout({
         {children}
 
         {/* <main className="min-h-[85vh]">{children}</main> */}
-        <Analytics />
       </body>
     </html>
   );

@@ -3,9 +3,7 @@
 import Dialog, { DialogProps } from "@/components/core/Dialog";
 import { memo, useCallback, useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
-import { PodcastEpisode } from "contentlayer/generated";
 import toast from "react-hot-toast";
-import Image from "next/image";
 import { SessionProvider, getCsrfToken } from "next-auth/react";
 import { fetcher } from "@/lib/api";
 import { PulseLoader } from "react-spinners";
@@ -18,84 +16,87 @@ import { SITE } from "@/lib/const/general";
 import { SolanaSignInMessage } from "@/lib/solana/SignInMessage";
 
 import Confetti from "react-dom-confetti";
+import { MintableEpisode } from "@/lib/const/podcast/mintable";
 
 type EpisodeMintDialogProps = {
-  episode: PodcastEpisode;
+  mintable: MintableEpisode;
   onSuccess?: Function;
 };
 
-export const EpisodeMintButton = memo(({ episode }: EpisodeMintDialogProps) => {
-  const searchParams = useSearchParams();
-  const [isOpen, setIsOpen] = useState<boolean>(false);
-  const [isExploding, setIsExploding] = useState<boolean>(false);
-  const [isComplete, setIsComplete] = useState<boolean>(false);
+export const EpisodeMintButton = memo(
+  ({ mintable }: EpisodeMintDialogProps) => {
+    const searchParams = useSearchParams();
+    const [isOpen, setIsOpen] = useState<boolean>(false);
+    const [isExploding, setIsExploding] = useState<boolean>(false);
+    const [isComplete, setIsComplete] = useState<boolean>(false);
 
-  // auto open the modal via a direct url route i.e. `/<ep>?mint`
-  useEffect(() => {
-    if (searchParams.has("mint")) setIsOpen(true);
-  }, [searchParams, setIsOpen, isOpen]);
+    // auto open the modal via a direct url route i.e. `/<ep>?mint`
+    useEffect(() => {
+      if (searchParams.has("mint")) setIsOpen(true);
+    }, [searchParams, setIsOpen, isOpen]);
 
-  /**
-   * make it a party!
-   */
-  const partyTime = useCallback(() => {
-    setIsExploding(true);
-    setIsComplete(true);
-    return new Promise((r) =>
-      setTimeout(() => {
-        setIsExploding(false);
-        return r;
-      }, 1000),
-    );
-  }, [setIsExploding]);
+    /**
+     * make it a party!
+     */
+    const partyTime = useCallback(() => {
+      setIsExploding(true);
+      setIsComplete(true);
+      return new Promise((r) =>
+        setTimeout(() => {
+          setIsExploding(false);
+          return r;
+        }, 1000),
+      );
+    }, [setIsExploding]);
 
-  return (
-    <SessionProvider>
-      <SolanaProvider>
-        <div className="absolute right-[50%]">
-          <Confetti
-            active={isExploding}
-            config={{
-              angle: -95,
-              spread: 200,
-              startVelocity: 80,
-              // startVelocity: 45,
-              elementCount: 200,
-              // elementCount: 100,
-              dragFriction: 0.15,
-              // duration: 3000,
-              duration: 5000,
-              stagger: 4,
-              width: "10px",
-              height: "10px",
-              colors: ["#a864fd", "#29cdff", "#78ff44", "#ff718d", "#fdff6a"],
-            }}
+    return (
+      <SessionProvider>
+        <SolanaProvider>
+          <div className="absolute right-[50%]">
+            <Confetti
+              active={isExploding}
+              config={{
+                angle: -95,
+                spread: 200,
+                startVelocity: 80,
+                // startVelocity: 45,
+                elementCount: 200,
+                // elementCount: 100,
+                dragFriction: 0.15,
+                // duration: 3000,
+                duration: 5000,
+                stagger: 4,
+                width: "10px",
+                height: "10px",
+                colors: ["#a864fd", "#29cdff", "#78ff44", "#ff718d", "#fdff6a"],
+              }}
+            />
+          </div>
+
+          <EpisodeMintDialog
+            mintable={mintable}
+            isOpen={isOpen}
+            setIsOpen={setIsOpen}
+            onSuccess={partyTime}
           />
-        </div>
 
-        <EpisodeMintDialog
-          episode={episode}
-          isOpen={isOpen}
-          setIsOpen={setIsOpen}
-          onSuccess={partyTime}
-        />
-
-        <button
-          type="button"
-          className={`btn ${isComplete ? "btn-ghost" : "btn-black"}`}
-          disabled={isComplete}
-          onClick={() => setIsOpen(!isOpen)}
-        >
-          {isComplete ? <>Collected</> : <>Collect Episode</>}
-        </button>
-      </SolanaProvider>
-    </SessionProvider>
-  );
-});
+          <button
+            type="button"
+            className={`btn ${isComplete ? "btn-ghost" : "btn-black"}`}
+            disabled={isComplete}
+            onClick={() => setIsOpen(!isOpen)}
+          >
+            {isComplete ? <>Collected</> : <>Collect Episode</>}
+          </button>
+        </SolanaProvider>
+      </SessionProvider>
+    );
+  },
+);
 
 export const EpisodeMintDialog = memo(
   ({
-    episode,
+    mintable,
     isOpen,
     setIsOpen,
     onSuccess,
@@ -254,7 +255,7 @@ export const EpisodeMintDialog = memo(
 
           setLoading(true);
 
-          await fetcher<any>(`/api/podcast/mint/${episode.ep}`, {
+          await fetcher<any>(`/api/podcast/mint/${mintable.episode}`, {
             method: "POST",
             body: signInMessage,
           }).then((res) => {
@@ -329,14 +330,16 @@ export const EpisodeMintDialog = memo(
               </section>
 
               <section className="p-8 space-y-5 w-full">
-                <div className="rounded-lg overflow-hidden border relative mx-auto max-h-64 aspect-video text-center flex items-center justify-center">
-                  <Image
-                    fill
-                    priority={true}
-                    src={episode.image || "/media/podcast/cover0.jpg"}
-                    alt={""}
-                    className="rounded-lg p-4"
+                <div className="border border-gray-200 rounded-lg w-fit mx-auto space-y-4 p-4">
+                  <img
+                    width={320}
+                    height={320}
+                    alt={mintable.name}
+                    src={`/media/podcast/mintable/ep${mintable.episode}.jpg`}
+                    className="max-w-xs w-full object-contain mx-auto"
                   />
+
+                  {/* <h2 className="font-semibold text-center">{mintable.name}</h2> */}
                 </div>
               </section>
 

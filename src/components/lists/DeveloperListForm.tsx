@@ -21,7 +21,6 @@ import { GithubProfile } from "next-auth/providers/github";
 import { fetcher } from "@/lib/api";
 import { ApiListDevelopersPostInput } from "@/types/api/developers";
 import { ApiAuthDisconnectDeleteInput } from "@/types/api/auth";
-import { SITE } from "@/lib/const/general";
 
 enum TaskStatus {
   IDLE,
@@ -31,14 +30,12 @@ enum TaskStatus {
 }
 
 type DeveloperListFormProps = {
-  onList: boolean;
   groupedAccounts: Option<AccountsGroupByProvider>;
 };
 
 export const DeveloperListForm = memo(
-  ({ groupedAccounts, onList }: DeveloperListFormProps) => {
+  ({ groupedAccounts }: DeveloperListFormProps) => {
     const [loading, setLoading] = useState<false | string>(false);
-    const [isOnList, setIsOnList] = useState(onList);
     const [dialogOpen, setDialogOpen] = useState(false);
 
     /**
@@ -199,84 +196,11 @@ export const DeveloperListForm = memo(
       else return setDialogOpen(true);
     }, [accounts, groupedAccounts]);
 
-    const devlistTweet = useMemo(() => {
-      const tweetUrl = new URL("https://twitter.com/intent/tweet");
-      tweetUrl.searchParams.append(
-        "text",
-        `❤️‍🔥 I just applied to join the @solana DevList! ` +
-          `Tell @SolfateHQ why I am a dedicated dev and should be approved to join\n` +
-          `Apply yourself here too 👇\n` +
-          `https://solfate.com/devlist`,
-      );
-      tweetUrl.searchParams.append("original_referer", SITE.url);
-      tweetUrl.searchParams.append("related", "@SolfateHQ");
-
-      return tweetUrl.toString();
-    }, []);
-
-    if (!!isOnList) {
-      return (
-        <>
-          <div className="text-center card text-sm max-w-2xl mx-auto space-y-4 border-yellow-500 bg-yellow-300">
-            <h4 className="font-semibold text-base">
-              GitHub Contributions Under Review
-            </h4>
-            <p>
-              Your GitHub account (
-              <Link
-                href={`https://github.com/${accounts.github}`}
-                target="_blank"
-                className="underline hover:text-hot-pink"
-              >
-                @{accounts.github}
-              </Link>
-              ) is the waitlist to join the Verified Solana Developers. Your
-              contributions to the Solana ecosystem are currently under review.
-            </p>
-            <p>
-              If approved, you will be able to mint the soul-bound NFT to your
-              selected wallet (
-              <Link
-                href={`https://solana.fm/address/${accounts.solana}`}
-                target="_blank"
-                className="underline hover:text-hot-pink"
-              >
-                {shortWalletAddress(accounts.solana as string)}
-              </Link>
-              ). Granting you access to special goodies!
-            </p>
-          </div>
-          <div className="flex items-center justify-center">
-            <Link
-              href={devlistTweet}
-              target="_blank"
-              className="btn inline-flex mx-auto btn-black bg-twitter"
-            >
-              Tell your Twitter frens to vote for you
-            </Link>
-          </div>
-
-          <p className="mx-auto max-w-lg text-center">
-            👋 PS: Followers of{" "}
-            <Link
-              href={"https://twitter.com/SolfateHQ"}
-              target="_target"
-              className="underline hover:text-hot-pink"
-            >
-              SolfateHQ
-            </Link>{" "}
-            will be reviewed first 💜
-          </p>
-        </>
-      );
-    }
-
     return (
       <>
         <DeveloperListQuestionsDialog
           isOpen={dialogOpen}
           setIsOpen={setDialogOpen}
-          setIsOnList={setIsOnList}
         />
         {!accounts.solana ? (
           <div className="max-w-2xl mx-auto space-y-4">
@@ -552,19 +476,7 @@ export const TaskItemCard = ({
   );
 };
 
-export const DeveloperListQuestionsDialog = (
-  props: DialogProps & {
-    setIsOnList: React.Dispatch<React.SetStateAction<boolean>>;
-  },
-) => {
-  //   const {
-  //     profileData,
-  //     updateProfileData,
-  //     elementEditorOpen,
-  //     setElementEditorOpen,
-  //     elementToEdit,
-  //   } = useContext(ProfileEditorContext);
-
+export const DeveloperListQuestionsDialog = (props: DialogProps) => {
   // initialize the state tracker for the on-page form state
   const [loading, setLoading] = useState<boolean>(false);
   const [hasChanges, setHasChanges] = useState<boolean>(false);
@@ -572,12 +484,6 @@ export const DeveloperListQuestionsDialog = (
     why: "",
     who: "",
   });
-
-  // auto reset the editor's state when the `elementToEdit` changes
-  //   useEffect(() => {
-  //     setFormData(elementToEdit);
-  //     setHasChanges(false);
-  //   }, [elementToEdit, setFormData, setHasChanges]);
 
   // helper function to handle the various input state changes
   function updateFormState(name: keyof typeof formData, value: string) {
@@ -605,10 +511,13 @@ export const DeveloperListQuestionsDialog = (
           body: formData,
         })
           .then((res) => {
-            props.setIsOnList(true);
             props.setIsOpen(false);
             toast.success(res);
             setHasChanges(false);
+
+            // redirect to the `/devlist` status page
+            window.location.href = "/devlist";
+
             return true;
           })
           .catch((err: string) => {

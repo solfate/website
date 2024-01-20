@@ -16,7 +16,7 @@ import { NextPrevButtons } from "@/components/posts/NextPrevButtons";
 import { Metadata, ResolvingMetadata } from "next";
 import { PodcastRatingButtons } from "@/components/podcast/PodcastRatingButtons";
 import { EpisodeMintButton } from "@/components/podcast/EpisodeMintButton";
-import { OLDEST_MINTABLE_EPISODE } from "@/lib/const/podcast/mintable";
+import { mintableEpisodes } from "@/lib/const/podcast/mintable";
 
 type PageProps = {
   params: {
@@ -87,6 +87,9 @@ export default async function Page({ params }: PageProps) {
     notFound();
   }
 
+  // load the mintable episode details
+  const mintableEpisode = mintableEpisodes[parseInt(episode.ep)];
+
   // serialize the markdown content for parsing via MDX
   const mdxSerialized = await serialize(episode.body.raw, {
     // scope: { }
@@ -107,9 +110,7 @@ export default async function Page({ params }: PageProps) {
           </li>
         </ul>
 
-        {parseInt(episode.ep) >= OLDEST_MINTABLE_EPISODE && (
-          <EpisodeMintButton episode={episode} />
-        )}
+        <EpisodeMintButton mintable={mintableEpisode} />
       </section>
 
       <h1 className="font-bold text-3xl md:text-4xl max-w-5xl">

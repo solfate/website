@@ -5,7 +5,8 @@
 import { groupAccountsByProvider, withUserAuth } from "@/lib/auth";
 import prisma from "@/lib/prisma";
 import { getAccountsByUserId } from "@/lib/queries/accounts";
-import { ApiListDevelopersPostInput } from "@/types/api/developers";
+import { ApiDevelopersPostInput } from "@/types/api/developers";
+import { DevListApplicationExtraData } from "@/types/api/lists";
 import { WalletList } from "@prisma/client";
 import { GithubProfile } from "next-auth/providers/github";
 import { TwitterProfile } from "next-auth/providers/twitter";
@@ -20,7 +21,7 @@ const WALLET_LIST_DEFAULTS: {
   status: WalletList["status"];
 } = {
   // current working cohort
-  cohort: 1,
+  cohort: 2,
   // developer list
   type: "DEVELOPER",
   // waitlist all new additions by default
@@ -61,13 +62,13 @@ export const POST = withUserAuth(async ({ req, session }) => {
       return {
         solanaWallet: accounts.solana?.[0].providerAccountId,
         twitter: {
-          id: accounts.twitter?.[0].providerAccountId,
+          id: accounts.twitter?.[0].providerAccountId as string,
           username: (
             accounts.twitter?.[0].provider_profile as object as TwitterProfile
           ).data.username,
         },
         github: {
-          id: accounts.github?.[0].providerAccountId,
+          id: accounts.github?.[0].providerAccountId as string,
           username: (
             accounts.github?.[0].provider_profile as object as GithubProfile
           ).login,
@@ -115,7 +116,7 @@ export const POST = withUserAuth(async ({ req, session }) => {
       data: {
         github: accounts.github,
         twitter: accounts.twitter,
-      },
+      } as DevListApplicationExtraData,
       questions: {
         why: input.why,
         who: input.who,
