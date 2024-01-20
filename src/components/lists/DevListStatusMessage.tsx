@@ -33,8 +33,10 @@ export const DevListStatusMessage = memo(
               <h4 className="font-semibold text-base">You are approved!</h4>
               <p>
                 Congratulations, you have been approved to join the Solana
-                DevList. Now you just need to claim your (non-transferrable)
-                DevList membership token to make it official.
+                DevList.
+                <br />
+                Claim your (non-transferrable) DevList membership token to make
+                it official.
               </p>
             </div>
 
