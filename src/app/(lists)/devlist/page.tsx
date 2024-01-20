@@ -3,11 +3,12 @@ import { SITE } from "@/lib/const/general";
 
 import crownEmoji from "@/../public/icons/crown.svg";
 import Image from "next/image";
-import { DeveloperListForm } from "@/components/lists/DeveloperListForm";
 import { getUserSession, groupAccountsByProvider } from "@/lib/auth";
 import { getAccountsByUserId } from "@/lib/queries/accounts";
 import prisma from "@/lib/prisma";
 import { DeveloperListFAQ } from "@/components/lists/DeveloperListFAQ";
+import { DeveloperListForm } from "@/components/lists/DeveloperListForm";
+import { DevListStatusMessage } from "@/components/lists/DevListStatusMessage";
 
 export const metadata: Metadata = {
   title: `Solana DevList - Verified Solana Developers | ${SITE.name}`,
@@ -36,7 +37,7 @@ export default async function Page() {
     listRecord = await prisma.walletList.findFirst({
       where: {
         type: "DEVELOPER",
-        wallet: groupedAccounts.solana[0].providerAccountId,
+        userId: session.user.id,
       },
     });
   }
@@ -72,10 +73,11 @@ export default async function Page() {
         </p>
       </section>
 
-      <DeveloperListForm
-        groupedAccounts={groupedAccounts}
-        onList={!!listRecord}
-      />
+      {!!listRecord ? (
+        <DevListStatusMessage application={listRecord} />
+      ) : (
+        <DeveloperListForm groupedAccounts={groupedAccounts} />
+      )}
 
       <DeveloperListFAQ />
     </main>
