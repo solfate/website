@@ -38,7 +38,7 @@ export const DevListStatusMessage = memo(
               </p>
             </div>
 
-            <div className="flex items-center justify-center">
+            {/* <div className="flex items-center justify-center">
               <Link
                 href={devlistTweet("approved", application.twitter)}
                 target="_blank"
@@ -46,9 +46,9 @@ export const DevListStatusMessage = memo(
               >
                 Tell your Twitter frens you are approved
               </Link>
-            </div>
+            </div> */}
 
-            <p className="max-w-xl mx-auto text-center">
+            {/* <p className="max-w-xl mx-auto text-center">
               In the <span className="shadow-hot-pink">next few days</span>, we
               will enable claiming/minting right here on this page. Keep an eye
               out for <span className="">announcements</span> on the{" "}
@@ -60,7 +60,7 @@ export const DevListStatusMessage = memo(
                 @SolfateHQ
               </Link>{" "}
               twitter!
-            </p>
+            </p> */}
           </>
         );
       }
