@@ -3,7 +3,6 @@
  */
 
 import { groupAccountsByProvider, withUserAuth } from "@/lib/auth";
-import { debug } from "@/lib/helpers";
 import prisma from "@/lib/prisma";
 import { getAccountsByUserId } from "@/lib/queries/accounts";
 import { ApiDevelopersPostInput } from "@/types/api/developers";
@@ -22,7 +21,7 @@ const WALLET_LIST_DEFAULTS: {
   status: WalletList["status"];
 } = {
   // current working cohort
-  cohort: 1,
+  cohort: 2,
   // developer list
   type: "DEVELOPER",
   // waitlist all new additions by default
