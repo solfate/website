@@ -64,6 +64,8 @@ const STANDARD_GITHUB_REPOS = [
   "https://github.com/openbook-dex/openbook-v2",
   "https://github.com/openbook-dex/openbook-ts",
   "https://github.com/openbook-dex/openbook-dex-ui",
+  "https://github.com/LibrePlex/libreplex-program-library",
+  "https://github.com/LibrePlex/sample-ui",
 ];
 
 /**
