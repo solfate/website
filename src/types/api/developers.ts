@@ -17,6 +17,11 @@ export type ApiListDevelopersPutInput = {
   message: string;
   /** signed version of the `message` data */
   signedData: string;
+  /** fields to support additional metadata */
+  metadata?: {
+    twitter?: boolean;
+    github?: boolean;
+  };
 };
 
 /**
