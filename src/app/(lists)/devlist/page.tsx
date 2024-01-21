@@ -9,6 +9,10 @@ import prisma from "@/lib/prisma";
 import { DeveloperListFAQ } from "@/components/lists/DeveloperListFAQ";
 import { DeveloperListForm } from "@/components/lists/DeveloperListForm";
 import { DevListStatusMessage } from "@/components/lists/DevListStatusMessage";
+import { ClaimDevListToken } from "@/components/lists/ClaimDevListToken";
+import { SolanaProvider } from "@/context/SolanaProvider";
+import { Connection, PublicKey } from "@solana/web3.js";
+import { checkMintAndUpdateApplicantStatus } from "@/lib/lists";
 
 export const metadata: Metadata = {
   title: `Solana DevList - Verified Solana Developers | ${SITE.name}`,
@@ -33,6 +37,8 @@ export default async function Page() {
 
   // get the current users list record
   let listRecord = null;
+
+  // locate the user's DevList application
   if (!!session?.user.id && !!groupedAccounts.solana?.[0].providerAccountId) {
     listRecord = await prisma.walletList.findFirst({
       where: {
@@ -40,6 +46,23 @@ export default async function Page() {
         userId: session.user.id,
       },
     });
+
+    // check if the current `assetId` already exists (aka the user has claimed)
+    if (listRecord && !!listRecord.assetId && listRecord.status != "ACTIVE") {
+      const connection = new Connection(process.env.SOLANA_RPC, {
+        commitment: "single",
+      });
+
+      const accountInfo = await checkMintAndUpdateApplicantStatus(
+        listRecord.id,
+        connection,
+        new PublicKey(listRecord.assetId),
+        "ACTIVE",
+      );
+
+      // force update the current record's state
+      if (!!accountInfo) listRecord.status = "ACTIVE";
+    }
   }
 
   return (
@@ -64,22 +87,30 @@ export default async function Page() {
           </h4>
         </section>
 
-        <p className="mx-auto text-base md:text-lg text-gray-700">
-          The community of <span className="">Solana Developers</span> is always
-          busy building, often for thankless work. Especially{" "}
-          <span className="shadow-hot-pink">open source contributors</span>. The{" "}
-          Solana DevList aims to help support ways to provide value back to
-          these <span className="shadow-hot-pink">dedicated developers</span>.
-        </p>
+        {listRecord?.status != "UNCLAIMED" && (
+          <p className="mx-auto text-base md:text-lg text-gray-700">
+            The community of <span className="">Solana Developers</span> is
+            always busy building, often for thankless work. Especially{" "}
+            <span className="shadow-hot-pink">open source contributors</span>.
+            The Solana DevList aims to help support ways to provide value back
+            to these{" "}
+            <span className="shadow-hot-pink">dedicated developers</span>.
+          </p>
+        )}
       </section>
 
       {!!listRecord ? (
-        <DevListStatusMessage application={listRecord} />
-      ) : (
-        <DeveloperListForm groupedAccounts={groupedAccounts} />
-      )}
+        <SolanaProvider autoConnect={false}>
+          <DevListStatusMessage application={listRecord} />
 
-      <DeveloperListFAQ />
+          {listRecord.status == "ACTIVE" ? <></> : <ClaimDevListToken />}
+        </SolanaProvider>
+      ) : (
+        <>
+          <DeveloperListForm groupedAccounts={groupedAccounts} />
+          <DeveloperListFAQ />
+        </>
+      )}
     </main>
   );
 }
