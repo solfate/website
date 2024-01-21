@@ -16,10 +16,11 @@ export const DevListStatusMessage = memo(
         return (
           <div className="text-center card text-sm max-w-2xl mx-auto space-y-4 border-green-500 bg-green-300">
             <h4 className="font-semibold text-base">
-              You have claimed your DevList token!
+              You are officially on the DevList
             </h4>
             <p>
               Congratulations, you have claimed your DevList membership token.
+              <br />
               Now, we wait for the next chapter.
             </p>
           </div>
