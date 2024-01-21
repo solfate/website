@@ -13,6 +13,7 @@ import { ClaimDevListToken } from "@/components/lists/ClaimDevListToken";
 import { SolanaProvider } from "@/context/SolanaProvider";
 import { Connection, PublicKey } from "@solana/web3.js";
 import { checkMintAndUpdateApplicantStatus } from "@/lib/lists";
+import { DevListApplicationExtraData } from "@/types/api/lists";
 
 export const metadata: Metadata = {
   title: `Solana DevList - Verified Solana Developers | ${SITE.name}`,
@@ -37,6 +38,7 @@ export default async function Page() {
 
   // get the current users list record
   let listRecord = null;
+  let applicantData: DevListApplicationExtraData | undefined = undefined;
 
   // locate the user's DevList application
   if (!!session?.user.id && !!groupedAccounts.solana?.[0].providerAccountId) {
@@ -46,6 +48,10 @@ export default async function Page() {
         userId: session.user.id,
       },
     });
+
+    // correctly type the extra data
+    if (!!listRecord?.data)
+      applicantData = listRecord?.data as DevListApplicationExtraData;
 
     // check if the current `assetId` already exists (aka the user has claimed)
     if (listRecord && !!listRecord.assetId && listRecord.status != "ACTIVE") {
@@ -103,7 +109,14 @@ export default async function Page() {
         <SolanaProvider autoConnect={false}>
           <DevListStatusMessage application={listRecord} />
 
-          {listRecord.status == "ACTIVE" ? <></> : <ClaimDevListToken />}
+          {listRecord.status == "ACTIVE" ? (
+            <></>
+          ) : (
+            <ClaimDevListToken
+              twitter={applicantData?.twitter.username}
+              github={applicantData?.github.username}
+            />
+          )}
         </SolanaProvider>
       ) : (
         <>
