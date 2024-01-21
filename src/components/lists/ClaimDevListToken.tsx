@@ -211,7 +211,7 @@ export const ClaimDevListToken = ({
         setProcessingStage(WALLET_STAGE.SUCCESS);
 
         // refresh the page
-        window.location.href = window.location.href;
+        // window.location.href = window.location.href;
 
         return toast.success("Success!");
       } catch (err) {
@@ -281,12 +281,16 @@ export const ClaimDevListToken = ({
             <span className="flex w-10 h-10 text-sm rounded-full bg-red-100 items-center justify-center border border-red-200 p-3">
               2
             </span>
-            <h3 className="font-medium text-lg">Customize your metadata</h3>
+            <h3 className="font-medium text-lg">
+              Customize your metadata (optional)
+            </h3>
           </div>
 
           <p className="text-sm">
             Decide if you want your DevList token to store your Twitter and/or
             GitHub username publicly in the onchain metadata.
+            <br />
+            This is optional and off by default.
           </p>
         </div>
         <div className="space-y-1">
@@ -315,6 +319,8 @@ export const ClaimDevListToken = ({
           <section className="grid grid-cols-2 gap-2">
             <p className="col-span-full text-sm">
               Select optional onchain metadata:
+              <br />
+              (optional - off by default)
             </p>
             <MetadataToggle
               disabled={processingStage !== WALLET_STAGE.IDLE}
