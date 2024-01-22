@@ -7,8 +7,13 @@ import { exit, saveJsonCacheDataSync, sleep } from "@/lib/scripts";
 import type { GithubProfile } from "next-auth/providers/github";
 import { retryWithBackoff } from "@/lib/helpers";
 
-const COHORT_TO_APPROVE = 1;
+const COHORT_TO_APPROVE = 2;
 const REQUEST_QUANTITY = 200;
+
+/**
+ *
+ */
+const AUTO_APPROVAL_THRESHOLD = 5;
 
 dotenv.config();
 
@@ -66,6 +71,7 @@ const STANDARD_GITHUB_REPOS = [
   "https://github.com/openbook-dex/openbook-dex-ui",
   "https://github.com/LibrePlex/libreplex-program-library",
   "https://github.com/LibrePlex/sample-ui",
+  "https://github.com/arihantbansal/cubik",
 ];
 
 /**
@@ -271,9 +277,8 @@ for (let i = 0; i < applicants.length; i++) {
 
   // check for lots of commits total
   if (
-    userData.total.activity >= 10 ||
-    userData.total.commits >= 10 ||
-    userData.total.commits + userData.total.commits >= 5
+    userData.total.commits + userData.total.commits >=
+    AUTO_APPROVAL_THRESHOLD
   ) {
     autoApprove = true;
   }
