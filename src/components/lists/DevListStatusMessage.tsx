@@ -226,7 +226,10 @@ const devlistTweet = (
   tweetUrl.searchParams.append("original_referer", SITE.url);
   tweetUrl.searchParams.append("related", "@SolfateHQ");
 
-  const refText = refAddress ? `?ref=${refAddress}` : "";
+  let refText = refAddress ? `ref=${refAddress}` : "";
+
+  if (tweetType == "member")
+    refText = !!refText ? `${refText}&verified` : "verified";
 
   if (tweetType == "voucher") {
     tweetUrl.searchParams.append(
@@ -234,7 +237,7 @@ const devlistTweet = (
       `❤️‍🔥 I just applied to join the @solana DevList! 🧑‍💻📜\n` +
         `Tell @SolfateHQ why I am a dedicated dev and should be approved to join\n` +
         `Apply yourself here too 👇\n` +
-        `https://solfate.com/devlist${refText}`,
+        `https://solfate.com/devlist?${refText}`,
     );
   } else if (tweetType == "member") {
     tweetUrl.searchParams.append(
@@ -243,7 +246,7 @@ const devlistTweet = (
         `Who is going to be the first to use the DevList for something ` +
         `interesting and support dedicated Solana developers (like myself)\n\n` +
         `Not a member? Apply yourself here 👇\n` +
-        `https://solfate.com/devlist${refText}`,
+        `https://solfate.com/devlist?${refText}`,
     );
   } else if (tweetType == "approved") {
     tweetUrl.searchParams.append(
@@ -251,7 +254,7 @@ const devlistTweet = (
       `🧑‍💻📜 I was approved to join the @solana DevList by @SolfateHQ! ` +
         `Excited to claim my membership token soon (tm)\n` +
         `You can apply yourself here too 👇\n` +
-        `https://solfate.com/devlist${refText}`,
+        `https://solfate.com/devlist?${refText}`,
     );
   } else if (tweetType == "pending") {
     tweetUrl.searchParams.append(
@@ -260,7 +263,7 @@ const devlistTweet = (
         `Who will vouch for me?\n\n` +
         `Here are some links to repos that I have contributed to 👇`,
       // `You can apply yourself here too 👇\n` +
-      // `https://solfate.com/devlist${refText}`,
+      // `https://solfate.com/devlist?${refText}`,
     );
   } else {
     // fallback tweet message
@@ -269,7 +272,7 @@ const devlistTweet = (
       `🧑‍💻📜 Checkout the @solana DevList by @SolfateHQ! ` +
         `A free and public good for the Solana ecosystem\n` +
         `Apply to the DevList here 👇\n` +
-        `https://solfate.com/devlist${refText}`,
+        `https://solfate.com/devlist?${refText}`,
     );
   }
 
