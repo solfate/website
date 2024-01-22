@@ -4,12 +4,17 @@ import dotenv from "dotenv";
 import prisma from "@/lib/prisma";
 import { exit } from "@/lib/scripts";
 
-const COHORT_TO_APPROVE = 1;
+const COHORT_TO_SEARCH = 2;
 const REQUEST_QUANTITY = 1000;
+
+/**
+ * whether or not to print the accounts that have not yet been checked by the automation script
+ */
+const PRINT_UNCHECKED_BY_AUTOMATION = true;
 
 // declare the cache dir to save all the devlist data
 const devlistCacheDir = path.resolve("./.cache/devlist");
-const pendingFileName = "pending.md";
+const pendingFileName = `pending-cohort-${COHORT_TO_SEARCH}.md`;
 
 try {
   fs.statfsSync(devlistCacheDir);
@@ -51,7 +56,7 @@ const applicants = await prisma.walletList.findMany({
       // only applicants that have not been approved yet
       status: "PENDING",
       // only parse applications in the desired cohort
-      cohort: COHORT_TO_APPROVE,
+      cohort: COHORT_TO_SEARCH,
     },
   },
   include: {
@@ -81,7 +86,7 @@ for (let i = 0; i < applicants.length; i++) {
     continue;
   }
 
-  if (!applicants[i].lastCheck) {
+  if (!PRINT_UNCHECKED_BY_AUTOMATION && !applicants[i].lastCheck) {
     // do not process uncheck applicants
     continue;
   }
