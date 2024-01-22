@@ -1,4 +1,4 @@
-import { Metadata } from "next";
+import { Metadata, ResolvingMetadata } from "next";
 import { SITE } from "@/lib/const/general";
 
 import crownEmoji from "@/../public/icons/crown.svg";
@@ -16,19 +16,32 @@ import { checkMintAndUpdateApplicantStatus } from "@/lib/lists";
 import { DevListApplicationExtraData } from "@/types/api/lists";
 import { ViewDevListToken } from "@/components/lists/ViewDevListToken";
 
-export const metadata: Metadata = {
-  title: `Solana DevList - Verified Solana Developers | ${SITE.name}`,
-  description:
-    "A verified list of Solana developers. " +
-    "The community of developers is doing thankless work building. " +
-    "This helps make it easier to provide value back to them",
-  alternates: {
-    canonical: "/devlist",
-  },
-  openGraph: {
-    images: "/img/social/devlist.png?786yr",
-  },
+type Props = {
+  params: { id: string };
+  searchParams: { [key: string]: string | string[] | undefined };
 };
+export function generateMetadata(
+  { params, searchParams }: Props,
+  parent: ResolvingMetadata,
+): Metadata {
+  const metadata: Metadata = {
+    title: `Solana DevList - Verified Solana Developers | ${SITE.name}`,
+    description:
+      "A verified list of Solana developers. " +
+      "The community of developers is doing thankless work building. " +
+      "This helps make it easier to provide value back to them",
+    alternates: {
+      canonical: "/devlist",
+    },
+    openGraph: {
+      images: !!searchParams?.verified
+        ? "/img/social/devlist.png?786yr"
+        : "/img/social/devlist-verified.png?786yr",
+    },
+  };
+
+  return metadata;
+}
 
 export default async function Page() {
   const session = await getUserSession();
