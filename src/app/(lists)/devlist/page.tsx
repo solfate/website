@@ -14,6 +14,7 @@ import { SolanaProvider } from "@/context/SolanaProvider";
 import { Connection, PublicKey } from "@solana/web3.js";
 import { checkMintAndUpdateApplicantStatus } from "@/lib/lists";
 import { DevListApplicationExtraData } from "@/types/api/lists";
+import { ViewDevListToken } from "@/components/lists/ViewDevListToken";
 
 export const metadata: Metadata = {
   title: `Solana DevList - Verified Solana Developers | ${SITE.name}`,
@@ -93,16 +94,17 @@ export default async function Page() {
           </h4>
         </section>
 
-        {listRecord?.status != "UNCLAIMED" && (
-          <p className="mx-auto text-base md:text-lg text-gray-700">
-            The community of <span className="">Solana Developers</span> is
-            always busy building, often for thankless work. Especially{" "}
-            <span className="shadow-hot-pink">open source contributors</span>.
-            The Solana DevList aims to help support ways to provide value back
-            to these{" "}
-            <span className="shadow-hot-pink">dedicated developers</span>.
-          </p>
-        )}
+        {listRecord?.status != "UNCLAIMED" &&
+          listRecord?.status != "ACTIVE" && (
+            <p className="mx-auto text-base md:text-lg text-gray-700">
+              The community of <span className="">Solana Developers</span> is
+              always busy building, often for thankless work. Especially{" "}
+              <span className="shadow-hot-pink">open source contributors</span>.
+              The Solana DevList aims to help support ways to provide value back
+              to these{" "}
+              <span className="shadow-hot-pink">dedicated developers</span>.
+            </p>
+          )}
       </section>
 
       {!!listRecord ? (
@@ -110,7 +112,11 @@ export default async function Page() {
           <DevListStatusMessage application={listRecord} />
 
           {listRecord.status == "ACTIVE" ? (
-            <></>
+            <ViewDevListToken
+              assetId={listRecord.assetId}
+              // twitter={applicantData?.twitter.username}
+              // github={applicantData?.github.username}
+            />
           ) : (
             <ClaimDevListToken
               twitter={applicantData?.twitter.username}
