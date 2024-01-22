@@ -6,13 +6,18 @@ import prisma from "@/lib/prisma";
 import { exit, saveJsonCacheDataSync, sleep } from "@/lib/scripts";
 import { retryWithBackoff } from "@/lib/helpers";
 
-const COHORT_TO_APPROVE = 2;
-const REQUEST_QUANTITY = 200;
+const COHORT_TO_APPROVE: number = 1;
+const REQUEST_QUANTITY: number = 200;
 
 /**
- *
+ * set the minimum threshold to auto approve a user (based on cumulative github activity)
  */
-const AUTO_APPROVAL_THRESHOLD = 5;
+const AUTO_APPROVAL_THRESHOLD: number = 5;
+
+/**
+ * whether or not to check applicants that have already been checked with this script
+ */
+const RECHECK_GITHUB_REPOS: boolean = true;
 
 dotenv.config();
 
@@ -90,18 +95,17 @@ const applicants = await prisma.walletList.findMany({
   orderBy: {
     // the unchecked applications (aka `null`) will appear first
     // lastCheck: "asc",
-    id: "asc",
+    id: "desc",
   },
   where: {
     AND: {
-      // only check for applicants that have not already been checked
-      lastCheck: null,
       // we are only checking the devlist applications
       type: "DEVELOPER",
       // only applicants that have not been approved yet
       status: "PENDING",
       // only parse applications in the desired cohort
       cohort: COHORT_TO_APPROVE,
+      lastCheck: RECHECK_GITHUB_REPOS ? undefined : null,
     },
   },
   include: {
