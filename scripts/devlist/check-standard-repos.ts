@@ -4,7 +4,6 @@ import dotenv from "dotenv";
 import { Octokit } from "octokit";
 import prisma from "@/lib/prisma";
 import { exit, saveJsonCacheDataSync, sleep } from "@/lib/scripts";
-import type { GithubProfile } from "next-auth/providers/github";
 import { retryWithBackoff } from "@/lib/helpers";
 
 const COHORT_TO_APPROVE = 2;
@@ -55,6 +54,11 @@ const STANDARD_GITHUB_REPOS = [
   "https://github.com/metaplex-foundation/mpl-bubblegum",
   "https://github.com/metaplex-foundation/digital-asset-rpc-infrastructure",
   "https://github.com/metaplex-foundation/umi",
+  // helium
+  "https://github.com/helium/helium-program-library",
+  "https://github.com/helium/wallet-app",
+  "https://github.com/helium/helium-vote",
+  "https://github.com/helium/docs",
   // superteam the best team
   "https://github.com/SuperteamDAO/earn",
   "https://github.com/SuperteamDAO/solathon",
@@ -72,7 +76,10 @@ const STANDARD_GITHUB_REPOS = [
   "https://github.com/LibrePlex/libreplex-program-library",
   "https://github.com/LibrePlex/sample-ui",
   "https://github.com/arihantbansal/cubik",
+  "https://github.com/Lightprotocol/light-protocol",
 ];
+
+console.log("Total repos to check:", STANDARD_GITHUB_REPOS.length);
 
 /**
  * Get the list of all all DevList applicants that are potentially eligible
