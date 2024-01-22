@@ -5,6 +5,7 @@ import { useConnection } from "@solana/wallet-adapter-react";
 import devlistImage from "@/../public/img/devlist/devlist.png";
 import Link from "next/link";
 import { solanaExplorerLink } from "@/lib/solana/helpers";
+import { shortWalletAddress } from "@/lib/helpers";
 
 type ViewDevListTokenProps = {
   assetId: string | null;
@@ -31,19 +32,34 @@ export const ViewDevListToken = ({
             />
 
             {!!assetId && (
-              <Link
-                href={solanaExplorerLink(
-                  "token",
-                  assetId,
-                  connection.rpcEndpoint.includes("devnet")
-                    ? "devnet"
-                    : undefined,
-                )}
-                target="_blank"
-                className={`btn w-full btn-black inline-flex items-center py-3 justify-center text-center gap-2`}
-              >
-                View on Explorer
-              </Link>
+              <>
+                <Link
+                  href={solanaExplorerLink(
+                    "token",
+                    assetId,
+                    connection.rpcEndpoint.includes("devnet")
+                      ? "devnet"
+                      : undefined,
+                  )}
+                  target="_blank"
+                  className={`btn w-full btn-black inline-flex items-center py-3 justify-center text-center gap-2`}
+                >
+                  View on Explorer
+                </Link>
+                {/* <Link
+                  href={solanaExplorerLink(
+                    "token",
+                    assetId,
+                    connection.rpcEndpoint.includes("devnet")
+                      ? "devnet"
+                      : undefined,
+                  )}
+                  target="_blank"
+                  className="text-gray-500 text-sm text-center hover:text-black hover:underline"
+                >
+                  {shortWalletAddress(assetId, 14)}
+                </Link> */}
+              </>
             )}
           </div>
         </section>
