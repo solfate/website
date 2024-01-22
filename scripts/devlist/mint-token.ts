@@ -17,6 +17,7 @@ import { getKeypairFromEnvironment } from "@solana-developers/helpers";
 import { createNonTransferableTokenTransaction, grindKeypairSync } from "@/lib/solana/tokens";
 // prettier-ignore
 import { DEVLIST_UPDATE_AUTHORITY } from "@/lib/const/devlist";
+import { solanaExplorerLink } from "@/lib/solana/helpers";
 
 dotenv.config();
 
@@ -91,16 +92,20 @@ const txSig = await sendAndConfirmTransaction(
 
 console.log(
   "Transaction:",
-  `https://solana.fm/tx/${txSig}?cluster=${
-    CLUSTER.startsWith("devnet") ? "devnet-solana" : ""
-  }`,
+  solanaExplorerLink(
+    "tx",
+    txSig,
+    CLUSTER.startsWith("devnet") ? "devnet" : "mainnet-beta",
+  ),
 );
 
 console.log(
   "Token account:",
-  `https://solana.fm/account/${mint.publicKey.toBase58()}?cluster=${
-    CLUSTER.startsWith("devnet") ? "devnet-solana" : ""
-  }`,
+  solanaExplorerLink(
+    "token",
+    mint.publicKey.toBase58(),
+    CLUSTER.startsWith("devnet") ? "devnet" : "mainnet-beta",
+  ),
 );
 
 console.log("Getting the metadata from the chain...");

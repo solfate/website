@@ -21,6 +21,7 @@ import { GithubProfile } from "next-auth/providers/github";
 import { fetcher } from "@/lib/api";
 import { ApiListDevelopersPostInput } from "@/types/api/developers";
 import { ApiAuthDisconnectDeleteInput } from "@/types/api/auth";
+import { solanaExplorerLink } from "@/lib/solana/helpers";
 
 enum TaskStatus {
   IDLE,
@@ -212,7 +213,7 @@ export const DeveloperListForm = memo(
                   <>
                     {"Connected to "}
                     <Link
-                      href={`https://solana.fm/address/${accounts.solana}`}
+                      href={solanaExplorerLink("account", accounts.solana)}
                       target="_blank"
                       className="underline hover:text-hot-pink"
                     >

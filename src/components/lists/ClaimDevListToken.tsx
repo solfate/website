@@ -26,6 +26,7 @@ import {
 import { PulseLoader } from "react-spinners";
 import clsx from "clsx";
 import { FeatherIcon } from "@/components/core/FeatherIcon";
+import { solanaExplorerLink } from "@/lib/solana/helpers";
 
 type ClaimDevListTokenProps = {
   twitter?: string;
@@ -196,16 +197,24 @@ export const ClaimDevListToken = ({
 
         console.log(
           "Transaction:",
-          `https://solana.fm/tx/${txSig}?cluster=${
-            connection.rpcEndpoint.includes("devnet") ? "devnet-solana" : ""
-          }`,
+          solanaExplorerLink(
+            "tx",
+            txSig,
+            connection.rpcEndpoint.includes("devnet")
+              ? "devnet"
+              : "mainnet-beta",
+          ),
         );
 
         console.log(
           "Token account:",
-          `https://solana.fm/account/${mint.publicKey.toBase58()}?cluster=${
-            connection.rpcEndpoint.includes("devnet") ? "devnet-solana" : ""
-          }`,
+          solanaExplorerLink(
+            "token",
+            mint.publicKey.toBase58(),
+            connection.rpcEndpoint.includes("devnet")
+              ? "devnet"
+              : "mainnet-beta",
+          ),
         );
 
         setProcessingStage(WALLET_STAGE.SUCCESS);
@@ -340,9 +349,13 @@ export const ClaimDevListToken = ({
 
           {processingStage == WALLET_STAGE.SUCCESS ? (
             <Link
-              href={`https://solana.fm/account/${mint.publicKey.toBase58()}?cluster=${
-                connection.rpcEndpoint.includes("devnet") ? "devnet-solana" : ""
-              }`}
+              href={solanaExplorerLink(
+                "token",
+                mint.publicKey.toBase58(),
+                connection.rpcEndpoint.includes("devnet")
+                  ? "devnet"
+                  : "mainnet-beta",
+              )}
               target="_blank"
               className={`btn w-full btn-black inline-flex items-center py-3 justify-center text-center gap-2`}
             >
