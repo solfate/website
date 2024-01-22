@@ -16,10 +16,11 @@ export const DevListStatusMessage = memo(
         return (
           <div className="text-center card text-sm max-w-2xl mx-auto space-y-4 border-green-500 bg-green-300">
             <h4 className="font-semibold text-base">
-              You have claimed your DevList token!
+              You are officially on the DevList
             </h4>
             <p>
               Congratulations, you have claimed your DevList membership token.
+              <br />
               Now, we wait for the next chapter.
             </p>
           </div>
@@ -33,12 +34,14 @@ export const DevListStatusMessage = memo(
               <h4 className="font-semibold text-base">You are approved!</h4>
               <p>
                 Congratulations, you have been approved to join the Solana
-                DevList. Now you just need to claim your (non-transferrable)
-                DevList membership token to make it official.
+                DevList.
+                <br />
+                Claim your (non-transferrable) DevList membership token to make
+                it official.
               </p>
             </div>
 
-            <div className="flex items-center justify-center">
+            {/* <div className="flex items-center justify-center">
               <Link
                 href={devlistTweet("approved", application.twitter)}
                 target="_blank"
@@ -46,9 +49,9 @@ export const DevListStatusMessage = memo(
               >
                 Tell your Twitter frens you are approved
               </Link>
-            </div>
+            </div> */}
 
-            <p className="max-w-xl mx-auto text-center">
+            {/* <p className="max-w-xl mx-auto text-center">
               In the <span className="shadow-hot-pink">next few days</span>, we
               will enable claiming/minting right here on this page. Keep an eye
               out for <span className="">announcements</span> on the{" "}
@@ -60,7 +63,7 @@ export const DevListStatusMessage = memo(
                 @SolfateHQ
               </Link>{" "}
               twitter!
-            </p>
+            </p> */}
           </>
         );
       }
@@ -69,12 +72,18 @@ export const DevListStatusMessage = memo(
         if (!!application.lastCheck) {
           return (
             <>
+              <h3 className="font-semibold text-center text-2xl">
+                You are now in the manual review queue
+              </h3>
+
               <div className="text-center card text-sm max-w-2xl mx-auto space-y-4 border-yellow-500 bg-yellow-300">
                 <h4 className="font-semibold text-base">
-                  We have reviewed your GitHub account
+                  Automated GitHub scan complete
                 </h4>
                 <p>
-                  We have completed an automated review of your GitHub account (
+                  We have completed an{" "}
+                  <span className="font-semibold">automated review</span> of
+                  your GitHub account (
                   <Link
                     href={`https://github.com/${accounts.github.username}`}
                     target="_blank"
@@ -82,28 +91,34 @@ export const DevListStatusMessage = memo(
                   >
                     @{accounts.github.username}
                   </Link>
-                  ) for public code contributions in the Solana ecosystem. We
-                  checked over{" "}
-                  <span className="font-semibold underline">
-                    35 popular public repos
-                  </span>{" "}
-                  maintained by different organizations in the Solana ecosystem.
+                  ) for public code contributions in the Solana ecosystem. While
+                  we checked numerous{" "}
+                  <span className="font-semibold">popular public repos</span>{" "}
+                  maintained by different organizations in the Solana ecosystem,
+                  we cannot check all personal (or any private) repos via this
+                  automation.
                 </p>
+
                 <p>
-                  We did NOT find enough public code contributions to
-                  automatically approve your DevList membership at this time.
+                  You have not been auto approved via this automated scan.{" "}
+                  <span className="font-semibold">
+                    You are in our manual review queue
+                  </span>{" "}
+                  and we are working through them as fast as we can.
                 </p>
               </div>
 
               <h3 className="font-semibold text-center text-2xl">
-                Not approved yet? What now?
+                Not approved by the automated scan? What now?
               </h3>
+
               <p className="mx-auto max-w-xl text-center">
-                Even though you have not been approved to join the DevList{" "}
-                <span className="">yet</span>, you have not been rejected.{" "}
-                <span className="font-semibold underline">
-                  We need more information from you!
-                </span>
+                Even though you have not been auto approved to join the DevList{" "}
+                (by our automated GitHub scanner),{" "}
+                <b>you have not been rejected.</b>{" "}
+                {/* <span className="font-semibold underline"> */}
+                We need more information from you!
+                {/* </span> */}
                 <br />
                 <br />
                 Please share more proof of your Solana development work with the{" "}
@@ -120,6 +135,9 @@ export const DevListStatusMessage = memo(
                 </span>{" "}
                 you have contributed to and/or having notable Solana ecosystem
                 developers publicly vouch for you.
+                <br />
+                These can be public tweets or direct messages. We manually
+                review all DevList applicants that are not auto approved.
               </p>
 
               <div className="flex items-center justify-center">
@@ -128,7 +146,7 @@ export const DevListStatusMessage = memo(
                   target="_blank"
                   className="btn inline-flex mx-auto btn-black bg-twitter border-blue-400"
                 >
-                  Share proof with @SolfateHQ
+                  Share info with @SolfateHQ
                 </Link>
               </div>
             </>
