@@ -4,7 +4,7 @@ import dotenv from "dotenv";
 import prisma from "@/lib/prisma";
 import { exit } from "@/lib/scripts";
 
-const COHORT_TO_SEARCH = 2;
+const COHORT_TO_SEARCH = 1;
 const REQUEST_QUANTITY = 1000;
 
 /**
@@ -15,24 +15,6 @@ const PRINT_UNCHECKED_BY_AUTOMATION = true;
 // declare the cache dir to save all the devlist data
 const devlistCacheDir = path.resolve("./.cache/devlist");
 const pendingFileName = `pending-cohort-${COHORT_TO_SEARCH}.md`;
-
-try {
-  fs.statfsSync(devlistCacheDir);
-
-  // clear the current file contents
-  fs.writeFileSync(
-    path.join(devlistCacheDir, pendingFileName),
-    `Pending list generated: ${new Date().toISOString()}\n\n`,
-    {
-      encoding: "utf-8",
-    },
-  );
-
-  // todo: delete the file
-} catch (err) {
-  // todo: force create the required directories
-  exit("devlist cache dir does not exist");
-}
 
 dotenv.config();
 
@@ -75,6 +57,26 @@ const applicants = await prisma.walletList.findMany({
 
 if (!applicants || applicants.length == 0) {
   exit("There are no pending DevList applicants");
+}
+
+try {
+  fs.statfsSync(devlistCacheDir);
+
+  // clear the current file contents
+  fs.writeFileSync(
+    path.join(devlistCacheDir, pendingFileName),
+    `Pending list generated: ${new Date().toISOString()}\n` +
+      `Total applicants: ${applicants.length}` +
+      `\n\n`,
+    {
+      encoding: "utf-8",
+    },
+  );
+
+  // todo: delete the file
+} catch (err) {
+  // todo: force create the required directories
+  exit("devlist cache dir does not exist");
 }
 
 console.log("Total applicants:", applicants.length);
