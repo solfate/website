@@ -14,16 +14,27 @@ export const DevListStatusMessage = memo(
       // active - the state when the user has claimed the token
       case "ACTIVE": {
         return (
-          <div className="text-center card text-sm max-w-2xl mx-auto space-y-4 border-green-500 bg-green-300">
-            <h4 className="font-semibold text-base">
-              You are officially on the DevList
-            </h4>
-            <p>
-              Congratulations, you have claimed your DevList membership token.
-              <br />
-              Now, we wait for the next chapter.
-            </p>
-          </div>
+          <>
+            <div className="text-center card text-sm max-w-2xl mx-auto space-y-4 border-green-500 bg-green-300">
+              <h4 className="font-semibold text-base">
+                You are officially on the DevList. What now?
+              </h4>
+              <p>
+                We are sending a booming message into the ecosystem to see who
+                wants to contribute to the DevList. Help yourself and each-other
+                and amplify our message with a Retweet!
+              </p>
+            </div>
+            <div className="flex items-center justify-center">
+              <Link
+                href={devlistTweet("member", application.twitter)}
+                target="_blank"
+                className="btn inline-flex mx-auto btn-black bg-twitter border-blue-400"
+              >
+                Tell your Twitter frens you are a DevList member
+              </Link>
+            </div>
+          </>
         );
       }
       // unclaimed - the state when the user is approved, but has not claimed the token
@@ -208,7 +219,7 @@ export const DevListStatusMessage = memo(
  * helper function to construct the standard tweets
  */
 const devlistTweet = (
-  tweetType: "voucher" | "approved" | "pending",
+  tweetType: "voucher" | "approved" | "pending" | "member",
   refAddress: string | null = "",
 ) => {
   const tweetUrl = new URL("https://twitter.com/intent/tweet");
@@ -223,6 +234,15 @@ const devlistTweet = (
       `❤️‍🔥 I just applied to join the @solana DevList! 🧑‍💻📜\n` +
         `Tell @SolfateHQ why I am a dedicated dev and should be approved to join\n` +
         `Apply yourself here too 👇\n` +
+        `https://solfate.com/devlist${refText}`,
+    );
+  } else if (tweetType == "member") {
+    tweetUrl.searchParams.append(
+      "text",
+      `I am officially a member of the @solana DevList! 🧑‍💻📜\n\n` +
+        `Who is going to be the first to use the DevList for something ` +
+        `interesting and support dedicated Solana developers (like myself)\n\n` +
+        `Not a member? Apply yourself here 👇\n` +
         `https://solfate.com/devlist${refText}`,
     );
   } else if (tweetType == "approved") {
