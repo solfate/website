@@ -6,7 +6,9 @@ import {
   verifyMessageSignature,
   verifySignIn,
 } from "@solana/wallet-standard-util";
+import { PublicKey, Transaction } from "@solana/web3.js";
 import base58 from "bs58";
+import { MEMO_PROGRAM_ID } from "../const/general";
 
 export interface SolanaSignInMessageData extends SolanaSignInInput {
   /** domain used to generate the message */
@@ -32,6 +34,8 @@ export type SolanaSignedMessageData = {
    * */
   address?: string;
   nonce?: string | undefined;
+  /** if signing in with ledger */
+  isLedger?: boolean | undefined;
 };
 
 type SolanaSignInMessageArgs = {
@@ -94,11 +98,13 @@ export class SolanaSignInMessage {
     signature,
     signedMessage,
     address,
+    isLedger,
   }: SolanaSignedMessageData) {
     this.signedData = {
       signature,
       signedMessage,
       address: address ?? this.message.address,
+      isLedger,
     };
   }
 
@@ -160,6 +166,10 @@ export class SolanaSignInMessage {
   ) {
     if (!signature) throw Error("No signature to verify");
 
+    if (this.signedData?.isLedger) {
+      const tx = Transaction.from(base58.decode(this.signedData.signature));
+      return validateAuthTx(tx, message, this.message.address);
+    }
     // parse each of the values as Uint8 arrays
     return verifyMessageSignature({
       publicKey: base58.decode(this.message.address),
@@ -194,3 +204,23 @@ export class SolanaSignInMessage {
     return false;
   }
 }
+
+export const validateAuthTx = (
+  tx: Transaction,
+  message: string,
+  publicKey: string,
+): boolean => {
+  try {
+    const inx = tx.instructions.find((x) =>
+      x.programId.equals(new PublicKey(MEMO_PROGRAM_ID)),
+    );
+    if (!inx) return false;
+    if (inx.data.toString() != message) return false;
+    if (!tx.verifySignatures()) return false;
+    if (!tx.signatures.find((x) => x.publicKey.toBase58() === publicKey))
+      return false;
+  } catch (e) {
+    return false;
+  }
+  return true;
+};
