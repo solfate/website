@@ -6,7 +6,7 @@ import prisma from "@/lib/prisma";
 import { exit, saveJsonCacheDataSync, sleep } from "@/lib/scripts";
 import { retryWithBackoff } from "@/lib/helpers";
 
-const COHORT_TO_APPROVE: number = 1;
+const COHORT_TO_APPROVE: number = 2;
 const REQUEST_QUANTITY: number = 200;
 
 /**

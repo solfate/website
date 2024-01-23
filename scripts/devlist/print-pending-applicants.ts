@@ -4,7 +4,7 @@ import dotenv from "dotenv";
 import prisma from "@/lib/prisma";
 import { exit } from "@/lib/scripts";
 
-const COHORT_TO_SEARCH = 1;
+const COHORT_TO_SEARCH = 2;
 const REQUEST_QUANTITY = 1000;
 
 /**
