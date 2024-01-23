@@ -82,6 +82,9 @@ const STANDARD_GITHUB_REPOS = [
   "https://github.com/LibrePlex/sample-ui",
   "https://github.com/arihantbansal/cubik",
   "https://github.com/Lightprotocol/light-protocol",
+  "https://github.com/orca-so/whirlpools",
+  "https://github.com/Web3-Builders-Alliance/soda",
+  "https://github.com/holaplex/reward-center-program",
 ];
 
 console.log("Total repos to check:", STANDARD_GITHUB_REPOS.length);
