@@ -108,7 +108,7 @@ export const ViewDevListToken = ({
 
             <p className="text-sm">
               Since Token Extensions are rather new, your favorite Solana
-              wallets and explorers do not have full support for them.
+              wallets and explorers might not have full support for them.
               Especially NFTs created exclusively with the Token Extension
               program.
             </p>
@@ -132,6 +132,16 @@ export const ViewDevListToken = ({
         is in the works by the top teams you know and love. Until then, this
         fully Token Extension (Token22) based NFT will not show like the NFTs
         you are used to.
+        <br />
+        Wallets and explorers that we know will display the DevList token:{" "}
+        <Link
+          href="https://phantom.app"
+          target="_blank"
+          className="underline hover:text-hot-pink"
+        >
+          Phantom
+        </Link>
+        .
       </p>
     </section>
   );
