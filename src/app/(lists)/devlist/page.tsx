@@ -34,7 +34,7 @@ export function generateMetadata(
       canonical: "/devlist",
     },
     openGraph: {
-      images: !!searchParams?.verified
+      images: Object.hasOwn(searchParams, "verified")
         ? "/img/social/devlist-verified.png?786yr"
         : "/img/social/devlist.png?786yr",
     },
