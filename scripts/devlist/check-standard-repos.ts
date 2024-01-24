@@ -85,6 +85,12 @@ const STANDARD_GITHUB_REPOS = [
   "https://github.com/orca-so/whirlpools",
   "https://github.com/Web3-Builders-Alliance/soda",
   "https://github.com/holaplex/reward-center-program",
+  // magic block
+  "https://github.com/magicblock-labs/Solana.Unity-SDK",
+  "https://github.com/magicblock-labs/bolt",
+  "https://github.com/magicblock-labs/Solana.Unity.Metaplex",
+  "https://github.com/magicblock-labs/Solana.Unity.Anchor",
+  "https://github.com/magicblock-labs/Solana.Unity-Core",
 ];
 
 console.log("Total repos to check:", STANDARD_GITHUB_REPOS.length);
