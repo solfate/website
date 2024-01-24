@@ -242,7 +242,7 @@ const devlistTweet = (
   } else if (tweetType == "member") {
     tweetUrl.searchParams.append(
       "text",
-      `I am officially a member of the @solana DevList! 🧑‍💻📜\n\n` +
+      `I am officially a member of the @solana DevList by @SolfateHQ! 🧑‍💻📜\n\n` +
         `Who is going to be the first to use the DevList for something ` +
         `interesting and support dedicated Solana developers (like myself)\n\n` +
         `Not a member? Apply yourself here 👇\n` +
