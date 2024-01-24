@@ -269,119 +269,138 @@ export const ClaimDevListToken = ({
   ]);
 
   return (
-    <section className="md:flex grid gap-10 md:gap-6 lg:gap-8 items-center justify-center">
-      <section className="space-y-6 items-center max-w-md">
-        <h2 className="font-semibold text-4xl">How to claim?</h2>
-        <div className="space-y-1">
-          <div className="flex items-center gap-3">
-            <span className="flex w-10 h-10 text-sm rounded-full bg-red-100 items-center justify-center border border-red-200 p-3">
-              1
-            </span>
-            <h3 className="font-medium text-lg">Connect a Solana wallet</h3>
-          </div>
+    <>
+      <section className="md:flex grid gap-10 md:gap-6 lg:gap-8 items-center justify-center">
+        <section className="space-y-6 items-center max-w-md">
+          <h2 className="font-semibold text-4xl">How to claim?</h2>
+          <div className="space-y-1">
+            <div className="flex items-center gap-3">
+              <span className="flex w-10 h-10 text-sm rounded-full bg-red-100 items-center justify-center border border-red-200 p-3">
+                1
+              </span>
+              <h3 className="font-medium text-lg">Connect a Solana wallet</h3>
+            </div>
 
-          <p className="text-sm">
-            Connect the Solana wallet you want to own your DevList token. This
-            does not have to be the same one you used before.
-          </p>
-        </div>
-        <div className="space-y-1">
-          <div className="flex items-center gap-3">
-            <span className="flex w-10 h-10 text-sm rounded-full bg-red-100 items-center justify-center border border-red-200 p-3">
-              2
-            </span>
-            <h3 className="font-medium text-lg">
-              Customize your metadata (optional)
-            </h3>
-          </div>
-
-          <p className="text-sm">
-            Decide if you want your DevList token to store your Twitter and/or
-            GitHub username publicly in the onchain metadata.
-            <br />
-            This is optional and off by default.
-          </p>
-        </div>
-        <div className="space-y-1">
-          <div className="flex items-center gap-3">
-            <span className="flex w-10 h-10 text-sm rounded-full bg-red-100 items-center justify-center border border-red-200 p-3">
-              3
-            </span>
-            <h3 className="font-medium text-lg">Mint your DevList token</h3>
-          </div>
-
-          <p className="text-sm">
-            Sign a plaintext message, then sign a transaction to claim your
-            non-transferrable membership token, officially joining the DevList.
-          </p>
-        </div>
-      </section>
-
-      <section>
-        <div className="z-10 flex max-w-sm flex-shrink mx-auto flex-col !items-stretch gap-3 p-6 card">
-          <Image
-            alt="DevList Token"
-            src={devlistImage}
-            className="rounded-lg"
-          />
-
-          <section className="grid grid-cols-2 gap-2">
-            <p className="col-span-full text-sm">
-              Select optional onchain metadata:
-              <br />
-              (optional - off by default)
+            <p className="text-sm">
+              Connect the Solana wallet you want to own your DevList token. This
+              does not have to be the same one you used before.
             </p>
-            <MetadataToggle
-              disabled={processingStage !== WALLET_STAGE.IDLE}
-              label="Twitter / X"
-              value={twitter}
-              checked={mintTwitter}
-              setChecked={setMintTwitter}
-            />
-            <MetadataToggle
-              disabled={processingStage !== WALLET_STAGE.IDLE}
-              label="GitHub"
-              value={github}
-              checked={mintGithub}
-              setChecked={setMintGithub}
-            />
-          </section>
+          </div>
+          <div className="space-y-1">
+            <div className="flex items-center gap-3">
+              <span className="flex w-10 h-10 text-sm rounded-full bg-red-100 items-center justify-center border border-red-200 p-3">
+                2
+              </span>
+              <h3 className="font-medium text-lg">
+                Customize your metadata (optional)
+              </h3>
+            </div>
 
-          {processingStage == WALLET_STAGE.SUCCESS ? (
-            <Link
-              href={solanaExplorerLink(
-                "token",
-                mint.publicKey.toBase58(),
-                connection.rpcEndpoint.includes("devnet")
-                  ? "devnet"
-                  : "mainnet-beta",
-              )}
-              target="_blank"
-              className={`btn w-full btn-black inline-flex items-center py-3 justify-center text-center gap-2`}
-            >
-              View on Explorer
+            <p className="text-sm">
+              Decide if you want your DevList token to store your Twitter and/or
+              GitHub username publicly in the on-chain metadata.
+              <br />
+              This is optional and off by default.
+            </p>
+          </div>
+          <div className="space-y-1">
+            <div className="flex items-center gap-3">
+              <span className="flex w-10 h-10 text-sm rounded-full bg-red-100 items-center justify-center border border-red-200 p-3">
+                3
+              </span>
+              <h3 className="font-medium text-lg">Mint your DevList token</h3>
+            </div>
+
+            <p className="text-sm">
+              Sign a plaintext message, then sign a transaction to claim your
+              non-transferrable membership token, officially joining the
+              DevList.
+            </p>
+          </div>
+        </section>
+
+        <section>
+          <div className="z-10 flex max-w-sm flex-shrink mx-auto flex-col !items-stretch gap-3 p-6 card">
+            <Image
+              alt="DevList Token"
+              src={devlistImage}
+              className="rounded-lg"
+            />
+
+            <section className="grid grid-cols-2 gap-2">
+              <p className="col-span-full text-sm">
+                Select optional on-chain metadata:
+                <br />
+                (optional - off by default)
+              </p>
+              <MetadataToggle
+                disabled={processingStage !== WALLET_STAGE.IDLE}
+                label="Twitter / X"
+                value={twitter}
+                checked={mintTwitter}
+                setChecked={setMintTwitter}
+              />
+              <MetadataToggle
+                disabled={processingStage !== WALLET_STAGE.IDLE}
+                label="GitHub"
+                value={github}
+                checked={mintGithub}
+                setChecked={setMintGithub}
+              />
+            </section>
+
+            {processingStage == WALLET_STAGE.SUCCESS ? (
+              <Link
+                href={solanaExplorerLink(
+                  "token",
+                  mint.publicKey.toBase58(),
+                  connection.rpcEndpoint.includes("devnet")
+                    ? "devnet"
+                    : "mainnet-beta",
+                )}
+                target="_blank"
+                className={`btn w-full btn-black inline-flex items-center py-3 justify-center text-center gap-2`}
+              >
+                View on Explorer
+              </Link>
+            ) : (
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.preventDefault();
+                  wallet.disconnect().then(() => walletModal.setVisible(true));
+                }}
+                disabled={processingStage !== WALLET_STAGE.IDLE}
+                className={`btn w-full btn-black inline-flex items-center py-3 justify-center text-center gap-2`}
+              >
+                {claimButtonLabel({
+                  stage: processingStage,
+                  // placeholder: "Claim Membership Token",
+                  placeholder: "Claim DevList Token",
+                  success: "Success!",
+                })}
+              </button>
+            )}
+            <Link href={"#ledger"} className="text-center underline text-sm">
+              Want to claim with a Ledger? Read this first!
             </Link>
-          ) : (
-            <button
-              type="button"
-              onClick={(e) => {
-                e.preventDefault();
-                wallet.disconnect().then(() => walletModal.setVisible(true));
-              }}
-              disabled={processingStage !== WALLET_STAGE.IDLE}
-              className={`btn w-full btn-black inline-flex items-center py-3 justify-center text-center gap-2`}
-            >
-              {claimButtonLabel({
-                stage: processingStage,
-                // placeholder: "Claim Membership Token",
-                placeholder: "Claim DevList Token",
-                success: "Success!",
-              })}
-            </button>
-          )}
-        </div>
+          </div>
+        </section>
       </section>
-    </section>
+
+      <p
+        id="ledger"
+        className="text-sm max-w-4xl mx-auto card bg-yellow-100 border-yellow-300"
+      >
+        <b>Ledger Users: Do NOT claim/mint yet!</b>
+        <br />
+        If you want to claim the DevList token to a Ledger device,{" "}
+        <span className="font-semibold">do NOT claim/mint yet</span>. We will
+        add Ledger support in the coming days. The DevList token is
+        non-transferrable (aka soul-bound). Whichever wallet you mint to is were
+        it will stay.
+      </p>
+    </>
   );
 };
 
