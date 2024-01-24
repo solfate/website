@@ -35,8 +35,8 @@ export function generateMetadata(
     },
     openGraph: {
       images: !!searchParams?.verified
-        ? "/img/social/devlist.png?786yr"
-        : "/img/social/devlist-verified.png?786yr",
+        ? "/img/social/devlist-verified.png?786yr"
+        : "/img/social/devlist.png?786yr",
     },
   };
 

@@ -222,7 +222,7 @@ export const ClaimDevListToken = ({
         // refresh the page
         // window.location.href = window.location.href;
 
-        return toast.success("Success!");
+        return toast.success("Success! You have claimed the DevList token!");
       } catch (err) {
         console.error(err);
         setProcessingStage(WALLET_STAGE.IDLE);
