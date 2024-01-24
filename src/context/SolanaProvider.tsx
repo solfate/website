@@ -26,7 +26,8 @@ export function SolanaProvider({
   children: ReactNode;
   autoConnect?: boolean;
 }) {
-  const endpoint = clusterApiUrl("mainnet-beta");
+  const endpoint =
+    process?.env?.NEXT_PUBLIC_SOLANA_RPC || clusterApiUrl("devnet");
 
   const onError = useCallback((error: WalletError) => {
     console.error("[SolanaProvider]", error);

@@ -17,14 +17,14 @@ export function JsonResponse<InputType>(
  *
  * todo: should we add some error handling things
  */
-export async function fetcher<ApiInputType>(
+export async function fetcher<ApiInputType, ApiResponseType = string>(
   apiUrl: string,
   init: Omit<RequestInit, "body"> & {
-    method: "DELETE" | "GET" | "POST" | "PATCH";
+    method: "DELETE" | "GET" | "POST" | "PATCH" | "PUT";
     body?: ApiInputType;
   },
   //   apiVersion = "v0",
-): Promise<string> {
+): Promise<ApiResponseType> {
   // auto-magically add in the correct api version (when not included)
   //   if (!apiUrl.startsWith("/api/v")) {
   //     apiUrl = apiUrl.replace("/api/", `/api/${apiVersion}/`);
@@ -44,7 +44,12 @@ export async function fetcher<ApiInputType>(
     // always stringify the body because this is json land and we always use it every time
     body: JSON.stringify(init.body),
   }).then(async (res) => {
-    if (res.ok) return await res.text();
-    else throw await res.text();
+    if (res.ok) {
+      try {
+        return (await res.json()) as ApiResponseType;
+      } catch (err) {
+        return (await res.text()) as ApiResponseType;
+      }
+    } else throw await res.text();
   });
 }

@@ -1,3 +1,5 @@
+import { RequestError } from "octokit";
+
 /**
  * Create a standard URL slug for the given `input`
  */
@@ -92,6 +94,11 @@ export async function retryWithBackoff(
     try {
       return await operation;
     } catch (err) {
+      // do not retry on 404
+      if (err instanceof RequestError && err.status == 404) {
+        throw err;
+      }
+
       if (attempt >= maxAttempts) {
         throw err;
       }

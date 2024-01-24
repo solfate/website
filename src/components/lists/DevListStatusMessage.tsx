@@ -14,16 +14,27 @@ export const DevListStatusMessage = memo(
       // active - the state when the user has claimed the token
       case "ACTIVE": {
         return (
-          <div className="text-center card text-sm max-w-2xl mx-auto space-y-4 border-green-500 bg-green-300">
-            <h4 className="font-semibold text-base">
-              You are officially on the DevList
-            </h4>
-            <p>
-              Congratulations, you have claimed your DevList membership token.
-              <br />
-              Now, we wait for the next chapter.
-            </p>
-          </div>
+          <>
+            <div className="text-center card text-sm max-w-2xl mx-auto space-y-4 border-green-500 bg-green-300">
+              <h4 className="font-semibold text-base">
+                You are officially on the DevList. What now?
+              </h4>
+              <p>
+                We are sending a booming message into the ecosystem to see who
+                wants to contribute to the DevList. Help yourself and each-other
+                and amplify our message with a Retweet!
+              </p>
+            </div>
+            <div className="flex items-center justify-center">
+              <Link
+                href={devlistTweet("member", application.twitter)}
+                target="_blank"
+                className="btn inline-flex mx-auto btn-black bg-twitter border-blue-400"
+              >
+                Tell your Twitter frens you are a DevList member
+              </Link>
+            </div>
+          </>
         );
       }
       // unclaimed - the state when the user is approved, but has not claimed the token
@@ -41,7 +52,7 @@ export const DevListStatusMessage = memo(
               </p>
             </div>
 
-            <div className="flex items-center justify-center">
+            {/* <div className="flex items-center justify-center">
               <Link
                 href={devlistTweet("approved", application.twitter)}
                 target="_blank"
@@ -49,9 +60,9 @@ export const DevListStatusMessage = memo(
               >
                 Tell your Twitter frens you are approved
               </Link>
-            </div>
+            </div> */}
 
-            <p className="max-w-xl mx-auto text-center">
+            {/* <p className="max-w-xl mx-auto text-center">
               In the <span className="shadow-hot-pink">next few days</span>, we
               will enable claiming/minting right here on this page. Keep an eye
               out for <span className="">announcements</span> on the{" "}
@@ -63,7 +74,7 @@ export const DevListStatusMessage = memo(
                 @SolfateHQ
               </Link>{" "}
               twitter!
-            </p>
+            </p> */}
           </>
         );
       }
@@ -223,14 +234,17 @@ export const DevListStatusMessage = memo(
  * helper function to construct the standard tweets
  */
 const devlistTweet = (
-  tweetType: "voucher" | "approved" | "pending",
+  tweetType: "voucher" | "approved" | "pending" | "member",
   refAddress: string | null = "",
 ) => {
   const tweetUrl = new URL("https://twitter.com/intent/tweet");
   tweetUrl.searchParams.append("original_referer", SITE.url);
   tweetUrl.searchParams.append("related", "@SolfateHQ");
 
-  const refText = refAddress ? `?ref=${refAddress}` : "";
+  let refText = refAddress ? `ref=${refAddress}` : "";
+
+  if (tweetType == "member")
+    refText = !!refText ? `${refText}&verified` : "verified";
 
   if (tweetType == "voucher") {
     tweetUrl.searchParams.append(
@@ -238,7 +252,16 @@ const devlistTweet = (
       `❤️‍🔥 I just applied to join the @solana DevList! 🧑‍💻📜\n` +
         `Tell @SolfateHQ why I am a dedicated dev and should be approved to join\n` +
         `Apply yourself here too 👇\n` +
-        `https://solfate.com/devlist${refText}`,
+        `https://solfate.com/devlist?${refText}`,
+    );
+  } else if (tweetType == "member") {
+    tweetUrl.searchParams.append(
+      "text",
+      `I am officially a member of the @solana DevList by @SolfateHQ! 🧑‍💻📜\n\n` +
+        `Who is going to be the first to use the DevList for something ` +
+        `interesting and support dedicated Solana developers (like myself)\n\n` +
+        `Not a member? Apply yourself here 👇\n` +
+        `https://solfate.com/devlist?${refText}`,
     );
   } else if (tweetType == "approved") {
     tweetUrl.searchParams.append(
@@ -246,7 +269,7 @@ const devlistTweet = (
       `🧑‍💻📜 I was approved to join the @solana DevList by @SolfateHQ! ` +
         `Excited to claim my membership token soon (tm)\n` +
         `You can apply yourself here too 👇\n` +
-        `https://solfate.com/devlist${refText}`,
+        `https://solfate.com/devlist?${refText}`,
     );
   } else if (tweetType == "pending") {
     tweetUrl.searchParams.append(
@@ -255,7 +278,7 @@ const devlistTweet = (
         `Who will vouch for me?\n\n` +
         `Here are some links to repos that I have contributed to 👇`,
       // `You can apply yourself here too 👇\n` +
-      // `https://solfate.com/devlist${refText}`,
+      // `https://solfate.com/devlist?${refText}`,
     );
   } else {
     // fallback tweet message
@@ -264,7 +287,7 @@ const devlistTweet = (
       `🧑‍💻📜 Checkout the @solana DevList by @SolfateHQ! ` +
         `A free and public good for the Solana ecosystem\n` +
         `Apply to the DevList here 👇\n` +
-        `https://solfate.com/devlist${refText}`,
+        `https://solfate.com/devlist?${refText}`,
     );
   }
 
