@@ -51,7 +51,7 @@ type ListMember = {
 /**
  * handler for listing all owners of the DevList token (aka members)
  */
-export const GET = async ({}) => {
+export const GET = async () => {
   try {
     const applicants = await prisma.walletList.findMany({
       where: {
@@ -90,8 +90,8 @@ export const GET = async ({}) => {
             "ACTIVE",
           );
 
-          console.log(assetId as string, accountInfo);
-          console.log(solanaExplorerLink("token", assetId));
+          // console.log(assetId as string, accountInfo);
+          // console.log(solanaExplorerLink("token", assetId));
 
           // force update the current record's state
           if (!!accountInfo) {
