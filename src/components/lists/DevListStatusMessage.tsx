@@ -22,7 +22,14 @@ export const DevListStatusMessage = memo(
               <p>
                 We are sending a booming message into the ecosystem to see who
                 wants to contribute to the DevList. Help yourself and each-other
-                and amplify our message with a Retweet!
+                and{" "}
+                <Link
+                  href="https://x.com/SolfateHQ/status/1750297683460321617?s=20"
+                  className="underline hover:text-hot-pink"
+                >
+                  help amplify our message with a Retweet
+                </Link>
+                !
               </p>
             </div>
             <div className="flex items-center justify-center">
@@ -52,7 +59,7 @@ export const DevListStatusMessage = memo(
               </p>
             </div>
 
-            {/* <div className="flex items-center justify-center">
+            <div className="flex items-center justify-center">
               <Link
                 href={devlistTweet("approved", application.twitter)}
                 target="_blank"
@@ -60,7 +67,7 @@ export const DevListStatusMessage = memo(
               >
                 Tell your Twitter frens you are approved
               </Link>
-            </div> */}
+            </div>
 
             {/* <p className="max-w-xl mx-auto text-center">
               In the <span className="shadow-hot-pink">next few days</span>, we
