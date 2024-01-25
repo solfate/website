@@ -193,6 +193,9 @@ export const ClaimDevListToken = ({
         // send the transaction and mint!
         const txSig = await connection.sendRawTransaction(
           transaction.serialize(),
+          {
+            maxRetries: 5,
+          },
         );
 
         console.log(
@@ -226,7 +229,7 @@ export const ClaimDevListToken = ({
       } catch (err) {
         console.error(err);
         setProcessingStage(WALLET_STAGE.IDLE);
-        return toast.error("Your wallet must sign the transaction");
+        return toast.error("Transaction failed to send. Try again.");
       }
     } catch (err) {
       console.error("handleClaimMembershipToken failed::", err);
