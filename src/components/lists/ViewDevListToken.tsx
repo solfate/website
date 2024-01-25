@@ -132,7 +132,7 @@ export const ViewDevListToken = ({
         is in the works by the top teams you know and love. Until then, this
         fully Token Extension (Token22) based NFT will not show like the NFTs
         you are used to.
-        <br />
+        {/* <br />
         Wallets and explorers that we know will display the DevList token:{" "}
         <Link
           href="https://phantom.app"
@@ -141,7 +141,7 @@ export const ViewDevListToken = ({
         >
           Phantom
         </Link>
-        .
+        . */}
       </p>
     </section>
   );
