@@ -12,12 +12,15 @@ export async function checkMintAndUpdateApplicantStatus(
   accountAddress: PublicKey,
   newStatus: WalletList["status"] = "ACTIVE",
 ) {
-  // check if the account `accountAddress` exists on chain
-  const accountInfo = await connection.getAccountInfo(accountAddress, {
-    commitment: "processed",
-  });
+  try {
+    // check if the account `accountAddress` exists on chain
+    const accountInfo = await connection.getAccountInfo(accountAddress, {
+      commitment: "single",
+    });
 
-  if (!!accountInfo) {
+    // the `accountAddress` does not exist
+    if (accountInfo == null) return false;
+
     // since the token account already exists, update the db record
     await prisma.walletList.update({
       where: {
@@ -29,7 +32,8 @@ export async function checkMintAndUpdateApplicantStatus(
     });
 
     return accountInfo;
+  } catch (err) {
+    // default return true since this is the worst case: the address exists
+    return true;
   }
-
-  return false;
 }
