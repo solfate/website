@@ -3,7 +3,7 @@ import { PublicKey } from "@solana/web3.js";
 /**
  * Cooldown period (in seconds) to force the user to wait between mints
  */
-export const MINT_COOLDOWN_SECONDS = 15;
+export const MINT_COOLDOWN_SECONDS = 60;
 
 /**
  * the update authority for ALL token things
