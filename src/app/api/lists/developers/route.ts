@@ -24,6 +24,7 @@ import base58 from "bs58";
 import { GithubProfile } from "next-auth/providers/github";
 import { TwitterProfile } from "next-auth/providers/twitter";
 import { checkMintAndUpdateApplicantStatus } from "@/lib/lists";
+import { solanaExplorerLink } from "@/lib/solana/helpers";
 
 // set the max length for the question info
 const MAX_LEN = 250;
@@ -40,6 +41,87 @@ const WALLET_LIST_DEFAULTS: {
   type: "DEVELOPER",
   // waitlist all new additions by default
   status: "PENDING",
+};
+
+type ListMember = {
+  token: string;
+  owner: string;
+};
+
+/**
+ * handler for listing all owners of the DevList token (aka members)
+ */
+export const GET = async ({}) => {
+  try {
+    const applicants = await prisma.walletList.findMany({
+      where: {
+        type: "DEVELOPER",
+        // status: "ACTIVE",
+        assetId: {
+          not: null,
+        },
+      },
+    });
+
+    const connection = new Connection(process.env.SOLANA_RPC, {
+      commitment: "single",
+    });
+
+    //
+    const members: ListMember[] = [];
+
+    //
+    for (let i = 0; i < applicants.length; i++) {
+      // an assetId is required
+      if (!applicants[i]?.assetId) continue;
+
+      const assetId = applicants[i].assetId as string;
+
+      // when the member has not been fully activated, attempt to do so
+      if (applicants[i].status != "ACTIVE") {
+        // console.log(applicants[i]);
+
+        try {
+          // attempt to verify if the token as actually allocated on chain, and update the status accordingly
+          const accountInfo = await checkMintAndUpdateApplicantStatus(
+            applicants[i].id,
+            connection,
+            new PublicKey(assetId),
+            "ACTIVE",
+          );
+
+          console.log(assetId as string, accountInfo);
+          console.log(solanaExplorerLink("token", assetId));
+
+          // force update the current record's state
+          if (!!accountInfo) {
+            applicants[i].status = "ACTIVE";
+          } else continue;
+        } catch (err) {
+          console.error("[DEVLIST MEMBER UPDATE]", err);
+          continue;
+        }
+      }
+
+      members.push({
+        token: assetId,
+        owner: applicants[i].wallet,
+      });
+    }
+
+    // serialize and encode the transaction while sending it to the client
+    return Response.json({
+      list: "DevList",
+      count: members.length,
+      members,
+    });
+  } catch (err) {
+    console.error(err);
+
+    return new Response("An unknown error occurred", {
+      status: 400,
+    });
+  }
 };
 
 /**
