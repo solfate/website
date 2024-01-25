@@ -63,6 +63,27 @@ export const GET = async () => {
       },
     });
 
+    let [pendingApplicants, unclaimedApplicants] = await Promise.all([
+      prisma.walletList.count({
+        where: {
+          type: "DEVELOPER",
+          status: "PENDING",
+          assetId: {
+            equals: null,
+          },
+        },
+      }),
+      prisma.walletList.count({
+        where: {
+          type: "DEVELOPER",
+          status: "UNCLAIMED",
+          assetId: {
+            equals: null,
+          },
+        },
+      }),
+    ]);
+
     const connection = new Connection(process.env.SOLANA_RPC, {
       commitment: "single",
     });
@@ -96,7 +117,10 @@ export const GET = async () => {
           // force update the current record's state
           if (!!accountInfo) {
             applicants[i].status = "ACTIVE";
-          } else continue;
+          } else {
+            unclaimedApplicants++;
+            continue;
+          }
         } catch (err) {
           console.error("[DEVLIST MEMBER UPDATE]", err);
           continue;
@@ -112,8 +136,16 @@ export const GET = async () => {
     // serialize and encode the transaction while sending it to the client
     return Response.json({
       list: "DevList",
-      count: members.length,
-      members,
+      date: new Date().toISOString(),
+      url: "https://solfate.com/devlist",
+      count: {
+        members: members.length,
+        unclaimed: unclaimedApplicants,
+        pending: pendingApplicants,
+        total: pendingApplicants + unclaimedApplicants + members.length,
+      },
+      // randomly sort the members array
+      members: members.sort(() => Math.random() - 0.5),
     });
   } catch (err) {
     console.error(err);
