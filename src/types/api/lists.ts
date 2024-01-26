@@ -12,4 +12,6 @@ export type DevListApplicationExtraData = {
   };
   /** track the minting unix timestamp */
   mintTimestamp?: number;
+  /** track the previously attempted assetIds */
+  attemptedAssets?: string[];
 };

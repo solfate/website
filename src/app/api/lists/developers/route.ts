@@ -372,7 +372,7 @@ export const PUT = withUserAuth(async ({ req, session }) => {
         // make sure the user has passed the minting cooldown period
         if (mintTimestamp >= Date.now() - MINT_COOLDOWN_SECONDS * 1000) {
           return new Response(
-            `Rate limit exceeded. Try again in a few moments`,
+            `Slow down there tiger, you are now in a minting cooldown period. Try again in a few moments`,
             {
               status: 429,
             },
@@ -447,6 +447,10 @@ export const PUT = withUserAuth(async ({ req, session }) => {
           // store the current time stamp to process the mint cooldown period
           data: Object.assign(applicant.data as DevListApplicationExtraData, {
             mintTimestamp: Date.now(),
+            attemptedAssets: [mint.toBase58()].concat(
+              (applicant.data as DevListApplicationExtraData).attemptedAssets ||
+                [],
+            ),
           }),
         },
       }),
