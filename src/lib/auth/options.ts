@@ -8,6 +8,7 @@ import { createAccount, getAccountByProviderId } from "@/lib/queries/accounts";
 import { SolanaProvider } from "./SolanaProvider";
 import Twitter from "next-auth/providers/twitter";
 import Github from "next-auth/providers/github";
+import { Account } from "@prisma/client";
 
 const IS_VERCEL_DEPLOYMENT = !!process.env.VERCEL_URL;
 
@@ -117,8 +118,9 @@ export const authOptions: NextAuthOptions = {
 
           // attempt to locate the existing account connected to the current user
           if (
-            existingAccounts.filter((item) => item.userId === session.user.id)
-              .length > 0
+            existingAccounts.filter(
+              (item: Account) => item.userId === session.user.id,
+            ).length > 0
           ) {
             // when the user that owns the connected account is renewing their auth token,
             // this should not give an error, but rather update the connection data
