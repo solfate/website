@@ -6,7 +6,7 @@ import prisma from "@/lib/prisma";
 import { exit, saveJsonCacheDataSync, sleep } from "@/lib/scripts";
 import { retryWithBackoff } from "@/lib/helpers";
 
-const COHORT_TO_APPROVE: number = 2;
+const COHORT_TO_APPROVE: number = 0;
 const REQUEST_QUANTITY: number = 200;
 
 /**
@@ -113,7 +113,7 @@ const applicants = await prisma.walletList.findMany({
       // only applicants that have not been approved yet
       status: "PENDING",
       // only parse applications in the desired cohort
-      cohort: COHORT_TO_APPROVE,
+      cohort: !!COHORT_TO_APPROVE ? COHORT_TO_APPROVE : undefined,
       lastCheck: RECHECK_GITHUB_REPOS ? undefined : null,
     },
   },
