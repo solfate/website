@@ -206,11 +206,8 @@ export const EpisodeMintDialog = memo(
       setLoading(false);
     }, [
       // comment for better diffs
-      loading,
       setLoading,
       wallet,
-      processingStage,
-      walletModal,
       setProcessingStage,
     ]);
 
@@ -271,6 +268,7 @@ export const EpisodeMintDialog = memo(
         // always reset loading
         setLoading(false);
       },
+      // eslint-disable-next-line react-hooks/exhaustive-deps
       [
         // comment for better diffs
         loading,

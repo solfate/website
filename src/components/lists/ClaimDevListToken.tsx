@@ -240,7 +240,16 @@ export const ClaimDevListToken = ({
       else if (err instanceof Error) toast.error(err.message);
       else toast.error("An unknown error occurred");
     }
-  }, [wallet, processingStage, walletModal, setProcessingStage]);
+  }, [
+    mint,
+    wallet,
+    processingStage,
+    mintTwitter,
+    mintGithub,
+    connection,
+    walletModal,
+    setProcessingStage,
+  ]);
 
   /**
    * handle the various wallet state changes to provider better ux

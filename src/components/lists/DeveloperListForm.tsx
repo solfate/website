@@ -179,6 +179,7 @@ export const DeveloperListForm = memo(
         // comment for better diffs
         loading,
         setLoading,
+        groupedAccounts,
       ],
     );
 
