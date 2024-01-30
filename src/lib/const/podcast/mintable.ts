@@ -63,4 +63,20 @@ export const mintableEpisodes: {
       clip: "intro",
     },
   },
+  44: {
+    episode: 44,
+    name: "EP#44 - Phantom Wallet",
+    description:
+      "Phantom Wallet's CEO & co-founder, Brandon, and Head of Growth, David, discusses their " +
+      "UX driven approach to building the best Solana wallet they can, including maybe " +
+      "open sourcing some of the wallet.",
+    image: `https://bafkreicp64dqxhib7lixjm3di57qdnfs662qptihsrsohh77fldxh27ycq.ipfs.dweb.link/`,
+    animationUrl: `https://bafybeidik6fxln5gs5tin6gquzzhbql73fqupplzqimdbtsmdl6xorevpm.ipfs.dweb.link/`,
+    attributes: {
+      episode: 44,
+      guest: "Brandon",
+      project: "Phantom",
+      clip: "intro",
+    },
+  },
 };
