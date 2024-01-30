@@ -213,7 +213,10 @@ export const DeveloperListForm = memo(
                   <>
                     {"Connected to "}
                     <Link
-                      href={solanaExplorerLink("account", accounts.solana)}
+                      href={solanaExplorerLink(
+                        "account",
+                        accounts.solana as string,
+                      )}
                       target="_blank"
                       className="underline hover:text-hot-pink"
                     >
