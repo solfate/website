@@ -45,11 +45,7 @@ export async function fetcher<ApiInputType, ApiResponseType = string>(
     body: JSON.stringify(init.body),
   }).then(async (res) => {
     if (res.ok) {
-      try {
-        return (await res.json()) as ApiResponseType;
-      } catch (err) {
-        return (await res.text()) as ApiResponseType;
-      }
+      return (await res.text()) as ApiResponseType;
     } else throw await res.text();
   });
 }
