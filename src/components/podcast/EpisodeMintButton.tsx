@@ -155,7 +155,7 @@ export const EpisodeMintDialog = memo(
             message: {
               domain: window.location.host,
               address: wallet.publicKey.toBase58(),
-              statement: `Sign in to ${SITE.name}`,
+              statement: `Sign this message to verify your wallet:`,
               // resources: [SITE.url],
               nonce: csrf,
             },
@@ -163,32 +163,20 @@ export const EpisodeMintDialog = memo(
 
           try {
             // get the user's wallet to sign the requests (`signIn` is preferred if supported)
-            if (!!wallet.signIn) {
-              await wallet.signIn(signInMessage.message).then((res) => {
-                // store the wallet signed data
-                signInMessage.storeSignature({
-                  // note: the wallet could sign with a different wallet...
-                  address: res.account.address,
-                  signature: base58.encode(res.signature),
-                  signedMessage: base58.encode(res.signedMessage),
-                });
-              });
-            } else {
-              const messageToSign = new TextEncoder().encode(
-                signInMessage.prepare(),
-              );
+            const messageToSign = new TextEncoder().encode(
+              signInMessage.prepare(),
+            );
 
-              // request the user sign the message using the fallback methods
-              // i.e wallets that do not support the SIWS spec (aka the `signIn` function)
-              await wallet.signMessage(messageToSign).then((sig) => {
-                // store the wallet signed data
-                signInMessage.storeSignature({
-                  address: wallet.publicKey?.toBase58(),
-                  signature: base58.encode(sig),
-                  signedMessage: base58.encode(messageToSign),
-                });
+            // request the user sign the message using the fallback methods
+            // i.e wallets that do not support the SIWS spec (aka the `signIn` function)
+            await wallet.signMessage(messageToSign).then((sig) => {
+              // store the wallet signed data
+              signInMessage.storeSignature({
+                address: wallet.publicKey?.toBase58(),
+                signature: base58.encode(sig),
+                signedMessage: base58.encode(messageToSign),
               });
-            }
+            });
 
             // ensure we actually have a signature after attempting all wallet sign attempts
             if (!signInMessage.signedData) throw Error("Unknown signature");
@@ -218,11 +206,8 @@ export const EpisodeMintDialog = memo(
       setLoading(false);
     }, [
       // comment for better diffs
-      loading,
       setLoading,
       wallet,
-      processingStage,
-      walletModal,
       setProcessingStage,
     ]);
 
@@ -283,6 +268,7 @@ export const EpisodeMintDialog = memo(
         // always reset loading
         setLoading(false);
       },
+      // eslint-disable-next-line react-hooks/exhaustive-deps
       [
         // comment for better diffs
         loading,

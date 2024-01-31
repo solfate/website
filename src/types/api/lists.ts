@@ -10,4 +10,8 @@ export type DevListApplicationExtraData = {
     id: string;
     username: string;
   };
+  /** track the minting unix timestamp */
+  mintTimestamp?: number;
+  /** track the previously attempted assetIds */
+  attemptedAssets?: string[];
 };

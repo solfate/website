@@ -110,7 +110,7 @@ export default async function Page({ params }: PageProps) {
           </li>
         </ul>
 
-        <EpisodeMintButton mintable={mintableEpisode} />
+        {!!mintableEpisode && <EpisodeMintButton mintable={mintableEpisode} />}
       </section>
 
       <h1 className="font-bold text-3xl md:text-4xl max-w-5xl">

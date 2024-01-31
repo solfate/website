@@ -31,8 +31,8 @@ const components: MDXComponentProps = {
       {children}
     </Link>
   ),
-  img: ({ ref, children, src, ...props }) => (
-    <img {...props} src={src?.replace(/^\/content\//i, "/")}>
+  img: ({ ref, children, alt, src, ...props }) => (
+    <img {...props} alt={alt || ""} src={src?.replace(/^\/content\//i, "/")}>
       {children}
     </img>
   ),

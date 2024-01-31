@@ -22,6 +22,8 @@ declare namespace NodeJS {
     /**
      * General variables and settings
      */
+    SOLANA_RPC: string;
+    NEXT_PUBLIC_SOLANA_RPC: string;
 
     /**
      * Auth related variables

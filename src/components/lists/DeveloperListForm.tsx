@@ -19,8 +19,9 @@ import toast from "react-hot-toast";
 import { TwitterProfile } from "next-auth/providers/twitter";
 import { GithubProfile } from "next-auth/providers/github";
 import { fetcher } from "@/lib/api";
-import { ApiDevelopersPostInput } from "@/types/api/developers";
+import { ApiListDevelopersPostInput } from "@/types/api/developers";
 import { ApiAuthDisconnectDeleteInput } from "@/types/api/auth";
+import { solanaExplorerLink } from "@/lib/solana/helpers";
 
 enum TaskStatus {
   IDLE,
@@ -178,6 +179,7 @@ export const DeveloperListForm = memo(
         // comment for better diffs
         loading,
         setLoading,
+        groupedAccounts,
       ],
     );
 
@@ -212,7 +214,10 @@ export const DeveloperListForm = memo(
                   <>
                     {"Connected to "}
                     <Link
-                      href={`https://solana.fm/address/${accounts.solana}`}
+                      href={solanaExplorerLink(
+                        "account",
+                        accounts.solana as string,
+                      )}
                       target="_blank"
                       className="underline hover:text-hot-pink"
                     >
@@ -460,7 +465,7 @@ export const TaskItemCard = ({
         <Image
           priority
           src={imageSrc}
-          alt="Connect GitHub"
+          alt="Connect"
           className="w-10 h-10 md:w-12 md:h-12"
         />
         <div className="space-y-0">
@@ -480,7 +485,7 @@ export const DeveloperListQuestionsDialog = (props: DialogProps) => {
   // initialize the state tracker for the on-page form state
   const [loading, setLoading] = useState<boolean>(false);
   const [hasChanges, setHasChanges] = useState<boolean>(false);
-  const [formData, setFormData] = useState<ApiDevelopersPostInput>({
+  const [formData, setFormData] = useState<ApiListDevelopersPostInput>({
     why: "",
     who: "",
   });
@@ -505,7 +510,7 @@ export const DeveloperListQuestionsDialog = (props: DialogProps) => {
 
       try {
         setLoading(true);
-        await fetcher<ApiDevelopersPostInput>("/api/lists/developers", {
+        await fetcher<ApiListDevelopersPostInput>("/api/lists/developers", {
           method: "POST",
           // send the current working data
           body: formData,
