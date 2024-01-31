@@ -8,7 +8,7 @@ import {
 } from "@solana/wallet-standard-util";
 import { PublicKey, Transaction } from "@solana/web3.js";
 import base58 from "bs58";
-import { MEMO_PROGRAM_ID } from "../const/general";
+import { MEMO_PROGRAM_ID } from "@/lib/const/general";
 
 export interface SolanaSignInMessageData extends SolanaSignInInput {
   /** domain used to generate the message */
@@ -170,6 +170,7 @@ export class SolanaSignInMessage {
       const tx = Transaction.from(base58.decode(this.signedData.signature));
       return validateAuthTx(tx, message, this.message.address);
     }
+
     // parse each of the values as Uint8 arrays
     return verifyMessageSignature({
       publicKey: base58.decode(this.message.address),

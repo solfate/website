@@ -7,11 +7,19 @@ import { MEMO_PROGRAM_ID, SITE } from "@/lib/const/general";
 import base58 from "bs58";
 import { SolanaSignInMessage } from "@/lib/solana/SignInMessage";
 import { getCsrfToken, signIn } from "next-auth/react";
-import { WalletContextState, useConnection, useWallet } from "@solana/wallet-adapter-react";
+import {
+  WalletContextState,
+  useConnection,
+  useWallet,
+} from "@solana/wallet-adapter-react";
 import { useWalletModal } from "@solana/wallet-adapter-react-ui";
 import { WALLET_STAGE, walletButtonLabel } from "@/lib/solana/const";
 import { AuthError } from "@/components/auth/AuthError";
-import { PublicKey, Transaction, TransactionInstruction } from "@solana/web3.js";
+import {
+  PublicKey,
+  Transaction,
+  TransactionInstruction,
+} from "@solana/web3.js";
 // import { WalletButton } from "@/context/SolanaProviders";
 
 type AuthFormProps = {
@@ -21,7 +29,7 @@ type AuthFormProps = {
 
 export const AuthForm = memo(({ className, callbackPath }: AuthFormProps) => {
   const wallet = useWallet();
-  const {connection} = useConnection();
+  const { connection } = useConnection();
   const walletModal = useWalletModal();
 
   // state for tracking the current working step
@@ -115,10 +123,9 @@ export const AuthForm = memo(({ className, callbackPath }: AuthFormProps) => {
       });
 
       try {
-        if(isLedger){
-          const messageToSign = new TextEncoder().encode(
-            signInMessage.prepare(),
-          );
+        const messageToSign = new TextEncoder().encode(signInMessage.prepare());
+
+        if (isLedger) {
           const tx = new Transaction();
           tx.add(
             new TransactionInstruction({
@@ -128,7 +135,9 @@ export const AuthForm = memo(({ className, callbackPath }: AuthFormProps) => {
             }),
           );
           tx.feePayer = wallet.publicKey;
-          tx.recentBlockhash = (await connection.getLatestBlockhash()).blockhash;
+          tx.recentBlockhash = (
+            await connection.getLatestBlockhash()
+          ).blockhash;
           const signedTx = await wallet.signTransaction!(tx);
           const signature = signedTx.serialize();
           signInMessage.storeSignature({
@@ -149,10 +158,6 @@ export const AuthForm = memo(({ className, callbackPath }: AuthFormProps) => {
             });
           });
         } else {
-          const messageToSign = new TextEncoder().encode(
-            signInMessage.prepare(),
-          );
-
           // request the user sign the message using the fallback methods
           // i.e wallets that do not support the SIWS spec (aka the `signIn` function)
           await wallet.signMessage(messageToSign).then((sig) => {
@@ -213,7 +218,14 @@ export const AuthForm = memo(({ className, callbackPath }: AuthFormProps) => {
 
       toast.error("An unknown signin error occurred");
     }
-  }, [wallet, processingStage, walletModal, setProcessingStage, callbackPath]);
+  }, [
+    wallet,
+    isLedger,
+    processingStage,
+    walletModal,
+    setProcessingStage,
+    callbackPath,
+  ]);
 
   /**
    * handle the various wallet state changes to provider better ux
@@ -276,14 +288,20 @@ export const AuthForm = memo(({ className, callbackPath }: AuthFormProps) => {
               Connect a different wallet?
             </a>
           </div>
-          <div className="flex items-center justify-center">
-            Using a Ledger?&nbsp;
+
+          <label
+            htmlFor="ledger"
+            className="flex hover:cursor-pointer items-center justify-center gap-2"
+          >
+            Using a Ledger?
             <input
+              id="ledger"
+              name="ledger"
               checked={isLedger}
               type="checkbox"
               onChange={() => setIsLedger(!isLedger)}
             />
-          </div>
+          </label>
         </Suspense>
       </section>
     </div>
