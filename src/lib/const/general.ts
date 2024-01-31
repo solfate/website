@@ -25,3 +25,5 @@ export const YOUTUBE = {
 
 export const GITHUB = "https://github.com/nickfrosty/solfate";
 // export const GITHUB = "https://github.com/solfate";
+
+export const MEMO_PROGRAM_ID = "MemoSq4gqABAXKb96qnH8TysNcWxMyWCqXgDLGmfcHr";
