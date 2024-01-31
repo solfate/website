@@ -2,7 +2,7 @@
 
 import { Suspense, memo, useCallback, useEffect, useState } from "react";
 import toast from "react-hot-toast";
-import { MEMO_PROGRAM_ID, SITE } from "@/lib/const/general";
+import { SITE } from "@/lib/const/general";
 
 import base58 from "bs58";
 import { SolanaSignInMessage } from "@/lib/solana/SignInMessage";
@@ -15,11 +15,7 @@ import {
 import { useWalletModal } from "@solana/wallet-adapter-react-ui";
 import { WALLET_STAGE, walletButtonLabel } from "@/lib/solana/const";
 import { AuthError } from "@/components/auth/AuthError";
-import {
-  PublicKey,
-  Transaction,
-  TransactionInstruction,
-} from "@solana/web3.js";
+import { createAuthMemoTransaction } from "@/lib/solana/auth-memo";
 // import { WalletButton } from "@/context/SolanaProviders";
 
 type AuthFormProps = {
@@ -126,25 +122,21 @@ export const AuthForm = memo(({ className, callbackPath }: AuthFormProps) => {
         const messageToSign = new TextEncoder().encode(signInMessage.prepare());
 
         if (isLedger) {
-          const tx = new Transaction();
-          tx.add(
-            new TransactionInstruction({
-              programId: new PublicKey(MEMO_PROGRAM_ID),
-              keys: [],
-              data: Buffer.from(messageToSign),
-            }),
-          );
-          tx.feePayer = wallet.publicKey;
-          tx.recentBlockhash = (
-            await connection.getLatestBlockhash()
-          ).blockhash;
-          const signedTx = await wallet.signTransaction!(tx);
-          const signature = signedTx.serialize();
-          signInMessage.storeSignature({
-            address: wallet.publicKey?.toBase58(),
-            signature: base58.encode(signature),
-            signedMessage: base58.encode(messageToSign),
-            isLedger: true,
+          // create a memo based transaction for the user to sign
+          const tx = await createAuthMemoTransaction({
+            connection,
+            signInMessage,
+          });
+
+          // ask the user to sign this transaction (which we do not send)
+          await wallet.signTransaction!(tx).then((signedTx) => {
+            // store the wallet signed data
+            signInMessage.storeSignature({
+              address: wallet.publicKey?.toBase58(),
+              signature: base58.encode(signedTx.serialize()),
+              signedMessage: base58.encode(messageToSign),
+              isMemoTransaction: true,
+            });
           });
         } else if (!!wallet.signIn) {
           // get the user's wallet to sign the requests (`signIn` is preferred if supported)

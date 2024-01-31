@@ -8,7 +8,7 @@ import {
 } from "@solana/wallet-standard-util";
 import { PublicKey, Transaction } from "@solana/web3.js";
 import base58 from "bs58";
-import { MEMO_PROGRAM_ID } from "@/lib/const/general";
+import { MEMO_PROGRAM_ID } from "./auth-memo";
 
 export interface SolanaSignInMessageData extends SolanaSignInInput {
   /** domain used to generate the message */
@@ -26,16 +26,18 @@ export type SolanaSignedMessageData = {
   signature: string;
   /**
    * base58 encoded bytes that were signed
-   * */
+   */
   signedMessage: string;
   /**
    * the wallet address that signed the message
    * defaults to the `data.address` when not provided
-   * */
+   */
   address?: string;
   nonce?: string | undefined;
-  /** if signing in with ledger */
-  isLedger?: boolean | undefined;
+  /**
+   * Track if the `signature` is actually a signed transaction (vice a message)
+   */
+  isMemoTransaction?: boolean | undefined;
 };
 
 type SolanaSignInMessageArgs = {
@@ -51,7 +53,8 @@ type SolanaSignInMessageArgs = {
 
   /**
    * The signed message data
-   */ signedData?: SolanaSignedMessageData | string;
+   */
+  signedData?: SolanaSignedMessageData | string;
 };
 
 export class SolanaSignInMessage {
@@ -98,13 +101,13 @@ export class SolanaSignInMessage {
     signature,
     signedMessage,
     address,
-    isLedger,
+    isMemoTransaction,
   }: SolanaSignedMessageData) {
     this.signedData = {
       signature,
       signedMessage,
       address: address ?? this.message.address,
-      isLedger,
+      isMemoTransaction,
     };
   }
 
@@ -166,9 +169,9 @@ export class SolanaSignInMessage {
   ) {
     if (!signature) throw Error("No signature to verify");
 
-    if (this.signedData?.isLedger) {
+    if (this.signedData?.isMemoTransaction) {
       const tx = Transaction.from(base58.decode(this.signedData.signature));
-      return validateAuthTx(tx, message, this.message.address);
+      return this.verifyAuthTransaction(tx, message, this.message.address);
     }
 
     // parse each of the values as Uint8 arrays
@@ -178,6 +181,29 @@ export class SolanaSignInMessage {
       message: new TextEncoder().encode(message),
       signedMessage: new TextEncoder().encode(message),
     });
+  }
+
+  /**
+   * Verify a memo based auth transaction was signed by the desired `address`
+   */
+  verifyAuthTransaction(
+    tx: Transaction,
+    message: string,
+    address: string,
+  ): boolean {
+    try {
+      const innerIx = tx.instructions.find((ix) =>
+        ix.programId.equals(new PublicKey(MEMO_PROGRAM_ID)),
+      );
+      if (!innerIx) return false;
+      if (innerIx.data.toString() !== message) return false;
+      if (!tx.verifySignatures()) return false;
+      if (!tx.signatures.find((x) => x.publicKey.toBase58() === address))
+        return false;
+    } catch (e) {
+      return false;
+    }
+    return true;
   }
 
   /**
@@ -205,23 +231,3 @@ export class SolanaSignInMessage {
     return false;
   }
 }
-
-export const validateAuthTx = (
-  tx: Transaction,
-  message: string,
-  publicKey: string,
-): boolean => {
-  try {
-    const inx = tx.instructions.find((x) =>
-      x.programId.equals(new PublicKey(MEMO_PROGRAM_ID)),
-    );
-    if (!inx) return false;
-    if (inx.data.toString() != message) return false;
-    if (!tx.verifySignatures()) return false;
-    if (!tx.signatures.find((x) => x.publicKey.toBase58() === publicKey))
-      return false;
-  } catch (e) {
-    return false;
-  }
-  return true;
-};
