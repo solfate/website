@@ -470,7 +470,11 @@ export const PUT = withUserAuth(async ({ req, session }) => {
     // get the latest blockhash since we need to sign with the server key
     await connection
       .getLatestBlockhash()
-      .then(({ blockhash }) => (transaction.recentBlockhash = blockhash));
+      .then(({ blockhash }) => (transaction.recentBlockhash = blockhash))
+      .catch((err) => {
+        console.error(err);
+        throw Error("Unable to get latest blockhash");
+      });
 
     // partially sign the transaction with the server key
     transaction.sign(DEVLIST_SERVER_KEY);

@@ -27,6 +27,7 @@ import { PulseLoader } from "react-spinners";
 import clsx from "clsx";
 import { FeatherIcon } from "@/components/core/FeatherIcon";
 import { solanaExplorerLink } from "@/lib/solana/helpers";
+import { createAuthMemoTransaction } from "@/lib/solana/auth-memo";
 
 type ClaimDevListTokenProps = {
   twitter?: string;
@@ -123,16 +124,34 @@ export const ClaimDevListToken = ({
     try {
       const messageToSign = new TextEncoder().encode(signInMessage.prepare());
 
-      // request the user sign the message
-      await wallet.signMessage(messageToSign).then((sig) => {
-        // store the wallet signed data
-        signInMessage.storeSignature({
-          address: wallet.publicKey?.toBase58(),
-          signature: base58.encode(sig),
-          signedMessage: base58.encode(messageToSign),
+      if (isLedger) {
+        // create a memo based transaction for the user to sign
+        const tx = await createAuthMemoTransaction({
+          connection,
+          signInMessage,
         });
-      });
 
+        // ask the user to sign this transaction (which we do not send)
+        await wallet.signTransaction!(tx).then((signedTx) => {
+          // store the wallet signed data
+          signInMessage.storeSignature({
+            address: wallet.publicKey?.toBase58(),
+            signature: base58.encode(signedTx.serialize()),
+            signedMessage: base58.encode(messageToSign),
+            isMemoTransaction: true,
+          });
+        });
+      } else {
+        // request the user sign the message
+        await wallet.signMessage(messageToSign).then((sig) => {
+          // store the wallet signed data
+          signInMessage.storeSignature({
+            address: wallet.publicKey?.toBase58(),
+            signature: base58.encode(sig),
+            signedMessage: base58.encode(messageToSign),
+          });
+        });
+      }
       // ensure we actually have a signature after attempting all wallet sign attempts
       if (!signInMessage.signedData) throw Error("Unknown signature");
     } catch (err) {
@@ -147,28 +166,27 @@ export const ClaimDevListToken = ({
     try {
       setProcessingStage(WALLET_STAGE.BUILDING_TRANSACTION);
 
-      await fetcher<ApiListDevelopersPutInput, ApiListDevelopersPutResponse>(
-        "/api/lists/developers",
-        {
-          method: "PUT",
-          body: {
-            mint: mint.publicKey.toBase58(),
-            message: JSON.stringify(signInMessage.message),
-            signedData: JSON.stringify(signInMessage.signedData),
-            metadata: {
-              twitter: mintTwitter,
-              github: mintGithub,
-            },
+      await fetcher<ApiListDevelopersPutInput>("/api/lists/developers", {
+        method: "PUT",
+        body: {
+          mint: mint.publicKey.toBase58(),
+          message: JSON.stringify(signInMessage.message),
+          signedData: JSON.stringify(signInMessage.signedData),
+          metadata: {
+            twitter: mintTwitter,
+            github: mintGithub,
           },
         },
-      ).then((res) => {
-        // deserialize and set the transaction provided from the server
-        transaction = Transaction.from(
-          base58.decode(res.serializedTransaction),
-        );
+      })
+        .then((res) => JSON.parse(res) as ApiListDevelopersPutResponse)
+        .then((res) => {
+          // deserialize and set the transaction provided from the server
+          transaction = Transaction.from(
+            base58.decode(res.serializedTransaction),
+          );
 
-        // setLoading(false);
-      });
+          // setLoading(false);
+        });
 
       // ensure we have a transaction ready for the user
       if (!transaction) {
@@ -179,7 +197,6 @@ export const ClaimDevListToken = ({
       setProcessingStage(WALLET_STAGE.WALLET_SIGN);
 
       try {
-        console.log(transaction);
         // sign with the client side generated mint keypair
         transaction.partialSign(mint);
 
