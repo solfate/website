@@ -212,6 +212,7 @@ export const AuthForm = memo(({ className, callbackPath }: AuthFormProps) => {
     }
   }, [
     wallet,
+    connection,
     isLedger,
     processingStage,
     walletModal,

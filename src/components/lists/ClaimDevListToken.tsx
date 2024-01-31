@@ -261,6 +261,7 @@ export const ClaimDevListToken = ({
     }
   }, [
     mint,
+    isLedger,
     wallet,
     processingStage,
     mintTwitter,
