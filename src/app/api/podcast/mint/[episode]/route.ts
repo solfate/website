@@ -7,10 +7,10 @@ import {
   mintableEpisodes,
 } from "@/lib/const/podcast/mintable";
 import {
-  SolanaSignInMessage,
-  SolanaSignInMessageData,
-  SolanaSignedMessageData,
-} from "@/lib/solana/SignInMessage";
+  SolanaAuth,
+  SolanaAuthMessageData,
+  SolanaAuthSignedData,
+} from "solana-auth";
 import { cookies } from "next/headers";
 
 type UnderdogNFTMintResponse = {
@@ -20,8 +20,8 @@ type UnderdogNFTMintResponse = {
 };
 
 type ApiPodcastMintInput = {
-  message: SolanaSignInMessageData;
-  signedData: SolanaSignedMessageData;
+  message: SolanaAuthMessageData;
+  signedData: SolanaAuthSignedData;
 };
 
 // export const POST = withUserAuth(async ({ req, session, params }) => {
@@ -59,7 +59,7 @@ export const POST = async (
     const csrfToken = decodeURI(cookieVal?.value || "").split("|")[0];
 
     // parse the signed message provided within the request
-    const signinMessage = new SolanaSignInMessage({
+    const solanaAuth = new SolanaAuth({
       signedData: input.signedData,
       message: input.message,
       // manually add in the enforced server data
@@ -70,7 +70,7 @@ export const POST = async (
     });
 
     // actually validate/check the submitted message for the signature
-    if (!signinMessage.verifyAny()) {
+    if (!solanaAuth.verifyAny()) {
       return new Response("Could not validate the signed message", {
         status: 400,
       });
@@ -121,7 +121,7 @@ export const POST = async (
           externalUrl: mintable.externalUrl,
           attributes: mintable.attributes,
           // finally, the wallet that will actually get the nft
-          receiverAddress: signinMessage.message.address,
+          receiverAddress: solanaAuth.message.address,
         }),
       },
     ).then((res) => res.json() as Promise<UnderdogNFTMintResponse>);

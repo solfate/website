@@ -13,7 +13,7 @@ import { useWalletModal } from "@solana/wallet-adapter-react-ui";
 import { WALLET_STAGE, walletButtonLabel } from "@/lib/solana/const";
 import base58 from "bs58";
 import { SITE } from "@/lib/const/general";
-import { SolanaSignInMessage } from "@/lib/solana/SignInMessage";
+import { SolanaAuth } from "solana-auth";
 
 import Confetti from "react-dom-confetti";
 import { MintableEpisode } from "@/lib/const/podcast/mintable";
@@ -151,7 +151,7 @@ export const EpisodeMintDialog = memo(
           setProcessingStage(WALLET_STAGE.WALLET_SIGN);
 
           // create the message for the user to sign
-          const signInMessage = new SolanaSignInMessage({
+          const solanaAuth = new SolanaAuth({
             message: {
               domain: window.location.host,
               address: wallet.publicKey.toBase58(),
@@ -164,14 +164,14 @@ export const EpisodeMintDialog = memo(
           try {
             // get the user's wallet to sign the requests (`signIn` is preferred if supported)
             const messageToSign = new TextEncoder().encode(
-              signInMessage.prepare(),
+              solanaAuth.prepare(),
             );
 
             // request the user sign the message using the fallback methods
             // i.e wallets that do not support the SIWS spec (aka the `signIn` function)
             await wallet.signMessage(messageToSign).then((sig) => {
               // store the wallet signed data
-              signInMessage.storeSignature({
+              solanaAuth.storeSignature({
                 address: wallet.publicKey?.toBase58(),
                 signature: base58.encode(sig),
                 signedMessage: base58.encode(messageToSign),
@@ -179,11 +179,11 @@ export const EpisodeMintDialog = memo(
             });
 
             // ensure we actually have a signature after attempting all wallet sign attempts
-            if (!signInMessage.signedData) throw Error("Unknown signature");
+            if (!solanaAuth.signedData) throw Error("Unknown signature");
 
             // all done with the wallet!
             setProcessingStage(WALLET_STAGE.IDLE);
-            return signInMessage;
+            return solanaAuth;
           } catch (err) {
             console.error("Wallet failed to sign message:", err);
 
@@ -231,9 +231,9 @@ export const EpisodeMintDialog = memo(
           }
 
           // get the user to sign a message and verify wallet ownership
-          let signInMessage = await connectWalletAndSign();
+          let solanaAuth = await connectWalletAndSign();
 
-          if (!signInMessage?.signedData) {
+          if (!solanaAuth?.signedData) {
             console.info("No signed message. Did you cancel the wallet popup?");
             return;
           }
@@ -242,7 +242,7 @@ export const EpisodeMintDialog = memo(
 
           await fetcher<any>(`/api/podcast/mint/${mintable.episode}`, {
             method: "POST",
-            body: signInMessage,
+            body: solanaAuth,
           }).then((res) => {
             console.log(res);
 

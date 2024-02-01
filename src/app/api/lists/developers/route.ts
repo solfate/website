@@ -9,7 +9,6 @@ import {
   MINT_COOLDOWN_SECONDS,
 } from "@/lib/const/devlist";
 import { getAccountsByUserId } from "@/lib/queries/accounts";
-import { SolanaSignInMessage } from "@/lib/solana/SignInMessage";
 import { createNonTransferableTokenTransaction } from "@/lib/solana/tokens";
 import {
   ApiListDevelopersPostInput,
@@ -25,6 +24,7 @@ import { GithubProfile } from "next-auth/providers/github";
 import { TwitterProfile } from "next-auth/providers/twitter";
 import { checkMintAndUpdateApplicantStatus } from "@/lib/lists";
 import { solanaExplorerLink } from "@/lib/solana/helpers";
+import { SolanaAuth } from "solana-auth";
 
 // set the max length for the question info
 const MAX_LEN = 250;
@@ -52,6 +52,8 @@ type ListMember = {
  * handler for listing all owners of the DevList token (aka members)
  */
 export const GET = async () => {
+  const startTime = Date.now();
+
   try {
     const applicants = await prisma.walletList.findMany({
       where: {
@@ -102,29 +104,33 @@ export const GET = async () => {
       if (applicants[i].status != "ACTIVE") {
         // console.log(applicants[i]);
 
-        try {
-          // attempt to verify if the token as actually allocated on chain, and update the status accordingly
-          const accountInfo = await checkMintAndUpdateApplicantStatus(
-            applicants[i].id,
-            connection,
-            new PublicKey(assetId),
-            "ACTIVE",
-          );
+        // note
+        unclaimedApplicants++;
+        continue;
 
-          // console.log(assetId as string, accountInfo);
-          // console.log(solanaExplorerLink("token", assetId));
+        // try {
+        //   // attempt to verify if the token as actually allocated on chain, and update the status accordingly
+        //   const accountInfo = await checkMintAndUpdateApplicantStatus(
+        //     applicants[i].id,
+        //     connection,
+        //     new PublicKey(assetId),
+        //     "ACTIVE",
+        //   );
 
-          // force update the current record's state
-          if (!!accountInfo) {
-            applicants[i].status = "ACTIVE";
-          } else {
-            unclaimedApplicants++;
-            continue;
-          }
-        } catch (err) {
-          console.error("[DEVLIST MEMBER UPDATE]", err);
-          continue;
-        }
+        //   // console.log(assetId as string, accountInfo);
+        //   // console.log(solanaExplorerLink("token", assetId));
+
+        //   // force update the current record's state
+        //   if (!!accountInfo) {
+        //     applicants[i].status = "ACTIVE";
+        //   } else {
+        //     unclaimedApplicants++;
+        //     continue;
+        //   }
+        // } catch (err) {
+        //   console.error("[DEVLIST MEMBER UPDATE]", err);
+        //   continue;
+        // }
       }
 
       members.push({
@@ -132,6 +138,10 @@ export const GET = async () => {
         owner: applicants[i].wallet,
       });
     }
+
+    console.log("-----------------------------");
+    console.log((Date.now() - startTime) / 1000);
+    console.log(((Date.now() - startTime) * 1000) / 60, "sec");
 
     // serialize and encode the transaction while sending it to the client
     return Response.json({
@@ -296,7 +306,7 @@ export const PUT = withUserAuth(async ({ req, session }) => {
     }
 
     // parse the signed message provided within the request
-    const signInMessage = new SolanaSignInMessage({
+    const solanaAuth = new SolanaAuth({
       signedData: input.signedData,
       message: input.message,
       overrides: {
@@ -305,7 +315,7 @@ export const PUT = withUserAuth(async ({ req, session }) => {
     });
 
     // actually validate/check the submitted message for the signature
-    if (!signInMessage.verifyAny()) {
+    if (!solanaAuth.verifyAny()) {
       return new Response("Could not validate the signed message", {
         status: 400,
       });
@@ -347,7 +357,7 @@ export const PUT = withUserAuth(async ({ req, session }) => {
 
     const connection = new Connection(process.env.SOLANA_RPC);
 
-    const owner = new PublicKey(signInMessage.message.address);
+    const owner = new PublicKey(solanaAuth.message.address);
 
     /**
      * when the user has an asset id and status=UNCLAIMED,

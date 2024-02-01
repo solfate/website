@@ -1,7 +1,7 @@
 import { cookies } from "next/headers";
 import prisma from "@/lib/prisma";
 import CredentialsProvider from "next-auth/providers/credentials";
-import { SolanaSignInMessage } from "@/lib/solana/SignInMessage";
+import { SolanaAuth } from "solana-auth";
 import { debug } from "@/lib/helpers";
 import { getUserByProviderAccountId } from "@/lib//queries/users";
 import { NextAuthOptions, User } from "next-auth";
@@ -48,7 +48,7 @@ export function SolanaProvider({}: SolanaProviderConfig) {
         const csrfToken = decodeURI(cookieVal?.value || "").split("|")[0];
 
         // parse the signed message provided within the request
-        const signinMessage = new SolanaSignInMessage({
+        const solanaAuth = new SolanaAuth({
           signedData: credentials.signedData,
           message: credentials.message,
           // manually add in the enforced server data
@@ -59,23 +59,23 @@ export function SolanaProvider({}: SolanaProviderConfig) {
         });
 
         // todo: perform a proper domain check using allowed domains
-        // if (signinMessage.domain !== nextAuthUrl.host) {
+        // if (solanaAuth.domain !== nextAuthUrl.host) {
         //   debug("domain/host failed");
         //   return null;
         // }
 
         // todo: perform a proper csrf check
-        // if (signinMessage.message.nonce !== csrfToken) {
+        // if (solanaAuth.message.nonce !== csrfToken) {
         //   throw Error("The message token did not match the server token");
         // }
 
         // actually validate/check the submitted message for the signature
-        if (!signinMessage.verifyAny())
+        if (!solanaAuth.verifyAny())
           throw new Error("Could not validate the signed message");
 
         // locate the User from the db based on the connected wallet as an Account
         let user = await getUserByProviderAccountId({
-          providerAccountId: signinMessage.message.address,
+          providerAccountId: solanaAuth.message.address,
         });
 
         // when no user was found, create their new User record
@@ -86,20 +86,20 @@ export function SolanaProvider({}: SolanaProviderConfig) {
           //   return null;
           // }
 
-          // debug("create new user:", signinMessage.publicKey);
+          // debug("create new user:", solanaAuth.publicKey);
 
           // manually create the User and Account record for the authenticated wallet
           // (making a valid ownership connection to the wallet address and the User record)
           user = await prisma.user.create({
             data: {
-              username: signinMessage.message.address,
+              username: solanaAuth.message.address,
               // todo: maybe set the default `user.name` to be a solana domain?
-              // name: signinMessage.message.address,
+              // name: solanaAuth.message.address,
               status: "ACTIVE",
               accounts: {
                 create: {
                   provider: SolanaProviderId,
-                  providerAccountId: signinMessage.message.address,
+                  providerAccountId: solanaAuth.message.address,
                   type: "credentials",
                 },
               },

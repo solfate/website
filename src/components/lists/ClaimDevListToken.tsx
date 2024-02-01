@@ -10,7 +10,7 @@ import {
   useWallet,
 } from "@solana/wallet-adapter-react";
 import { useWalletModal } from "@solana/wallet-adapter-react-ui";
-import { SolanaSignInMessage } from "@/lib/solana/SignInMessage";
+import { SolanaAuth, createSolanaAuthTransaction } from "solana-auth";
 import { SITE } from "@/lib/const/general";
 import base58 from "bs58";
 
@@ -27,7 +27,6 @@ import { PulseLoader } from "react-spinners";
 import clsx from "clsx";
 import { FeatherIcon } from "@/components/core/FeatherIcon";
 import { solanaExplorerLink } from "@/lib/solana/helpers";
-import { createAuthMemoTransaction } from "@/lib/solana/auth-memo";
 
 type ClaimDevListTokenProps = {
   twitter?: string;
@@ -110,7 +109,7 @@ export const ClaimDevListToken = ({
     let transaction: Transaction | undefined;
 
     // create the message for the mint to sign
-    const signInMessage = new SolanaSignInMessage({
+    const solanaAuth = new SolanaAuth({
       message: {
         domain: window.location.host,
         address: wallet.publicKey.toBase58(),
@@ -122,19 +121,19 @@ export const ClaimDevListToken = ({
     });
 
     try {
-      const messageToSign = new TextEncoder().encode(signInMessage.prepare());
+      const messageToSign = new TextEncoder().encode(solanaAuth.prepare());
 
       if (isLedger) {
         // create a memo based transaction for the user to sign
-        const tx = await createAuthMemoTransaction({
+        const tx = await createSolanaAuthTransaction({
           connection,
-          signInMessage,
+          solanaAuth,
         });
 
         // ask the user to sign this transaction (which we do not send)
         await wallet.signTransaction!(tx).then((signedTx) => {
           // store the wallet signed data
-          signInMessage.storeSignature({
+          solanaAuth.storeSignature({
             address: wallet.publicKey?.toBase58(),
             signature: base58.encode(signedTx.serialize()),
             signedMessage: base58.encode(messageToSign),
@@ -145,7 +144,7 @@ export const ClaimDevListToken = ({
         // request the user sign the message
         await wallet.signMessage(messageToSign).then((sig) => {
           // store the wallet signed data
-          signInMessage.storeSignature({
+          solanaAuth.storeSignature({
             address: wallet.publicKey?.toBase58(),
             signature: base58.encode(sig),
             signedMessage: base58.encode(messageToSign),
@@ -153,7 +152,7 @@ export const ClaimDevListToken = ({
         });
       }
       // ensure we actually have a signature after attempting all wallet sign attempts
-      if (!signInMessage.signedData) throw Error("Unknown signature");
+      if (!solanaAuth.signedData) throw Error("Unknown signature");
     } catch (err) {
       console.error("Wallet failed to sign message:", err);
       toast.error("You must sign the message with your wallet");
@@ -170,8 +169,8 @@ export const ClaimDevListToken = ({
         method: "PUT",
         body: {
           mint: mint.publicKey.toBase58(),
-          message: JSON.stringify(signInMessage.message),
-          signedData: JSON.stringify(signInMessage.signedData),
+          message: JSON.stringify(solanaAuth.message),
+          signedData: JSON.stringify(solanaAuth.signedData),
           metadata: {
             twitter: mintTwitter,
             github: mintGithub,

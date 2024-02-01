@@ -5,7 +5,6 @@ import toast from "react-hot-toast";
 import { SITE } from "@/lib/const/general";
 
 import base58 from "bs58";
-import { SolanaSignInMessage } from "@/lib/solana/SignInMessage";
 import { getCsrfToken, signIn } from "next-auth/react";
 import {
   WalletContextState,
@@ -15,7 +14,7 @@ import {
 import { useWalletModal } from "@solana/wallet-adapter-react-ui";
 import { WALLET_STAGE, walletButtonLabel } from "@/lib/solana/const";
 import { AuthError } from "@/components/auth/AuthError";
-import { createAuthMemoTransaction } from "@/lib/solana/auth-memo";
+import { SolanaAuth, createSolanaAuthTransaction } from "solana-auth";
 // import { WalletButton } from "@/context/SolanaProviders";
 
 type AuthFormProps = {
@@ -108,7 +107,7 @@ export const AuthForm = memo(({ className, callbackPath }: AuthFormProps) => {
       setProcessingStage(WALLET_STAGE.WALLET_SIGN);
 
       // create the message for the user to sign
-      const signInMessage = new SolanaSignInMessage({
+      const solanaAuth = new SolanaAuth({
         message: {
           domain: window.location.host,
           address: wallet.publicKey.toBase58(),
@@ -119,19 +118,19 @@ export const AuthForm = memo(({ className, callbackPath }: AuthFormProps) => {
       });
 
       try {
-        const messageToSign = new TextEncoder().encode(signInMessage.prepare());
+        const messageToSign = new TextEncoder().encode(solanaAuth.prepare());
 
         if (isLedger) {
           // create a memo based transaction for the user to sign
-          const tx = await createAuthMemoTransaction({
+          const tx = await createSolanaAuthTransaction({
             connection,
-            signInMessage,
+            solanaAuth: solanaAuth,
           });
 
           // ask the user to sign this transaction (which we do not send)
           await wallet.signTransaction!(tx).then((signedTx) => {
             // store the wallet signed data
-            signInMessage.storeSignature({
+            solanaAuth.storeSignature({
               address: wallet.publicKey?.toBase58(),
               signature: base58.encode(signedTx.serialize()),
               signedMessage: base58.encode(messageToSign),
@@ -140,9 +139,9 @@ export const AuthForm = memo(({ className, callbackPath }: AuthFormProps) => {
           });
         } else if (!!wallet.signIn) {
           // get the user's wallet to sign the requests (`signIn` is preferred if supported)
-          await wallet.signIn(signInMessage.message).then((res) => {
+          await wallet.signIn(solanaAuth.message).then((res) => {
             // store the wallet signed data
-            signInMessage.storeSignature({
+            solanaAuth.storeSignature({
               // note: the wallet could sign with a different wallet...
               address: res.account.address,
               signature: base58.encode(res.signature),
@@ -154,7 +153,7 @@ export const AuthForm = memo(({ className, callbackPath }: AuthFormProps) => {
           // i.e wallets that do not support the SIWS spec (aka the `signIn` function)
           await wallet.signMessage(messageToSign).then((sig) => {
             // store the wallet signed data
-            signInMessage.storeSignature({
+            solanaAuth.storeSignature({
               address: wallet.publicKey?.toBase58(),
               signature: base58.encode(sig),
               signedMessage: base58.encode(messageToSign),
@@ -163,7 +162,7 @@ export const AuthForm = memo(({ className, callbackPath }: AuthFormProps) => {
         }
 
         // ensure we actually have a signature after attempting all wallet sign attempts
-        if (!signInMessage.signedData) throw Error("Unknown signature");
+        if (!solanaAuth.signedData) throw Error("Unknown signature");
       } catch (err) {
         console.error("Wallet failed to sign message:", err);
         toast.error("You must sign the message with your wallet to sign in");
@@ -182,8 +181,8 @@ export const AuthForm = memo(({ className, callbackPath }: AuthFormProps) => {
         redirect: false,
         // force override the callback url (if desired)
         callbackUrl,
-        message: JSON.stringify(signInMessage.message),
-        signedData: JSON.stringify(signInMessage.signedData),
+        message: JSON.stringify(solanaAuth.message),
+        signedData: JSON.stringify(solanaAuth.signedData),
       })
         .then((res) => {
           // console.log("signin res:", res);
