@@ -5,7 +5,7 @@
  */
 
 // prettier-ignore
-import { SystemProgram,Connection,Keypair,PublicKey,Transaction} from "@solana/web3.js";
+import { SystemProgram,Connection,Keypair,PublicKey,Transaction, ComputeBudgetProgram} from "@solana/web3.js";
 // prettier-ignore
 import { ASSOCIATED_TOKEN_PROGRAM_ID,ExtensionType,LENGTH_SIZE,TOKEN_2022_PROGRAM_ID,TYPE_SIZE,createInitializeMetadataPointerInstruction,createInitializeMintInstruction,getMintLen,createInitializeInstruction,createUpdateFieldInstruction,createInitializeNonTransferableMintInstruction,getAssociatedTokenAddressSync,createAssociatedTokenAccountInstruction,createMintToInstruction,createSetAuthorityInstruction, AuthorityType} from "@solana/spl-token";
 // prettier-ignore
@@ -104,10 +104,28 @@ export async function createNonTransferableTokenTransaction({
   const metadataSpace = pack(metadata).length + TYPE_SIZE + LENGTH_SIZE;
 
   // get the lamport cost and recent blockhash
-  const [lamports /*recentBlockhash*/] = await Promise.all([
+  const [lamports, recentPriorityFee /*recentBlockhash*/] = await Promise.all([
     connection.getMinimumBalanceForRentExemption(mintSpace + metadataSpace),
     // connection.getLatestBlockhash().then(({ blockhash }) => blockhash),
+    connection
+      .getRecentPrioritizationFees()
+      .then((fees) =>
+        Math.ceil(
+          fees.reduce(
+            (accumulator, currentValue) =>
+              accumulator + currentValue.prioritizationFee,
+            1,
+          ) /
+            fees.length +
+            1,
+        ),
+      ),
   ]);
+
+  // add a priority fee based on the recent fee
+  const priorityFeeInstruction = ComputeBudgetProgram.setComputeUnitPrice({
+    microLamports: recentPriorityFee,
+  });
 
   // create the mint account, owned by the token22 program
   const createAccountInstruction = SystemProgram.createAccount({
@@ -264,6 +282,7 @@ export async function createNonTransferableTokenTransaction({
 
   // build the transaction
   let transaction = new Transaction().add(
+    priorityFeeInstruction,
     createAccountInstruction,
     initializeNonTransferrableInstruction,
     initializeMetadataPointerInstruction,
