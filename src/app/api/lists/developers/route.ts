@@ -139,10 +139,6 @@ export const GET = async () => {
       });
     }
 
-    console.log("-----------------------------");
-    console.log((Date.now() - startTime) / 1000);
-    console.log(((Date.now() - startTime) * 1000) / 60, "sec");
-
     // serialize and encode the transaction while sending it to the client
     return Response.json({
       list: "DevList",
@@ -371,13 +367,13 @@ export const PUT = withUserAuth(async ({ req, session }) => {
           throw Error("Unknown mint timestamp");
         }
 
-        console.log("mint", new Date(mintTimestamp));
-        console.log("now", new Date(Date.now()));
-        console.log("ago", new Date(Date.now() - MINT_COOLDOWN_SECONDS * 1000));
-        console.log(
-          "pass",
-          mintTimestamp < Date.now() - MINT_COOLDOWN_SECONDS * 1000,
-        );
+        // console.log("mint", new Date(mintTimestamp));
+        // console.log("now", new Date(Date.now()));
+        // console.log("ago", new Date(Date.now() - MINT_COOLDOWN_SECONDS * 1000));
+        // console.log(
+        //   "pass",
+        //   mintTimestamp < Date.now() - MINT_COOLDOWN_SECONDS * 1000,
+        // );
 
         // make sure the user has passed the minting cooldown period
         if (mintTimestamp >= Date.now() - MINT_COOLDOWN_SECONDS * 1000) {
