@@ -91,6 +91,8 @@ model WalletList {
     assetId   String?
 
     @@unique([type, wallet])
+    @@index([type], name: "type_idx")
+    @@index([type, assetId], name: "type_assetId_idx")
     @@index([userId], name: "user_id_idx")
     @@index([wallet], name: "wallet_id_idx")
     @@index([twitter], name: "twitter_id_idx")
