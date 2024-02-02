@@ -1,5 +1,5 @@
 import { redirect } from "next/navigation";
 
-export async function GET(request: Request) {
+export default function Page() {
   redirect("/podcast/browse/1");
 }
