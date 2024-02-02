@@ -199,22 +199,37 @@ export const ClaimDevListToken = ({
         // sign with the client side generated mint keypair
         transaction.partialSign(mint);
 
-        // note `wallet.signTransaction` does not mutate
-        transaction = await wallet.signTransaction(transaction);
-      } catch (err) {
-        console.error(err);
-        setProcessingStage(WALLET_STAGE.IDLE);
-        return toast.error("Your wallet must sign the transaction");
-      }
+        // let the wallet send the transaction after the user signs it
+        const txSig = await wallet.sendTransaction(transaction, connection, {
+          maxRetries: 5,
+        });
 
-      try {
-        // send the transaction and mint!
-        const txSig = await connection.sendRawTransaction(
-          transaction.serialize(),
-          {
-            maxRetries: 5,
-          },
+        console.log(
+          "Confirming transaction:",
+          solanaExplorerLink(
+            "tx",
+            txSig,
+            connection.rpcEndpoint.includes("devnet")
+              ? "devnet"
+              : "mainnet-beta",
+          ),
         );
+
+        // manually confirm the transaction
+        const latestBlockHash = await connection.getLatestBlockhash();
+        const confirmSigResult = await connection.confirmTransaction(
+          {
+            signature: txSig,
+            blockhash: latestBlockHash.blockhash,
+            lastValidBlockHeight: latestBlockHash.lastValidBlockHeight,
+          },
+          "finalized",
+        );
+
+        if (!!confirmSigResult.value.err) {
+          console.error("[CONFIRM ERROR]", confirmSigResult.value.err);
+          throw Error("Unable to confirm your transaction");
+        }
 
         console.log(
           "Transaction:",
@@ -241,12 +256,15 @@ export const ClaimDevListToken = ({
         setProcessingStage(WALLET_STAGE.SUCCESS);
 
         // refresh the page
-        window.location.href = window.location.href;
+        // window.location.href = window.location.href;
 
         return toast.success("Success! You have claimed the DevList token!");
       } catch (err) {
         console.error(err);
         setProcessingStage(WALLET_STAGE.IDLE);
+
+        if (typeof err == "string") return toast.error(err);
+        else if (err instanceof Error) return toast.error(err.message);
         return toast.error("Transaction failed to send. Try again.");
       }
     } catch (err) {

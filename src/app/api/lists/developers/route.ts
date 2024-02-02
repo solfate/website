@@ -485,6 +485,9 @@ export const PUT = withUserAuth(async ({ req, session }) => {
     // partially sign the transaction with the server key
     transaction.sign(DEVLIST_SERVER_KEY);
 
+    console.error("owner:", owner.toBase58());
+    console.warn("transaction:", transaction);
+
     // serialize and encode the transaction while sending it to the client
     return Response.json({
       assetId: mint,
