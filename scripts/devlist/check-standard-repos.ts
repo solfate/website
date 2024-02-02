@@ -91,6 +91,10 @@ const STANDARD_GITHUB_REPOS = [
   "https://github.com/magicblock-labs/Solana.Unity.Metaplex",
   "https://github.com/magicblock-labs/Solana.Unity.Anchor",
   "https://github.com/magicblock-labs/Solana.Unity-Core",
+  // marinade
+  "https://github.com/marinade-finance/liquid-staking-program",
+  "https://github.com/marinade-finance/marinade-ts-sdk",
+  "https://github.com/marinade-finance/marinade-ts-cli",
 ];
 
 console.log("Total repos to check:", STANDARD_GITHUB_REPOS.length);
