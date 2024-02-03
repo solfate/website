@@ -24,6 +24,7 @@ export const ViewDevListToken = ({
   // github,
 }: ViewDevListTokenProps) => {
   const { connection } = useConnection();
+  const [loading, setLoading] = useState(true);
 
   const [metadata, setMetadata] = useState({
     twitter: null,
@@ -57,6 +58,7 @@ export const ViewDevListToken = ({
       }
 
       setMetadata(parsedMetadata);
+      setLoading(false);
     })();
   }, []);
 
@@ -78,13 +80,13 @@ export const ViewDevListToken = ({
               <MetadataToggle
                 disabled={true}
                 label="Twitter / X"
-                value={metadata.twitter || "n/a"}
+                value={loading ? "loading" : metadata.twitter || "n/a"}
                 checked={!!metadata.twitter}
               />
               <MetadataToggle
                 disabled={true}
                 label="GitHub"
-                value={metadata.github || "n/a"}
+                value={loading ? "loading" : metadata.github || "n/a"}
                 checked={!!metadata.github}
               />
             </section>
