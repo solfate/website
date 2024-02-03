@@ -6,19 +6,41 @@ import devlistImage from "@/../public/img/devlist/devlist.png";
 import Link from "next/link";
 import { solanaExplorerLink } from "@/lib/solana/helpers";
 import { shortWalletAddress } from "@/lib/helpers";
+import { MetadataToggle } from "./MetadataToggle";
+import { TokenMetadata } from "@solana/spl-token-metadata";
+import { useMemo } from "react";
 
 type ViewDevListTokenProps = {
   assetId: string | null;
+  additionalMetadata?: TokenMetadata["additionalMetadata"];
   // twitter?: string;
   // github?: string;
 };
 
 export const ViewDevListToken = ({
   assetId,
+  additionalMetadata,
   // twitter,
   // github,
 }: ViewDevListTokenProps) => {
   const { connection } = useConnection();
+
+  // parse the `additionalMetadata` fields for display
+  const metadata = useMemo(() => {
+    const parsedMetadata = {
+      twitter: null,
+      github: null,
+    };
+
+    // if (Array.isArray(additionalMetadata)) {
+    //   additionalMetadata.forEach((record) => {
+    //     if (Object.hasOwn(parsedMetadata, record[0]))
+    //       parsedMetadata[record[0]] = record[1];
+    //   });
+    // }
+
+    return parsedMetadata;
+  }, [additionalMetadata]);
 
   return (
     <section className="container max-w-4xl !py-0 md:!space-y-12 !space-y-8">
@@ -30,6 +52,24 @@ export const ViewDevListToken = ({
               src={devlistImage}
               className="rounded-lg"
             />
+
+            <section className="grid grid-cols-2 gap-2">
+              <p className="col-span-full text-sm">
+                Your custom on-chain metadata:
+              </p>
+              <MetadataToggle
+                disabled={true}
+                label="Twitter / X"
+                value={metadata.twitter || "n/a"}
+                checked={!!metadata.twitter}
+              />
+              <MetadataToggle
+                disabled={true}
+                label="GitHub"
+                value={metadata.github || "n/a"}
+                checked={!!metadata.github}
+              />
+            </section>
 
             {!!assetId && (
               <>

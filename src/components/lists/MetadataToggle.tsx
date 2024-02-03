@@ -6,14 +6,14 @@ type MetadataToggleProps = {
   value?: string;
   disabled?: boolean;
   checked: React.SetStateAction<boolean>;
-  setChecked: React.Dispatch<React.SetStateAction<boolean>>;
+  setChecked?: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 export const MetadataToggle = ({
   label,
   value,
   checked,
-  setChecked,
+  setChecked = () => {},
   disabled,
 }: MetadataToggleProps) => {
   if (!value) return null;

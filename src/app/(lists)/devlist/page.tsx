@@ -15,6 +15,9 @@ import { Connection, PublicKey } from "@solana/web3.js";
 import { checkMintAndUpdateApplicantStatus } from "@/lib/lists";
 import { DevListApplicationExtraData } from "@/types/api/lists";
 import { ViewDevListToken } from "@/components/lists/ViewDevListToken";
+import { getTokenMetadata } from "@solana/spl-token";
+import { TokenMetadata } from "@solana/spl-token-metadata";
+import { Awaitable } from "next-auth";
 
 type Props = {
   params: { id: string };
@@ -52,6 +55,7 @@ export default async function Page() {
 
   // get the current users list record
   let listRecord = null;
+  let tokenMetadata: TokenMetadata = null;
   let applicantData: DevListApplicationExtraData | undefined = undefined;
 
   // locate the user's DevList application
@@ -68,20 +72,39 @@ export default async function Page() {
       applicantData = listRecord?.data as DevListApplicationExtraData;
 
     // check if the current `assetId` already exists (aka the user has claimed)
-    if (listRecord && !!listRecord.assetId && listRecord.status != "ACTIVE") {
+    if (listRecord && !!listRecord.assetId) {
       const connection = new Connection(process.env.SOLANA_RPC, {
         commitment: "single",
       });
 
-      const accountInfo = await checkMintAndUpdateApplicantStatus(
-        listRecord.id,
-        connection,
-        new PublicKey(listRecord.assetId),
-        "ACTIVE",
-      );
+      // attempt to active the token if not already done so
+      if (listRecord.status != "ACTIVE") {
+        const accountInfo = await checkMintAndUpdateApplicantStatus(
+          listRecord.id,
+          connection,
+          new PublicKey(listRecord.assetId),
+          "ACTIVE",
+        );
 
-      // force update the current record's state
-      if (!!accountInfo) listRecord.status = "ACTIVE";
+        // force update the current record's state
+        if (!!accountInfo) listRecord.status = "ACTIVE";
+      }
+
+      // get the token metadata for active tokens
+      if (listRecord.status == "ACTIVE") {
+        try {
+          tokenMetadata = await getTokenMetadata(
+            connection,
+            new PublicKey(listRecord.assetId),
+          );
+        } catch (err) {
+          console.error(
+            "Unable to get token metadata for: ",
+            listRecord.assetId,
+          );
+          console.error(err);
+        }
+      }
     }
   }
 
@@ -127,8 +150,7 @@ export default async function Page() {
           {listRecord.status == "ACTIVE" ? (
             <ViewDevListToken
               assetId={listRecord.assetId}
-              // twitter={applicantData?.twitter.username}
-              // github={applicantData?.github.username}
+              additionalMetadata={tokenMetadata.additionalMetadata}
             />
           ) : (
             <ClaimDevListToken
