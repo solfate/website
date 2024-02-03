@@ -3,7 +3,7 @@ import { FeatherIcon } from "@/components/core/FeatherIcon";
 
 type MetadataToggleProps = {
   label: string;
-  value?: string;
+  value?: React.ReactNode;
   disabled?: boolean;
   checked: React.SetStateAction<boolean>;
   setChecked?: React.Dispatch<React.SetStateAction<boolean>>;
