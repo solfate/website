@@ -5,10 +5,11 @@ import { useConnection } from "@solana/wallet-adapter-react";
 import devlistImage from "@/../public/img/devlist/devlist.png";
 import Link from "next/link";
 import { solanaExplorerLink } from "@/lib/solana/helpers";
-import { shortWalletAddress } from "@/lib/helpers";
 import { MetadataToggle } from "./MetadataToggle";
 import { TokenMetadata } from "@solana/spl-token-metadata";
-import { useMemo } from "react";
+import { useEffect, useState } from "react";
+import { getTokenMetadata } from "@solana/spl-token";
+import { PublicKey } from "@solana/web3.js";
 
 type ViewDevListTokenProps = {
   assetId: string | null;
@@ -19,28 +20,45 @@ type ViewDevListTokenProps = {
 
 export const ViewDevListToken = ({
   assetId,
-  additionalMetadata,
   // twitter,
   // github,
 }: ViewDevListTokenProps) => {
   const { connection } = useConnection();
 
+  const [metadata, setMetadata] = useState({
+    twitter: null,
+    github: null,
+  });
+
   // parse the `additionalMetadata` fields for display
-  const metadata = useMemo(() => {
+  useEffect(() => {
     const parsedMetadata = {
       twitter: null,
       github: null,
     };
 
-    // if (Array.isArray(additionalMetadata)) {
-    //   additionalMetadata.forEach((record) => {
-    //     if (Object.hasOwn(parsedMetadata, record[0]))
-    //       parsedMetadata[record[0]] = record[1];
-    //   });
-    // }
+    (async () => {
+      // get the token metadata for active tokens
+      try {
+        const tokenMetadata = await getTokenMetadata(
+          connection,
+          new PublicKey(assetId),
+        );
 
-    return parsedMetadata;
-  }, [additionalMetadata]);
+        if (Array.isArray(tokenMetadata.additionalMetadata)) {
+          tokenMetadata.additionalMetadata.forEach((record) => {
+            if (Object.hasOwn(parsedMetadata, record[0]))
+              parsedMetadata[record[0]] = record[1];
+          });
+        }
+      } catch (err) {
+        console.error("Unable to get token metadata for:", assetId);
+        console.error(err);
+      }
+
+      setMetadata(parsedMetadata);
+    })();
+  }, []);
 
   return (
     <section className="container max-w-4xl !py-0 md:!space-y-12 !space-y-8">

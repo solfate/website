@@ -15,9 +15,6 @@ import { Connection, PublicKey } from "@solana/web3.js";
 import { checkMintAndUpdateApplicantStatus } from "@/lib/lists";
 import { DevListApplicationExtraData } from "@/types/api/lists";
 import { ViewDevListToken } from "@/components/lists/ViewDevListToken";
-import { getTokenMetadata } from "@solana/spl-token";
-import { TokenMetadata } from "@solana/spl-token-metadata";
-import { Awaitable } from "next-auth";
 
 type Props = {
   params: { id: string };
@@ -55,7 +52,6 @@ export default async function Page() {
 
   // get the current users list record
   let listRecord = null;
-  let tokenMetadata: TokenMetadata = null;
   let applicantData: DevListApplicationExtraData | undefined = undefined;
 
   // locate the user's DevList application
@@ -88,22 +84,6 @@ export default async function Page() {
 
         // force update the current record's state
         if (!!accountInfo) listRecord.status = "ACTIVE";
-      }
-
-      // get the token metadata for active tokens
-      if (listRecord.status == "ACTIVE") {
-        try {
-          tokenMetadata = await getTokenMetadata(
-            connection,
-            new PublicKey(listRecord.assetId),
-          );
-        } catch (err) {
-          console.error(
-            "Unable to get token metadata for: ",
-            listRecord.assetId,
-          );
-          console.error(err);
-        }
       }
     }
   }
@@ -148,10 +128,7 @@ export default async function Page() {
           <DevListStatusMessage application={listRecord} />
 
           {listRecord.status == "ACTIVE" ? (
-            <ViewDevListToken
-              assetId={listRecord.assetId}
-              additionalMetadata={tokenMetadata.additionalMetadata}
-            />
+            <ViewDevListToken assetId={listRecord.assetId} />
           ) : (
             <ClaimDevListToken
               twitter={applicantData?.twitter.username}
