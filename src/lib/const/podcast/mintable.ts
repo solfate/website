@@ -79,4 +79,19 @@ export const mintableEpisodes: {
       clip: "intro",
     },
   },
+  45: {
+    episode: 45,
+    name: "EP#45 - Mycelium Networks",
+    description:
+      "Rishi, founder of Mycelium Networks, joins to talk all about DePIN. Including " +
+      "how Mycelium is building a Helium IoT and Mobile testbed in Arkansas.",
+    image: `https://bafkreiaxvzq7rnzk7gl7pkc3ffotpbs7wuecvgnjrghx53himb5wgal6ba.ipfs.dweb.link/`,
+    animationUrl: `https://bafybeigvfpy2htco23y72rfhljqkbunz7xllgsxxuxxkzhy5aq2hscod4a.ipfs.dweb.link/`,
+    attributes: {
+      episode: 45,
+      guest: "Rishi",
+      project: "Mycelium",
+      clip: "intro",
+    },
+  },
 };
