@@ -20,7 +20,7 @@
   @apply flex items-center gap-4 justify-between;
 }
 .minor {
-  @apply flex items-center gap-1 text-sm text-gray-500;
+  @apply flex items-center gap-2 text-sm text-gray-500;
 }
 .minor svg {
   @apply w-4 h-4;
