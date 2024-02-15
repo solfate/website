@@ -170,7 +170,7 @@ export const BlogPost = defineDocumentType(() => ({
       description: "Local url path of the post",
       type: "string",
       resolve: (record) =>
-        `/podcast/${record?.slug ?? createStandardSlug(record._id)}`,
+        `/blog/${record?.slug ?? createStandardSlug(record._id)}`,
     },
   },
 }));
