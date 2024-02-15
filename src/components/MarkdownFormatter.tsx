@@ -25,14 +25,18 @@ const components: MDXComponentProps = {
   a: ({ ref, children, href, ...props }) => (
     <Link
       {...props}
-      href={href?.replace(/^\/content\//i, "/") || "#"}
-      target="_blank"
+      href={href?.replace(/^\/(content|public)\//i, "/") || "#"}
+      target={href.startsWith("http") ? "_blank" : "_self"}
     >
       {children}
     </Link>
   ),
   img: ({ ref, children, alt, src, ...props }) => (
-    <img {...props} alt={alt || ""} src={src?.replace(/^\/content\//i, "/")}>
+    <img
+      {...props}
+      alt={alt || ""}
+      src={src?.replace(/^\/(content|public)\//i, "/")}
+    >
       {children}
     </img>
   ),
