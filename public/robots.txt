@@ -1,0 +1,10 @@
+# Default ignored routes
+User-agent: *
+Disallow: /favicon.ico
+Disallow: /api
+
+# Host
+Host: https://solfate.com
+
+# Sitemaps
+Sitemap: https://solfate.com/sitemap.xml
