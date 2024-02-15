@@ -25,7 +25,10 @@ const components: MDXComponentProps = {
   a: ({ ref, children, href, ...props }) => (
     <Link
       {...props}
-      href={href?.replace(/^\/(content|public)\//i, "/") || "#"}
+      href={
+        href?.replace(/^\/(content|public)\//i, "/").replace(/(.mdx?)$/i, "") ||
+        "#"
+      }
       target={href.startsWith("http") ? "_blank" : "_self"}
     >
       {children}
