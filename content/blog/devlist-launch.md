@@ -1,6 +1,6 @@
 ---
 date: "Jan 30 2024 01:00 EST"
-image: /img/social/devlist.png
+image: devlist-launch.jpg
 title: "Launch of the Solana DevList"
 description:
   "Using soul-bound NFTs, the Solana DevList is a public list of wallets
@@ -19,7 +19,7 @@ The DevList is a free and public good for the Solana ecosystem. We at Solfate
 charge no fee to claim the DevList membership token. Members will only pay for
 the usual Solana transaction and rent storage cost to claim the token. No more.
 
-[![Launch of the Solana DevList: A List of Verified Solana Developers](/public/img/social/devlist.png)](./devlist-launch.md)
+[![Launch of the Solana DevList: A List of Verified Solana Developers](/public/media/blog/devlist-launch.jpg)](./devlist-launch.md)
 
 ## What is the goal of the DevList?
 
