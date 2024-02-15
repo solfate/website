@@ -2,11 +2,7 @@
   Specific constants for the podcast
 */
 
-import {
-  PodcastFeedLocation,
-  PodcastPerson,
-  PodcastRatingLocation,
-} from "@/types";
+import { PodcastFeedLocation, Person, PodcastRatingLocation } from "@/types";
 import { SITE } from "./general";
 
 //name is a name. define it for use
@@ -33,7 +29,7 @@ export const PODCAST = {
     "Hosted by two developers.",
 };
 
-export const PODCAST_HOSTS: PodcastPerson[] = [
+export const PODCAST_HOSTS: Person[] = [
   {
     name: "Nick",
     img: "/img/nick.jpg",
