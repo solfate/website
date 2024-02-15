@@ -172,6 +172,21 @@ export const BlogPost = defineDocumentType(() => ({
       resolve: (record) =>
         `/blog/${record?.slug ?? createStandardSlug(record._id)}`,
     },
+    image: {
+      description: "Primary image for the post",
+      type: "string",
+      resolve: (record) => {
+        if (!record.image) return undefined;
+
+        if (
+          !record.image.startsWith("/") &&
+          !new RegExp(/^https?:\/\//gi).test(record.image)
+        )
+          return `/media/blog/${record.image}`;
+
+        return record.image;
+      },
+    },
   },
 }));
 
