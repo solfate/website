@@ -9,8 +9,8 @@ type BlogHeadingProps = {
 
 export const BlogHeading = memo(
   ({ title, description, href }: BlogHeadingProps) => (
-    <div className="items-center flex text-center md:text-left">
-      <section className={"py-4 max-w-lg space-y-2"}>
+    <div className="items-center flex md:text-left">
+      <section className={"md:py-4 max-w-lg space-y-2"}>
         <h1 className="text-4xl md:text-4xl font-bold">
           <Link href={href}>{title}</Link>
         </h1>

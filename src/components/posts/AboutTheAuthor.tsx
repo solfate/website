@@ -31,7 +31,7 @@ export const AboutTheAuthor = ({ author }: AboutTheAuthorProps) => {
           <SocialLinksForPerson person={author} />
         </div>
 
-        <div className="block md:hidden space-y-0">
+        <div className="block md:hidden text-center space-y-0">
           <Link
             href={`https://twitter.com/${author.twitter}`}
             target={"_blank"}
