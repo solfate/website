@@ -12,16 +12,9 @@ export const SITE = {
 };
 
 export const TWITTER = {
-  handle: "@SolfatePod",
-  username: "SolfatePod",
-  url: "https://twitter.com/SolfatePod",
+  handle: "@SolfateHQ",
+  username: "SolfateHQ",
+  url: "https://twitter.com/SolfateHQ",
 };
 
-export const YOUTUBE = {
-  handle: "@SolfatePod",
-  username: "SolfatePod",
-  url: "https://youtube.com/@SolfatePod",
-};
-
-export const GITHUB = "https://github.com/nickfrosty/solfate";
-// export const GITHUB = "https://github.com/solfate";
+export const GITHUB = "https://github.com/solfate/website";

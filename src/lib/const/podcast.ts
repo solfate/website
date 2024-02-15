@@ -12,6 +12,18 @@ import { SITE } from "./general";
 //name is a name. define it for use
 export const INITIAL_EPISODES_PER_PAGE = 5;
 
+export const PODCAST_TWITTER = {
+  handle: "@SolfatePod",
+  username: "SolfatePod",
+  url: "https://twitter.com/SolfatePod",
+};
+
+export const PODCAST_YOUTUBE = {
+  handle: "@SolfatePod",
+  username: "SolfatePod",
+  url: "https://youtube.com/@SolfatePod",
+};
+
 export const PODCAST = {
   name: "Solfate Podcast",
   url: `${SITE.url}/podcast`,

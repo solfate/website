@@ -1,8 +1,8 @@
 import Link from "next/link";
 import { Twitter, Youtube } from "react-feather";
 import { SocialButtonLink } from "@/components/SocialButtons";
-import { SITE, TWITTER, YOUTUBE } from "@/lib/const/general";
-import { PODCAST } from "@/lib/const/podcast";
+import { SITE, TWITTER } from "@/lib/const/general";
+import { PODCAST, PODCAST_TWITTER, PODCAST_YOUTUBE } from "@/lib/const/podcast";
 import { AppLogo } from "@/components/core/AppLogo";
 
 export default function MarketingFooter() {
@@ -51,21 +51,32 @@ export default function MarketingFooter() {
           {". All rights reserved."}
         </div>
 
-        <div className="order-1 justify-center md:order-2 flex items-center gap-2">
-          <SocialButtonLink
-            newTab={true}
-            title={"Twitter / X"}
-            href={TWITTER.url}
-            icon={Twitter}
-            label={TWITTER.handle}
-          />
-          <SocialButtonLink
-            newTab={true}
-            title={"YouTube"}
-            href={YOUTUBE.url}
-            icon={Youtube}
-            label={YOUTUBE.handle}
-          />
+        <div className="order-1 justify-center md:order-2 grid md:flex items-center gap-2">
+          <div className="flex items-center justify-center">
+            <SocialButtonLink
+              newTab={true}
+              title={"Twitter / X"}
+              href={TWITTER.url}
+              icon={Twitter}
+              label={TWITTER.handle}
+            />
+          </div>
+          <div className="order-1 justify-center md:order-2 flex items-center gap-2">
+            <SocialButtonLink
+              newTab={true}
+              title={"Twitter / X"}
+              href={PODCAST_TWITTER.url}
+              icon={Twitter}
+              label={PODCAST_TWITTER.handle}
+            />
+            <SocialButtonLink
+              newTab={true}
+              title={"YouTube"}
+              href={PODCAST_YOUTUBE.url}
+              icon={Youtube}
+              label={PODCAST_YOUTUBE.handle}
+            />
+          </div>
         </div>
       </section>
     </footer>
