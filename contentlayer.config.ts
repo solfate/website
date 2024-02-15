@@ -144,6 +144,12 @@ export const BlogPost = defineDocumentType(() => ({
       type: "string",
       description: "Social share image",
     },
+    author: {
+      required: true,
+      type: "enum",
+      options: ["nick", "james"],
+      description: "Author of the post",
+    },
   },
   computedFields: {
     draft: {
@@ -186,4 +192,5 @@ export default makeSource({
   documentTypes: [PodcastEpisode, BlogPost],
   onMissingOrIncompatibleData: "fail",
   onUnknownDocuments: "fail",
+  onExtraFieldData: "fail",
 });
