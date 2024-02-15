@@ -137,21 +137,12 @@ export const BlogPost = defineDocumentType(() => ({
     },
     tags: {
       type: "string",
-      // type: "list",
-      // of: { type: "string" },
       description: "Comma separated listing of tags",
       required: false,
     },
     image: {
       type: "string",
       description: "Social share image",
-    },
-
-    transistorUrl: {
-      type: "string",
-      description:
-        "Brief description of the post (also used in the SEO metadata)",
-      required: false,
     },
   },
   computedFields: {
@@ -193,4 +184,6 @@ export const BlogPost = defineDocumentType(() => ({
 export default makeSource({
   contentDirPath: "content",
   documentTypes: [PodcastEpisode, BlogPost],
+  onMissingOrIncompatibleData: "fail",
+  onUnknownDocuments: "fail",
 });
