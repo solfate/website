@@ -55,7 +55,7 @@ export async function generateMetadata(
     alternates: {
       canonical: post.href,
     },
-    title: `${post.title} - ${SITE.name}`,
+    title: `${post.title} - ${SITE.name} Blog`,
     description: post.description,
     openGraph: {
       title: `${SITE.name} - ${post.longTitle ?? post.title}`,
