@@ -36,7 +36,7 @@ export const PODCAST_HOSTS: Person[] = [
     twitter: "nickfrosty",
     github: "nickfrosty",
     website: "https://nick.af",
-    blurb: "Host of the Solfate Podcast",
+    title: "Host of the Solfate Podcast",
     bio: "Nick is a self taught developer and submariner. He spends his free time \
     writing docs and technical articles, as well as building side projects. \
     He strives to one day make a living online from those projects.",
@@ -47,7 +47,7 @@ export const PODCAST_HOSTS: Person[] = [
     twitter: "jamesrp13",
     github: "jamesrp13",
     // website: "",
-    blurb: "Host of the Solfate Podcast",
+    title: "Host of the Solfate Podcast",
     bio: "James is still trying to figure out what to do when he grows up, \
     but he's been making a living for almost a decade by creating software \
     and educating devs through his software agency Unboxed. So much for that Econ degree.",

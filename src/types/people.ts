@@ -7,6 +7,6 @@ export type Person = {
   twitter: string;
   github?: string;
   website?: string;
-  blurb?: string;
+  title?: string;
   bio?: string;
 };
