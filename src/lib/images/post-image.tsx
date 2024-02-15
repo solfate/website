@@ -6,11 +6,12 @@ type PostImageProps = {
   heading?: string;
   title: string;
   avatarImage?: string;
+  url?: string;
 };
 
 export async function PostImage(
   size: ImageSize,
-  { heading, title, avatarImage }: PostImageProps,
+  { heading, title, avatarImage, url }: PostImageProps,
 ) {
   return new ImageResponse(
     (
@@ -40,7 +41,7 @@ export async function PostImage(
                 <img src={coverImage} width={84} height={84} alt={""} />
               </span> */}
 
-              <span tw="text-[2.5rem] font-medium">{`solfate.com/podcast`}</span>
+              <span tw="text-[2.5rem] font-medium">{url}</span>
             </div>
           </div>
 

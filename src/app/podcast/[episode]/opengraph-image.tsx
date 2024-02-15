@@ -31,5 +31,6 @@ export default async function Image({
     heading: `Episode #${episode.ep}`,
     // set the podcast's default cover image
     avatarImage: `${SITE.url}${PODCAST.image}`,
+    url: `${SITE.domain}/podcast`,
   });
 }
