@@ -90,7 +90,7 @@ export default async function Page({ params }: PageProps) {
         <ul className="">
           <li>
             <Link
-              href={"/podcast"}
+              href={"/blog"}
               className="inline-flex items-center text-gray-500 gap-2 hover:underline text-sm hover:text-black"
             >
               <ArrowLeft className="w-4 h-4" />
