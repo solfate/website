@@ -48,7 +48,7 @@ export async function generateMetadata(
       "v",
       Math.floor(new Date().getTime() / 1000).toString(),
     );
-    openGraphImages = [url.toString()];
+    openGraphImages = [url.toString().replace(SITE.url, "")];
   }
 
   return {
