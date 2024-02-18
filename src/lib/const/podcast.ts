@@ -2,15 +2,23 @@
   Specific constants for the podcast
 */
 
-import {
-  PodcastFeedLocation,
-  PodcastPerson,
-  PodcastRatingLocation,
-} from "@/types";
+import { PodcastFeedLocation, Person, PodcastRatingLocation } from "@/types";
 import { SITE } from "./general";
 
 //name is a name. define it for use
 export const INITIAL_EPISODES_PER_PAGE = 5;
+
+export const PODCAST_TWITTER = {
+  handle: "@SolfatePod",
+  username: "SolfatePod",
+  url: "https://twitter.com/SolfatePod",
+};
+
+export const PODCAST_YOUTUBE = {
+  handle: "@SolfatePod",
+  username: "SolfatePod",
+  url: "https://youtube.com/@SolfatePod",
+};
 
 export const PODCAST = {
   name: "Solfate Podcast",
@@ -21,14 +29,14 @@ export const PODCAST = {
     "Hosted by two developers.",
 };
 
-export const PODCAST_HOSTS: PodcastPerson[] = [
+export const PODCAST_HOSTS: Person[] = [
   {
     name: "Nick",
     img: "/img/nick.jpg",
     twitter: "nickfrosty",
     github: "nickfrosty",
     website: "https://nick.af",
-    blurb: "Host of the Solfate Podcast",
+    title: "Host of the Solfate Podcast",
     bio: "Nick is a self taught developer and submariner. He spends his free time \
     writing docs and technical articles, as well as building side projects. \
     He strives to one day make a living online from those projects.",
@@ -39,7 +47,7 @@ export const PODCAST_HOSTS: PodcastPerson[] = [
     twitter: "jamesrp13",
     github: "jamesrp13",
     // website: "",
-    blurb: "Host of the Solfate Podcast",
+    title: "Host of the Solfate Podcast",
     bio: "James is still trying to figure out what to do when he grows up, \
     but he's been making a living for almost a decade by creating software \
     and educating devs through his software agency Unboxed. So much for that Econ degree.",

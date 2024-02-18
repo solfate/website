@@ -2,32 +2,28 @@ import Image from "next/image";
 import Link from "next/link";
 import { SITE } from "@/lib/const/general";
 
+import solfateLogoOrange from "@/../public/logo-orange.svg";
 import { serialize } from "next-mdx-remote/serialize";
 import MarkdownFormatter from "@/components/MarkdownFormatter";
 import { SocialShareButtons } from "@/components/SocialButtons";
 import { ArrowLeft } from "react-feather";
 import { notFound } from "next/navigation";
-import { getPodcastEpisode } from "@/lib/queries/getPodcastEpisode";
-import { PODCAST } from "@/lib/const/podcast";
 import { FormattedDateAgo } from "@/components/core/FormattedDateAgo";
-import { PodcastDisclaimer } from "@/components/podcast/PodcastDisclaimer";
-import { allPodcastEpisodes } from "contentlayer/generated";
-import { NextPrevButtons } from "@/components/posts/NextPrevButtons";
+import { allBlogPosts } from "contentlayer/generated";
 import { Metadata, ResolvingMetadata } from "next";
-import { PodcastRatingButtons } from "@/components/podcast/PodcastRatingButtons";
-import { EpisodeMintButton } from "@/components/podcast/EpisodeMintButton";
-import { mintableEpisodes } from "@/lib/const/podcast/mintable";
+import { SOLFATE_AUTHORS } from "@/lib/const/people";
+import { AboutTheAuthor } from "@/components/posts/AboutTheAuthor";
 
 type PageProps = {
   params: {
-    episode: string;
+    post: string;
   };
   // searchParams?: {}
 };
 
 export async function generateStaticParams() {
-  return allPodcastEpisodes.map((item) => ({
-    episode: item.slug,
+  return allBlogPosts.map((item) => ({
+    post: item.slug,
   }));
 }
 
@@ -35,23 +31,18 @@ export async function generateMetadata(
   { params }: PageProps,
   parent: ResolvingMetadata,
 ): Promise<Metadata> {
-  // locate the single record
-  // locate the current episode being requested
-  const { episode } = getPodcastEpisode({
-    epId: params.episode,
-    withNextPrev: false,
-  });
+  const post = allBlogPosts.filter((p) => p.slug == params.post)[0];
 
-  // do nothing if the episode was not found
-  if (!episode) return {};
+  // do nothing if the post was not found
+  if (!post) return {};
 
-  // get the parent images, and add the episode specific ones
+  // get the parent images, and add the post specific ones
   let openGraphImages = (await parent).openGraph?.images || [];
-  openGraphImages.unshift(`/podcast/${episode.ep}/opengraph-image`);
+  openGraphImages.unshift(`${post.href}/opengraph-image`);
 
-  // when an episode image is set, always make that the primary image
-  if (!!episode.image) {
-    const url = new URL(episode.image, SITE.url);
+  // when an post image is set, always make that the primary image
+  if (!!post.image) {
+    const url = new URL(post.image, SITE.url);
     // make the url unique to support cache busting
     url.searchParams.set(
       "v",
@@ -62,15 +53,13 @@ export async function generateMetadata(
 
   return {
     alternates: {
-      canonical: episode.href,
+      canonical: post.href,
     },
-    title: `${episode.title} - ${PODCAST.name} #${episode.ep}`,
-    description: episode.description,
+    title: `${post.title} - ${SITE.name} Blog`,
+    description: post.description,
     openGraph: {
-      title: `${PODCAST.name} #${episode.ep} - ${
-        episode.longTitle ?? episode.title
-      }`,
-      description: episode.description,
+      title: `${SITE.name} - ${post.longTitle ?? post.title}`,
+      description: post.description,
       // note: `images` will be auto populated by the `opengraph-image` generator
       images: openGraphImages,
     },
@@ -78,58 +67,61 @@ export async function generateMetadata(
 }
 
 export default async function Page({ params }: PageProps) {
-  // locate the current episode being requested
-  const { episode, next, prev } = getPodcastEpisode({
-    epId: params.episode,
-    withNextPrev: true,
-  });
-  if (!episode) {
+  // locate the current post being requested
+  const post = allBlogPosts.filter((p) => p.slug == params.post)[0];
+
+  if (!post) {
     notFound();
   }
 
-  // load the mintable episode details
-  const mintableEpisode = mintableEpisodes[parseInt(episode.ep)];
+  const author = SOLFATE_AUTHORS[post.author];
+
+  // load the mintable post details
+  // const mintableEpisode = mintableEpisodes[parseInt(post.ep)];
 
   // serialize the markdown content for parsing via MDX
-  const mdxSerialized = await serialize(episode.body.raw, {
+  const mdxSerialized = await serialize(post.body.raw, {
     // scope: { }
   });
 
   return (
-    <main className="page-container max-w-3xl !space-y-4 md:!space-y-6">
+    <main className="page-container max-w-3xl !space-y-6 md:!space-y-8">
       <section className="flex justify-between items-center">
         <ul className="">
           <li>
             <Link
-              href={"/podcast"}
-              className="inline-flex items-center text-gray-700 gap-2 hover:underline text-sm font-semibold"
+              href={"/blog"}
+              className="inline-flex items-center text-gray-500 gap-2 hover:underline text-sm hover:text-black"
             >
               <ArrowLeft className="w-4 h-4" />
-              Podcast Episodes
+              Back to Blog
             </Link>
           </li>
         </ul>
 
-        {!!mintableEpisode && <EpisodeMintButton mintable={mintableEpisode} />}
+        {/* {!!mintableEpisode && <EpisodeMintButton mintable={mintableEpisode} />} */}
       </section>
 
       <h1 className="font-bold text-3xl md:text-4xl max-w-5xl">
-        <Link href={`/podcast/${episode.ep}`} className="">
-          {episode.longTitle ?? episode.title ?? "[err]"}
+        <Link href={post.href} className="hover:underline">
+          {post.longTitle ?? post.title ?? "[err]"}
         </Link>
       </h1>
 
       <section className="flex items-center justify-between gap-4">
         <section className="flex items-center gap-2 md:gap-4">
           <Link
-            href={"/podcast"}
-            className="block rounded-full overflow-hidden w-12 h-12 bg-slate-300"
+            target={author.twitter ? "_blank" : "_self"}
+            href={
+              author.twitter ? `https://twitter.com/${author.twitter}` : "/blog"
+            }
+            className="block rounded-full overflow-hidden w-12 h-12 bg-transparent"
           >
             <Image
               width={64}
               height={64}
-              src={PODCAST.image}
-              alt={PODCAST.name}
+              src={author.img || solfateLogoOrange}
+              alt={author.name || "Solfate"}
               className="object-cover object-center rounded-full overflow-hidden w-12 h-12"
               priority={true}
             />
@@ -137,23 +129,25 @@ export default async function Page({ params }: PageProps) {
 
           <div className="space-y-0">
             <Link
-              href={"/podcast"}
+              target={author.twitter ? "_blank" : "_self"}
+              href={
+                author.twitter
+                  ? `https://twitter.com/${author.twitter}`
+                  : "/blog"
+              }
               className="hover:underline md:text-lg font-semibold"
             >
-              {PODCAST.name}
+              {author.name}
             </Link>
 
-            {!!episode.date && <FormattedDateAgo date={episode.date} />}
+            {!!post.date && <FormattedDateAgo date={post.date} />}
           </div>
 
           {/* <button className="btn mx-8 border-gray-400">Following</button> */}
         </section>
 
         <section className="flex items-center gap-3">
-          <SocialShareButtons
-            href={`/podcast/${episode.ep}`}
-            message={episode.title}
-          />
+          {/* <SocialShareButtons href={post.href} message={post.title} /> */}
 
           {/* <button className="btn btn-blue">Mint</button> */}
         </section>
@@ -171,39 +165,23 @@ export default async function Page({ params }: PageProps) {
         />
       </div> */}
 
-      {!!episode?.transistorUrl && (
-        <iframe
-          width="100%"
-          height="180"
-          frameBorder="no"
-          scrolling="no"
-          seamless
-          src={episode.transistorUrl}
-          className="border-0"
-        ></iframe>
-      )}
-
       <article className="prose max-w-full !text-lg">
         <MarkdownFormatter source={mdxSerialized} />
       </article>
 
-      <PodcastDisclaimer />
+      <AboutTheAuthor author={author} />
 
-      <PodcastRatingButtons />
-
-      {/* <AboutTheAuthor /> */}
-
-      <NextPrevButtons
+      {/* <NextPrevButtons
         className="pt-10"
         next={{
-          label: "Next Episode",
+          label: "Next post",
           href: next?.href,
         }}
         prev={{
-          label: "Previous Episode",
+          label: "Previous post",
           href: prev?.href,
         }}
-      />
+      /> */}
     </main>
   );
 }

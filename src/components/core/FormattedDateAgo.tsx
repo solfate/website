@@ -12,7 +12,7 @@ type FormattedDateProps = {
 };
 
 /** max number of days ago before showing an actual date */
-const MAX_DAYS_AGO = 45;
+const MAX_DAYS_AGO = 30;
 
 /**
  * Format a string date in the "time ago" when recent, otherwise show an actual date

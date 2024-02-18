@@ -1,10 +1,7 @@
 import { PODCAST_HOSTS } from "@/lib/const/podcast";
 import { memo } from "react";
-import { GitHub, Link as LinkIcon, Twitter } from "react-feather";
-import { SocialButtonLink } from "@/components/SocialButtons";
-import clsx from "clsx";
-import { PodcastPerson } from "@/types";
 import Image from "next/image";
+import { SocialLinksForPerson } from "@/components/SocialLinksForPerson";
 
 type PodcastHostsHeroProps = {
   label?: string;
@@ -37,7 +34,7 @@ export const PodcastHostsHero = memo(({ label }: PodcastHostsHeroProps) => (
                 {person.name}
               </h2>
 
-              <PodcastHostSocialLinks person={person} />
+              <SocialLinksForPerson person={person} />
             </div>
           </div>
 
@@ -47,43 +44,3 @@ export const PodcastHostsHero = memo(({ label }: PodcastHostsHeroProps) => (
     </section>
   </section>
 ));
-
-type SocialLinksProps = SimpleComponentProps & {
-  person: PodcastPerson;
-};
-
-/**
- * Display the standard social links for the podcast hosts
- */
-export const PodcastHostSocialLinks = memo(
-  ({ person, className }: SocialLinksProps) => (
-    <div className={clsx("flex items-center gap-3", className)}>
-      {person?.twitter && (
-        <SocialButtonLink
-          newTab={true}
-          href={`https://twitter.com/${person.twitter}`}
-          title={`@${person.twitter} on Twitter`}
-          icon={Twitter}
-        />
-      )}
-
-      {person?.github && (
-        <SocialButtonLink
-          newTab={true}
-          href={`https://github.com/${person.github}`}
-          title={`${person.github} on Github`}
-          icon={GitHub}
-        />
-      )}
-
-      {person?.website && (
-        <SocialButtonLink
-          newTab={true}
-          href={person.website}
-          title={person.website}
-          icon={LinkIcon}
-        />
-      )}
-    </div>
-  ),
-);
