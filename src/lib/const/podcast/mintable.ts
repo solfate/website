@@ -94,4 +94,20 @@ export const mintableEpisodes: {
       clip: "intro",
     },
   },
+  46: {
+    episode: 46,
+    name: "EP#46 - Elusiv",
+    description:
+      "Nico, co-founder of Elusiv, joins to talk all about their zero-knowledge " +
+      "based privacy protocol on Solana that allows people to private token balances " +
+      "while being AML compliant.",
+    image: `https://bafkreidedovzgoovxa2kz3dxvro2z7zy6goyz74muzbqtbecnr7k753soy.ipfs.dweb.link/`,
+    animationUrl: `https://bafybeidrgv64onnpvf7v47erql7vk7tcy45iif5r242aw22aqaiqx4wcyi.ipfs.dweb.link/`,
+    attributes: {
+      episode: 46,
+      guest: "Nico",
+      project: "Elusiv",
+      clip: "short1",
+    },
+  },
 };
