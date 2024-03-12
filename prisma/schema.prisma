@@ -69,7 +69,7 @@ model Profile {
     flags  String? @db.VarChar(500)
     status Status? @default(ACTIVE)
 
-    @@index([username], name: "user_username_idx")
+    @@index([username], name: "profile_username_idx")
 }
 
 // Listing of people and their wallets that have particiapted in our special lists
@@ -90,12 +90,12 @@ model WalletList {
     // track a single unique asset per record
     assetId   String?
 
-    @@unique([type, wallet])
-    @@index([type], name: "type_idx")
-    @@index([type, assetId], name: "type_assetId_idx")
-    @@index([userId], name: "user_id_idx")
-    @@index([wallet], name: "wallet_id_idx")
-    @@index([twitter], name: "twitter_id_idx")
+    @@unique([type, wallet], name: "wallet_address_and_type_idx")
+    @@index([type], name: "wallet_list_type_idx")
+    @@index([type, assetId], name: "wallet_list_type_assetId_idx")
+    @@index([userId], name: "wallet_list_user_id_idx")
+    @@index([wallet], name: "wallet_list__id_idx")
+    @@index([twitter], name: "wallet_list_twitter_id_idx")
 }
 
 // User types to be used for access controls
@@ -155,9 +155,9 @@ model Account {
 
     user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-    @@unique([provider, providerAccountId])
+    @@unique([provider, providerAccountId], name: "provider_and_account_id_idx")
     @@index([providerAccountId], name: "provider_account_id_idx")
-    @@index(userId)
+    @@index(userId, name: "provider_user_id_idx")
 }
 
 // required for next-auth
@@ -177,7 +177,7 @@ model Session {
     expires      DateTime
     user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-    @@index(userId)
+    @@index(userId, name: "session_user_id_idx")
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////
