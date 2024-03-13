@@ -117,7 +117,7 @@ export const POST = async (
           name: mintable.name,
           description: mintable.description,
           image: mintable.image,
-          animationUrl: mintable.animationUrl,
+          animationUrl: mintable?.animationUrl,
           externalUrl: mintable.externalUrl,
           attributes: mintable.attributes,
           // finally, the wallet that will actually get the nft

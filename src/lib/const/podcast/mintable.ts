@@ -19,7 +19,7 @@ export type MintableEpisode = {
   name: string;
   description: string;
   image: string;
-  animationUrl: string;
+  animationUrl?: string;
   externalUrl?: string;
   attributes: Record<EpisodeAttributes, string | number | boolean>;
 };
@@ -110,20 +110,20 @@ export const mintableEpisodes: {
       clip: "intro",
     },
   },
-  // 47: {
-  //   episode: 47,
-  //   name: "EP#47 - Toly",
-  //   description:
-  //     "An uncommon talk with Toly, the co-founder of Solana Labs and the Solana blockchain. " +
-  //     "A glimpse into his drove him to build Solana, him balancing family/work, " +
-  //     "and stress seeking activity to push the mind and body.",
-  //   image: `https://bafkreidk4ajru2hvebjwnyr7zwchielxt3qzvdqo7446hbmsgw5ojuedue.ipfs.dweb.link/`,
-  //   animationUrl: `https://todo.ipfs.dweb.link/`,
-  //   attributes: {
-  //     episode: 47,
-  //     guest: "Toly",
-  //     project: "Solana",
-  //     clip: "intro",
-  //   },
-  // },
+  47: {
+    episode: 47,
+    name: "EP#47 - Toly",
+    description:
+      "An uncommon talk with Toly, the co-founder of Solana Labs and the Solana blockchain. " +
+      "A glimpse into his drove him to build Solana, him balancing family/work, " +
+      "and stress seeking activity to push the mind and body.",
+    image: `https://bafkreidk4ajru2hvebjwnyr7zwchielxt3qzvdqo7446hbmsgw5ojuedue.ipfs.dweb.link/`,
+    // animationUrl: `https://todo.ipfs.dweb.link/`,
+    attributes: {
+      episode: 47,
+      guest: "Toly",
+      project: "Solana",
+      clip: "intro",
+    },
+  },
 };
