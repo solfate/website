@@ -3,9 +3,8 @@
 /* eslint-disable @next/next/no-img-element */
 import clsx from "clsx";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
-
 import styles from "@/styles/Nav.module.css";
+import { usePathname } from "next/navigation";
 
 type ComponentProps = SimpleComponentProps & {
   // icon;
@@ -13,12 +12,13 @@ type ComponentProps = SimpleComponentProps & {
   href: string;
 };
 
-export default function NavLink({
+export const NavLink = ({
   // icon,
   href,
   title = "",
   children,
-}: ComponentProps) {
+  className,
+}: ComponentProps) => {
   const pathName = usePathname();
   const isCurrent = pathName?.startsWith(href) || false;
 
@@ -29,9 +29,10 @@ export default function NavLink({
       className={clsx(
         styles.link,
         isCurrent ? styles.activeLink : styles.inactiveLink,
+        className,
       )}
     >
       {children}
     </Link>
   );
-}
+};

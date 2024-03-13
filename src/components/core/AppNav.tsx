@@ -1,4 +1,4 @@
-import NavLink from "@/components/core/NavLink";
+import { NavLink } from "@/components/core/NavLink";
 
 type AppNavProps = SimpleComponentProps;
 
