@@ -61,24 +61,38 @@
 }
 
 .link {
-  @apply flex items-center p-4 space-x-2 md:px-6;
+  @apply flex items-center;
   @apply transition-colors duration-150 ease-in-out;
-  @apply text-lg;
-  @apply border-l-4 border-transparent md:border-l-0 md:border-b-[3px];
-  @apply tracking-wide no-underline;
-
-  @apply hover:text-hot-red;
+  @apply no-underline border-transparent;
+  @apply hover:text-hot-pink;
   /* focus:outline-none focus:shadow-outline */
+}
+.primaryNavLink {
+  @apply p-4 space-x-2 md:px-6;
+  @apply text-lg;
+  @apply border-l-4 md:border-l-0 md:border-b-[3px];
+}
+.subNavLink {
+  @apply px-4 py-2 md:px-6 space-x-0;
+  @apply text-base;
+  @apply border-b-[3px];
+}
+
+/* styles for the horizontal scrolling on mobile */
+.horizontalScrollContainer {
+  @apply snap-x snap-mandatory;
+  @apply flex flex-row space-x-6 lg:space-x-0;
+  @apply overflow-x-scroll md:overflow-auto;
 }
 
 .activeLink {
-  @apply text-hot-red;
-  @apply border-hot-red;
+  @apply text-hot-pink;
+  @apply border-hot-pink;
   /* @apply bg-gray-100; */
   @apply font-semibold;
 }
 .inactiveLink {
-  @apply hover:text-hot-red;
-  @apply hover:border-hot-red;
+  @apply hover:text-hot-pink;
+  @apply hover:border-hot-pink;
   /* @apply hover:bg-gray-100; */
 }
