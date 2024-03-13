@@ -5,8 +5,7 @@ import styles from "@/styles/HeaderUserMenu.module.css";
 import clsx from "clsx";
 import Link, { LinkProps } from "next/link";
 import { signOut, useSession } from "next-auth/react";
-import { shortWalletAddress } from "@/lib/helpers";
-// import logomark from "@/../public/logomark.svg";
+import { Avatar } from "@/components/core/Avatar";
 
 export const HeaderUserMenu = memo(({}: SimpleComponentProps) => {
   const { data: session } = useSession();
@@ -23,35 +22,15 @@ export const HeaderUserMenu = memo(({}: SimpleComponentProps) => {
     <Menu as="div" className={styles.menu}>
       <div>
         <Menu.Button
-          className={`${styles.button} btn btn-ghost border-transparent md:border-gray-300`}
+          className={`${styles.button} rounded-full !p-0 btn btn-ghost border-transparent`}
         >
-          <FeatherIcon
-            name="User"
-            size={24}
-            strokeWidth={1.4}
-            aria-hidden="true"
+          <Avatar
+            as="span"
+            size={36}
+            title={session.user.name || session.user.username}
+            imageSrc={session.user.picture}
+            href={`/${session.user.username}`}
           />
-          <span className="hidden md:block">
-            {shortWalletAddress(session.user.username) || "[err]"}
-          </span>
-
-          {/* {!!session?.user.image ? (
-            <Image
-              src={session.user.image}
-              //   blurDataURL={logomark}
-              alt={""}
-              width={24}
-              height={24}
-              className={"border border-gray-200 bg-white rounded-full"}
-            />
-          ) : (
-            <FeatherIcon
-              name="User"
-              size={24}
-              strokeWidth={1.4}
-              aria-hidden="true"
-            />
-          )} */}
         </Menu.Button>
       </div>
 
@@ -66,27 +45,22 @@ export const HeaderUserMenu = memo(({}: SimpleComponentProps) => {
       >
         <Menu.Items className={styles.items}>
           {!!session?.user.username && (
-            <div
-              // href={`/${session.user.username}`}
-              className={styles.heading}
-            >
-              <FeatherIcon
-                name="User"
-                aria-hidden="true"
+            <Link href={`/${session.user.username}`} className={styles.heading}>
+              <Avatar
+                as="span"
                 size={24}
-                className="flex-shrink-0"
+                title={session.user.name || session.user.username}
+                imageSrc={session.user.picture}
+                href={`/${session.user.username}`}
               />
               <div className="line-clamp-1">
-                {shortWalletAddress(session.user.username) || "[err]"}
+                {session.user.username || "[err]"}
               </div>
-            </div>
+            </Link>
           )}
 
-          {/* <div className={styles.section}>
-            <MenuItemLink href="/settings" label="Settings" icon="Settings" />
-            <MenuItemLink href="/billing" label="Billing" icon="Disc" />
-          </div> */}
           <div className={styles.section}>
+            <MenuItemLink href="/settings" label="Settings" icon="Settings" />
             <MenuItemButton
               label="Sign out"
               icon="LogOut"
@@ -128,7 +102,12 @@ const MenuItemButton = memo(
           ) : (
             <>
               {label}
-              <FeatherIcon name={icon} aria-hidden="true" />
+              <FeatherIcon
+                size={18}
+                fontWeight={2.4}
+                name={icon}
+                aria-hidden="true"
+              />
             </>
           )}
         </button>
@@ -165,7 +144,12 @@ const MenuItemLink = memo(
           ) : (
             <>
               {label}
-              <FeatherIcon name={icon} aria-hidden="true" />
+              <FeatherIcon
+                size={18}
+                fontWeight={2.4}
+                name={icon}
+                aria-hidden="true"
+              />
             </>
           )}
         </Link>
