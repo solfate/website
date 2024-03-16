@@ -5,7 +5,7 @@ import { Metadata } from "next";
 import { notFound } from "next/navigation";
 
 export const metadata: Metadata = {
-  title: "Settings / General",
+  title: "Settings / General - Solfate",
 };
 
 export default async function Page() {
