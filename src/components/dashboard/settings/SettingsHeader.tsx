@@ -1,5 +1,3 @@
-// "use client";
-
 import { memo } from "react";
 
 type ComponentProps = SimpleComponentProps & {
@@ -8,7 +6,7 @@ type ComponentProps = SimpleComponentProps & {
 };
 
 export const SettingsHeader = memo(
-  ({ title, description, className = "" }: ComponentProps) => {
+  ({ title, description, children, className = "" }: ComponentProps) => {
     return (
       <header className={`flex pb-2 justify-between items-center ${className}`}>
         <section className="space-y-2">
@@ -18,10 +16,7 @@ export const SettingsHeader = memo(
           )}
         </section>
 
-        <button className="btn btn-ghost" disabled={true}>
-          {/* btn-black  */}
-          Save Changes
-        </button>
+        {!!children && children}
       </header>
     );
   },
