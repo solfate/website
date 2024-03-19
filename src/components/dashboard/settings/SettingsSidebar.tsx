@@ -26,6 +26,9 @@ export const SettingsSidebar = memo(
           <li>
             <SidebarLink href="/" icon="Settings" label="General" />
           </li>
+          <li>
+            <SidebarLink href="/profile" icon="User" label="Profile" />
+          </li>
           {/* <li>
             <SidebarLink href="/invites" icon="Key" label="Invites" />
           </li> */}
