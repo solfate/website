@@ -66,9 +66,16 @@ export async function getUserByProviderAccountId({
 export async function getUserProfile({
   username,
 }: {
-  username: Profile["username"];
+  username?: Profile["username"];
   // status?: Profile["status"];
 }) {
+  // fallback to the current authed user
+  if (!username) {
+    const session = await getUserSession();
+    if (!!session?.user.username) username = session.user.username;
+    else return null;
+  }
+
   const profile = await prisma.profile.findUnique({
     where: { username },
     // include: {
