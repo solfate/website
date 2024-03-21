@@ -95,7 +95,7 @@ export const ProfileEditorForm = memo(({ profile }: ComponentProps) => {
           className={clsx("btn", !pendingChanges ? "btn-ghost" : "btn-black")}
           disabled={!pendingChanges}
         >
-          {pendingChanges ? "Save Changes" : "No Changes"}
+          Save Changes
         </button>
       </SettingsHeader>
 
