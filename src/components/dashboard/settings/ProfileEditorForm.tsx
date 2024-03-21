@@ -180,7 +180,7 @@ export const ProfileEditorForm = memo(({ profile }: ComponentProps) => {
 
         <div className="grid gap-4 max-w-96">
           <div className="prefix-input">
-            <label htmlFor="website">https://</label>
+            <label htmlFor="website">Website:</label>
             <input
               type="text"
               name="website"
