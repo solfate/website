@@ -5,11 +5,15 @@ import { SettingsHeader } from "./SettingsHeader";
 import { getUserProfile } from "@/lib/queries/users";
 import clsx from "clsx";
 import { Profile } from "@prisma/client";
+import toast from "react-hot-toast";
+import { fetcher } from "@/lib/api";
+import { ApiProfilePatchInput } from "@/types/api/social";
 
 type ComponentProps = { profile: Awaited<ReturnType<typeof getUserProfile>> };
 
 export const ProfileEditorForm = memo(({ profile }: ComponentProps) => {
   const [pendingChanges, setPendingChanges] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const formReducer = useCallback(
     (state: FormState, action: FormAction) => {
@@ -47,16 +51,35 @@ export const ProfileEditorForm = memo(({ profile }: ComponentProps) => {
   };
 
   const submitHandler = useCallback(
-    (e: React.FormEvent<HTMLFormElement>) => {
+    async (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
 
-      if (!pendingChanges) return;
+      if (!pendingChanges || loading) return;
 
-      console.log(formData);
+      // todo: perform any client side validation
 
-      alert("submit");
+      setLoading(true);
+
+      try {
+        const res = await fetcher<ApiProfilePatchInput>("/api/profile", {
+          method: "PATCH",
+          body: formData,
+        });
+
+        setPendingChanges(false);
+
+        return toast.success(res);
+      } catch (err) {
+        console.error("failed::", err);
+
+        if (typeof err == "string") toast.error(err);
+        else if (err instanceof Error) toast.error(err.message);
+        else toast.error("An unknown error occurred");
+      } finally {
+        setLoading(false);
+      }
     },
-    [pendingChanges, formData],
+    [pendingChanges, formData, loading, setLoading],
   );
 
   return (
@@ -72,7 +95,7 @@ export const ProfileEditorForm = memo(({ profile }: ComponentProps) => {
           className={clsx("btn", !pendingChanges ? "btn-ghost" : "btn-black")}
           disabled={!pendingChanges}
         >
-          Save Changes
+          {pendingChanges ? "Save Changes" : "No Changes"}
         </button>
       </SettingsHeader>
 
