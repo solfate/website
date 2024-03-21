@@ -2,6 +2,7 @@ import { Metadata } from "next";
 import { ConnectionCardGrid } from "@/components/dashboard/settings/ConnectionCardGrid";
 import { convertAccountsToConnections, getUserSession } from "@/lib/auth";
 import { getAccountsByUserId } from "@/lib/queries/accounts";
+import { SettingsHeader } from "@/components/dashboard/settings/SettingsHeader";
 
 export const metadata: Metadata = {
   title: "Settings / Connections - Solfate",
@@ -19,18 +20,20 @@ export default async function Page() {
 
   return (
     <main className="container space-y-6">
-      {/* <p>Connections have not been enabled.</p> */}
-
-      <section className="flex pb-2 justify-between items-center">
-        <section className="space-y-2">
-          <h1 className="font-semibold text-xl">Connections</h1>
-          <p className="text-sm text-gray-500">
-            Connect external accounts, services, and wallets.
-          </p>
-        </section>
-
-        {/* <button className="btn btn-black">Save</button> */}
-      </section>
+      <SettingsHeader
+        title={"Connections"}
+        description={"Connect external accounts, services, and wallets."}
+      >
+        <button
+          type="submit"
+          // className={clsx("btn", !pendingChanges ? "btn-ghost" : "btn-black")}
+          // disabled={!pendingChanges}
+          className={"btn btn-ghost"}
+          disabled={true}
+        >
+          Add Connection
+        </button>
+      </SettingsHeader>
 
       <ConnectionCardGrid connections={accountConnections} />
     </main>
