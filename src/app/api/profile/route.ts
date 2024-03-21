@@ -16,19 +16,19 @@ export const PATCH = withUserAuth(async ({ req, session }) => {
 
     // todo: validate each input
 
-    if (input.name) {
+    if (typeof input.name != "undefined") {
       validatedProfileData.name = input.name.trim();
     }
 
-    if (input.oneLiner) {
+    if (typeof input.oneLiner != "undefined") {
       validatedProfileData.oneLiner = input.oneLiner.trim();
     }
 
-    if (input.bio) {
+    if (typeof input.bio != "undefined") {
       validatedProfileData.bio = input.bio.trim();
     }
 
-    if (input.website) {
+    if (typeof input.website != "undefined") {
       try {
         validatedProfileData.website = new URL(
           input.website.replace(/^(https?:\/\/)?/gi, "https://"),
@@ -39,7 +39,8 @@ export const PATCH = withUserAuth(async ({ req, session }) => {
         throw "Invalid website";
       }
     }
-    if (input.twitter) {
+
+    if (typeof input.twitter != "undefined") {
       try {
         const twitterRegex = new RegExp(
           /^(https?:\/\/(twitter|x)\.com\/)?@?([a-zA-Z0-9_]+)\/?/g,
@@ -50,7 +51,8 @@ export const PATCH = withUserAuth(async ({ req, session }) => {
         throw "Invalid twitter";
       }
     }
-    if (input.github) {
+
+    if (typeof input.github != "undefined") {
       validatedProfileData.github = input.github;
       try {
         const githubRegex = new RegExp(
