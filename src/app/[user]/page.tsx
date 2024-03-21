@@ -24,13 +24,13 @@ export default async function Page({ params }: PageProps) {
 
   return (
     <main className="container md:!py-12 min-h-[60vh] max-w-5xl !space-y-10">
-      {!!profile.bio && (
-        <ProfileSection
-          title={`About ${profile.name || `@${profile.username}`}`}
-        >
-          <p className="">{profile.bio}</p>
-        </ProfileSection>
-      )}
+      <ProfileSection title={`About ${profile.name || `@${profile.username}`}`}>
+        <p className="">
+          {profile.bio || profile.oneLiner || (
+            <span className="italic text-gray-400">Nothing to see here :)</span>
+          )}
+        </p>
+      </ProfileSection>
     </main>
   );
 }
