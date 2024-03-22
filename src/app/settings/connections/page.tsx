@@ -28,7 +28,7 @@ export default async function Page() {
           type="submit"
           // className={clsx("btn", !pendingChanges ? "btn-ghost" : "btn-black")}
           // disabled={!pendingChanges}
-          className={"btn btn-ghost"}
+          className={"btn text-center justify-center btn-ghost"}
           disabled={true}
         >
           Add Connection

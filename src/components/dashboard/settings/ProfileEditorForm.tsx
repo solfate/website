@@ -92,7 +92,10 @@ export const ProfileEditorForm = memo(({ profile }: ComponentProps) => {
       >
         <button
           type="submit"
-          className={clsx("btn", !pendingChanges ? "btn-ghost" : "btn-black")}
+          className={clsx(
+            "btn text-center whitespace-nowrap justify-center",
+            !pendingChanges ? "btn-ghost" : "btn-black",
+          )}
           disabled={!pendingChanges}
         >
           Save Changes

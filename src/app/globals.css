@@ -39,7 +39,7 @@ input[type="password"] {
 
 .prefix-input {
   @apply input input-default;
-  @apply inline-flex overflow-hidden relative items-center p-0;
+  @apply inline-flex max-w-full overflow-hidden relative items-center p-0;
 }
 .prefix-input label,
 .prefix-input .label {

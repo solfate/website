@@ -8,7 +8,9 @@ type ComponentProps = SimpleComponentProps & {
 export const SettingsHeader = memo(
   ({ title, description, children, className = "" }: ComponentProps) => {
     return (
-      <header className={`flex pb-2 justify-between items-center ${className}`}>
+      <header
+        className={`text-center sm:text-left mx-auto justify-center grid sm:flex gap-2 pb-2 sm:justify-between items-center ${className}`}
+      >
         <section className="space-y-2">
           <h1 className="font-semibold text-2xl">{title}</h1>
           {!!description && (

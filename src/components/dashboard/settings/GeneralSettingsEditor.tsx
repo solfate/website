@@ -24,8 +24,6 @@ type FormAction =
 type ComponentProps = { user: Awaited<ReturnType<typeof getUser>> };
 
 export const GeneralSettingsEditor = memo(({ user }: ComponentProps) => {
-  // const { update: updateSession } = useSession();
-
   const [pendingChanges, setPendingChanges] = useState(false);
   const [loading, setLoading] = useState(false);
 
@@ -106,7 +104,7 @@ export const GeneralSettingsEditor = memo(({ user }: ComponentProps) => {
       ></SettingsHeader>
 
       <form onSubmit={submitHandler} className="card space-y-4">
-        <div className="flex items-start gap-2 justify-between">
+        <div className="grid md:flex items-start gap-2 justify-between">
           <div className="space-y-0">
             <h2 className="font-semibold text-xl">Username</h2>
             <p className="text-gray-500">
@@ -115,7 +113,10 @@ export const GeneralSettingsEditor = memo(({ user }: ComponentProps) => {
           </div>
           <button
             type="submit"
-            className={clsx("btn", !pendingChanges ? "btn-ghost" : "btn-black")}
+            className={clsx(
+              "btn text-center justify-center",
+              !pendingChanges ? "btn-ghost" : "btn-black",
+            )}
             disabled={!pendingChanges}
           >
             Update
