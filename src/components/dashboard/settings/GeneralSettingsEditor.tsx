@@ -75,7 +75,7 @@ export const GeneralSettingsEditor = memo(({ user }: ComponentProps) => {
 
         // force update the user's current session
         // (to capture their new username change in the jwt)
-        if (!!formData.username) {
+        if (!!formData.username && formData.username !== user.username) {
           await signIn("jwt", {
             redirect: false,
           });
