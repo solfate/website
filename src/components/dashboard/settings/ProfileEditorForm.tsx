@@ -1,19 +1,45 @@
 "use client";
 
-import { memo, useCallback, useReducer, useState } from "react";
+import { memo, useCallback, useReducer, useRef, useState } from "react";
+import type { Profile } from "@prisma/client";
+import type { ApiProfilePatchInput } from "@/types/api/social";
+import type {
+  ApiUploadPostInput,
+  ApiUploadPostResponse,
+} from "@/types/api/general";
 import { SettingsHeader } from "./SettingsHeader";
 import { getUserProfile } from "@/lib/queries/users";
 import clsx from "clsx";
-import { Profile } from "@prisma/client";
 import toast from "react-hot-toast";
 import { fetcher } from "@/lib/api";
-import { ApiProfilePatchInput } from "@/types/api/social";
+import { FeatherIcon } from "@/components/core/FeatherIcon";
+import { Avatar } from "@/components/core/Avatar";
+import { signIn } from "next-auth/react";
+
+type FormState = {
+  name: Profile["name"];
+  bio: Profile["bio"];
+  oneLiner: Profile["oneLiner"];
+  website: Profile["website"];
+  twitter: Profile["twitter"];
+  github: Profile["github"];
+  image: Profile["image"];
+};
+
+type FormAction =
+  | { type: "update"; field: keyof FormState; value: string }
+  // Add more action types as needed
+  | { type: "reset" };
 
 type ComponentProps = { profile: Awaited<ReturnType<typeof getUserProfile>> };
 
 export const ProfileEditorForm = memo(({ profile }: ComponentProps) => {
   const [pendingChanges, setPendingChanges] = useState(false);
   const [loading, setLoading] = useState(false);
+
+  const [uploading, setUploading] = useState(false);
+  const [previewImage, setPreviewImage] = useState<string | null>(null);
+  const fileRef = useRef<HTMLInputElement>(null);
 
   const formReducer = useCallback(
     (state: FormState, action: FormAction) => {
@@ -38,6 +64,7 @@ export const ProfileEditorForm = memo(({ profile }: ComponentProps) => {
     website: profile.website,
     twitter: profile.twitter,
     github: profile.github,
+    image: profile.image,
   });
 
   const handleInputChange = (
@@ -66,6 +93,14 @@ export const ProfileEditorForm = memo(({ profile }: ComponentProps) => {
           body: formData,
         });
 
+        // force update the user's current session
+        // (to capture their new image change in the jwt)
+        if (!!formData.image && formData.image !== profile.image) {
+          await signIn("jwt", {
+            redirect: false,
+          });
+        }
+
         setPendingChanges(false);
 
         return toast.success(res);
@@ -80,6 +115,79 @@ export const ProfileEditorForm = memo(({ profile }: ComponentProps) => {
       }
     },
     [pendingChanges, formData, loading, setLoading],
+  );
+
+  /**
+   * handler function for uploading the selected file
+   */
+  const handleUploadFile = useCallback(
+    async (e: React.ChangeEvent<HTMLInputElement>) => {
+      // do nothing if there is no file selected
+      if (!e.target.files?.[0] || !!previewImage) return;
+
+      // stop if uploading is already in progress
+      if (!!uploading) return;
+
+      // todo: better upload progress tracking?
+
+      // todo: better error handling here
+      // error on multiple files selected
+      if (e.target.files.length > 1)
+        return toast.error("Only 1 file may be uploaded at a time");
+
+      const file = e.target.files[0];
+
+      // this will preview the image as on the page, prior to any actual upload
+      // toggle the image preview mode while uploading begins
+      setPreviewImage(URL.createObjectURL(file));
+      setUploading(true);
+
+      try {
+        const presignedData: ApiUploadPostResponse =
+          await fetcher<ApiUploadPostInput>("/api/upload", {
+            method: "POST",
+            body: {
+              type: "profile",
+              fileDetails: {
+                name: file.name,
+                size: file.size,
+                type: file.type,
+                lastModified: file.lastModified,
+                length: file.length,
+              },
+            },
+          }).then((res) => JSON.parse(res));
+
+        const uploadRes = await fetch(presignedData.signedUrl, {
+          method: "PUT",
+          body: file,
+        });
+
+        if (!uploadRes.ok) {
+          console.error(uploadRes);
+          throw "Upload failed";
+        }
+
+        // update the form state for the image
+        dispatch({
+          type: "update",
+          field: "image",
+          value: presignedData.assetUrl,
+        });
+      } catch (err) {
+        console.warn("[upload error]", err);
+
+        let message = "An upload error occurred";
+        if (typeof err == "string") message = err;
+
+        toast.error(message);
+      }
+
+      fileRef.current.blur();
+      setPreviewImage(null);
+      setUploading(false);
+    },
+    [previewImage, fileRef, setPreviewImage, uploading, setUploading],
   );
 
   return (
@@ -102,7 +210,18 @@ export const ProfileEditorForm = memo(({ profile }: ComponentProps) => {
         </button>
       </SettingsHeader>
 
-      <div className="card space-y-4">
+      <input
+        aria-hidden={true}
+        hidden={true}
+        ref={fileRef}
+        className="hidden"
+        type="file"
+        name="avatar"
+        id="avatar"
+        onChange={handleUploadFile}
+      />
+
+      <div className="card space-y-4 relative">
         <div className="flex items-start gap-2 justify-between">
           <div className="space-y-0">
             <h2 className="font-semibold text-xl">Basic Profile Information</h2>
@@ -112,59 +231,89 @@ export const ProfileEditorForm = memo(({ profile }: ComponentProps) => {
           </div>
         </div>
 
-        <div className="grid gap-4 max-w-[32rem]">
-          <div className="space-y-1">
-            <label htmlFor="name" className="block">
-              Display name:
-            </label>
+        <div className="grid grid-cols-2 gap-4">
+          <div className="space-y-2">
+            <button
+              onClick={() => fileRef?.current?.click()}
+              title="Upload an avatar image"
+              className={clsx(
+                "relative border border-transparent hover:border-gray-500 rounded-full",
+                uploading ? "opacity-50 " : "",
+              )}
+              disabled={uploading}
+            >
+              {uploading && (
+                <span className="absolute w-full items-center align-middle justify-center h-full flex bg-white bg-opacity-50 z-10">
+                  <FeatherIcon
+                    name="UploadCloud"
+                    size={48}
+                    className="text-black"
+                  />
+                </span>
+              )}
+              <Avatar
+                href=""
+                size={128}
+                imageSrc={previewImage || formData.image}
+                className=""
+              />
+            </button>
 
-            {/* <p className="text-gray-500 text-sm"></p> */}
+            <div className="space-y-1">
+              <label htmlFor="name" className="block">
+                Display name:
+              </label>
 
-            <input
-              type="text"
-              name="name"
-              id="name"
-              value={formData.name}
-              onChange={handleInputChange}
-              placeholder={formData.name || `@${profile.username}`}
-              className="input-box w-full"
-            />
+              {/* <p className="text-gray-500 text-sm"></p> */}
+
+              <input
+                type="text"
+                name="name"
+                id="name"
+                value={formData.name}
+                onChange={handleInputChange}
+                placeholder={formData.name || `@${profile.username}`}
+                className="input-box w-full"
+              />
+            </div>
           </div>
 
-          <div className="space-y-1">
-            <label htmlFor="oneLiner" className="block">
-              One line headline:
-            </label>
+          <div className="space-y-2">
+            <div className="space-y-1">
+              <label htmlFor="oneLiner" className="block">
+                One line headline:
+              </label>
 
-            {/* <p className="text-gray-500 text-sm"></p> */}
+              {/* <p className="text-gray-500 text-sm"></p> */}
 
-            <input
-              type="text"
-              name="oneLiner"
-              id="oneLiner"
-              value={formData.oneLiner}
-              onChange={handleInputChange}
-              placeholder={""}
-              className="input-box w-full"
-            />
-          </div>
+              <input
+                type="text"
+                name="oneLiner"
+                id="oneLiner"
+                value={formData.oneLiner}
+                onChange={handleInputChange}
+                placeholder={""}
+                className="input-box w-full"
+              />
+            </div>
 
-          <div className="space-y-1">
-            <label htmlFor="bio" className="block">
-              Bio:
-            </label>
+            <div className="space-y-1">
+              <label htmlFor="bio" className="block">
+                Bio:
+              </label>
 
-            {/* <p className="text-gray-500 text-sm"></p> */}
+              {/* <p className="text-gray-500 text-sm"></p> */}
 
-            <textarea
-              name="bio"
-              id="bio"
-              value={formData.bio}
-              onChange={handleInputChange}
-              placeholder="Describe yourself"
-              className="w-full h-28 max-h-28"
-              // disabled={true}
-            />
+              <textarea
+                name="bio"
+                id="bio"
+                value={formData.bio}
+                onChange={handleInputChange}
+                placeholder="Describe yourself"
+                className="w-full h-28 max-h-28"
+                // disabled={true}
+              />
+            </div>
           </div>
         </div>
       </div>
@@ -224,17 +373,3 @@ export const ProfileEditorForm = memo(({ profile }: ComponentProps) => {
     </form>
   );
 });
-
-type FormState = {
-  name: Profile["name"];
-  bio: Profile["bio"];
-  oneLiner: Profile["oneLiner"];
-  website: Profile["website"];
-  twitter: Profile["twitter"];
-  github: Profile["github"];
-};
-
-type FormAction =
-  | { type: "update"; field: keyof FormState; value: string }
-  // Add more action types as needed
-  | { type: "reset" };
