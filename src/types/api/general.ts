@@ -1,5 +1,3 @@
-import type { PresignedPost } from "@aws-sdk/s3-presigned-post";
-
 /**
  * API input from a `POST` request to the `/api/upload` endpoint
  */
