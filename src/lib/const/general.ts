@@ -11,6 +11,9 @@ export const SITE = {
       : "https://solfate.com",
 };
 
+export const ASSETS_DOMAIN = "assets.solfate.com";
+export const ASSETS_URL = "https://" + ASSETS_DOMAIN;
+
 export const TWITTER = {
   handle: "@SolfateHQ",
   username: "SolfateHQ",
