@@ -36,7 +36,8 @@ export const Avatar = memo(
         href={as != "span" ? href : undefined}
         className={clsx(
           "overflow-hidden rounded-full border border-gray-200 bg-white",
-          "flex items-center justify-center flex-shrink-0",
+          "flex items-center justify-center flex-shrink-0 aspect-square",
+          `size-[${size}px]`,
           className,
         )}
       >
@@ -48,10 +49,11 @@ export const Avatar = memo(
             src={imageSrc}
             width={size}
             height={size}
-            className="block object-cover place-self-center"
+            className="block object-fill place-self-center aspect-square"
           />
         ) : (
           <BoringAvatar
+            square={true}
             size={size}
             name={username}
             variant="beam"
