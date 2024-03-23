@@ -3,21 +3,55 @@
  */
 
 import { withUserAuth } from "@/lib/auth";
+import { ASSETS_DOMAIN } from "@/lib/const/general";
 import prisma from "@/lib/prisma";
 import { ApiProfilePatchInput } from "@/types/api/social";
-import { Profile } from "@prisma/client";
+import { Prisma } from "@prisma/client";
 
 export const PATCH = withUserAuth(async ({ req, session }) => {
   try {
     const input: ApiProfilePatchInput = await req.json();
     if (!input) throw "Invalid input";
 
-    const validatedProfileData: Partial<Profile> = {};
+    const validatedProfileData: Prisma.ProfileUpdateInput = {};
 
     // todo: validate each input
 
     if (typeof input.name != "undefined") {
       validatedProfileData.name = input.name.trim();
+    }
+
+    if (typeof input.image != "undefined") {
+      try {
+        const url = new URL(input.image);
+
+        switch (url.hostname.toLowerCase()) {
+          case ASSETS_DOMAIN: {
+            // valid and accepted
+            break;
+          }
+          case "storage.googleapis.com": {
+            // valid and accepted
+            if (url.pathname.startsWith("/" + ASSETS_DOMAIN)) break;
+          }
+          default:
+            throw "Invalid image";
+        }
+
+        if (!url.pathname.startsWith(`/profile/${session.user.id}`)) {
+          throw "Invalid profile image url";
+        }
+
+        validatedProfileData.image = url.toString();
+        validatedProfileData.user = {
+          update: {
+            image: validatedProfileData.image,
+          },
+        };
+      } catch (err) {
+        if (typeof err == "string") throw err;
+        throw "Invalid image";
+      }
     }
 
     if (typeof input.oneLiner != "undefined") {
@@ -71,8 +105,6 @@ export const PATCH = withUserAuth(async ({ req, session }) => {
       },
       data: validatedProfileData,
     });
-
-    console.log("updatedProfile:", updatedProfile);
 
     if (!updatedProfile) throw "Unable to update profile";
 
