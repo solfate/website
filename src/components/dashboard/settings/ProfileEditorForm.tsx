@@ -58,13 +58,13 @@ export const ProfileEditorForm = memo(({ profile }: ComponentProps) => {
   );
 
   const [formData, dispatch] = useReducer(formReducer, {
-    name: profile.name,
-    bio: profile.bio,
-    oneLiner: profile.oneLiner,
-    website: profile.website,
-    twitter: profile.twitter,
-    github: profile.github,
-    image: profile.image,
+    name: profile.name || "",
+    bio: profile.bio || "",
+    oneLiner: profile.oneLiner || "",
+    website: profile.website || "",
+    twitter: profile.twitter || "",
+    github: profile.github || "",
+    image: profile.image || "",
   });
 
   const handleInputChange = (
