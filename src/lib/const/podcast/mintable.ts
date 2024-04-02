@@ -38,7 +38,7 @@ export const mintableEpisodes: {
     description:
       "Siong, co-founder of the Jupiter swap aggregator, details how they scaled the " +
       "protocol and thoughts and plans around the Jupiter token and JUP airdrop.",
-    image: `https://bafkreidhs42ecmvfzr2tn4vwdneblmvgpnk43fud3or72bqplb5i5n5b7i.ipfs.dweb.link/`,
+    image: `https://solfate.com/media/podcast/mintable/ep42.jpg`,
     animationUrl: `https://bafybeienxm3zhackrdkgonm6dnkjc5nsm2tv5ejkz3dtvmxeendfp5qyje.ipfs.dweb.link/`,
     attributes: {
       episode: 42,
@@ -54,7 +54,7 @@ export const mintableEpisodes: {
       "GJ Flannery, the Head of Community at Flipside Crypto, discusses how " +
       "Flipside provides data the Solana ecosystem as a public good. " +
       "Including how analysts can get paid SOL to create analytics dashboard.",
-    image: `https://bafybeiewqb2oyemqjp2edes5iplrnpymzvfajfptji52tey74bsbs2sehi.ipfs.dweb.link/`,
+    image: `https://solfate.com/media/podcast/mintable/ep43.jpg`,
     animationUrl: `https://bafybeiaxweucvkcdigpwht6sigmghm4f2vll6me6v6eslsiee3d2czerzi.ipfs.dweb.link/`,
     attributes: {
       episode: 43,
@@ -70,7 +70,7 @@ export const mintableEpisodes: {
       "Phantom Wallet's CEO & co-founder, Brandon, and Head of Growth, David, discusses their " +
       "UX driven approach to building the best Solana wallet they can, including maybe " +
       "open sourcing some of the wallet.",
-    image: `https://bafkreicp64dqxhib7lixjm3di57qdnfs662qptihsrsohh77fldxh27ycq.ipfs.dweb.link/`,
+    image: `https://solfate.com/media/podcast/mintable/ep44.jpg`,
     animationUrl: `https://bafybeidik6fxln5gs5tin6gquzzhbql73fqupplzqimdbtsmdl6xorevpm.ipfs.dweb.link/`,
     attributes: {
       episode: 44,
@@ -85,7 +85,7 @@ export const mintableEpisodes: {
     description:
       "Rishi, founder of Mycelium Networks, joins to talk all about DePIN. Including " +
       "how Mycelium is building a Helium IoT and Mobile testbed in Arkansas.",
-    image: `https://bafkreiaxvzq7rnzk7gl7pkc3ffotpbs7wuecvgnjrghx53himb5wgal6ba.ipfs.dweb.link/`,
+    image: `https://solfate.com/media/podcast/mintable/ep45.jpg`,
     animationUrl: `https://bafybeigvfpy2htco23y72rfhljqkbunz7xllgsxxuxxkzhy5aq2hscod4a.ipfs.dweb.link/`,
     attributes: {
       episode: 45,
@@ -101,7 +101,7 @@ export const mintableEpisodes: {
       "Nico, co-founder of Elusiv, joins to talk all about their zero-knowledge " +
       "based privacy protocol on Solana that allows people to private token balances " +
       "while being AML compliant.",
-    image: `https://bafkreidedovzgoovxa2kz3dxvro2z7zy6goyz74muzbqtbecnr7k753soy.ipfs.dweb.link/`,
+    image: `https://solfate.com/media/podcast/mintable/ep46.jpg`,
     animationUrl: `https://bafybeidfz7e6ai52xonlznilbo5efthov4su2jw6cmgr3qvdhffqd3xlua.ipfs.dweb.link/`,
     attributes: {
       episode: 46,
@@ -117,12 +117,29 @@ export const mintableEpisodes: {
       "An uncommon talk with Toly, the co-founder of Solana Labs and the Solana blockchain. " +
       "A glimpse into his drove him to build Solana, him balancing family/work, " +
       "and stress seeking activity to push the mind and body.",
-    image: `https://bafkreidk4ajru2hvebjwnyr7zwchielxt3qzvdqo7446hbmsgw5ojuedue.ipfs.dweb.link/`,
+    image: `https://solfate.com/media/podcast/mintable/ep47.jpg`,
     // animationUrl: `https://todo.ipfs.dweb.link/`,
     attributes: {
       episode: 47,
       guest: "Toly",
       project: "Solana",
+      clip: "intro",
+    },
+  },
+  48: {
+    episode: 48,
+    name: "EP#48 - Matty and Colosseum",
+    description:
+      "Matty, the co-founder of Colosseum, stops in to talk about all things Solana Hackathons. " +
+      "For the past 3 years and until recently, Matty was running the Solana global hackathons. " +
+      "Now, he left the foundation to start Colosseum, a dedicated company to running and " +
+      "supporting the ecosystem hackathons and an accelerator.",
+    image: `https://solfate.com/media/podcast/mintable/ep48.jpg`,
+    // animationUrl: `https://todo.ipfs.dweb.link/`,
+    attributes: {
+      episode: 48,
+      guest: "Matty",
+      project: "Colosseum",
       clip: "intro",
     },
   },
