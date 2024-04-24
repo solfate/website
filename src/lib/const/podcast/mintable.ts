@@ -143,4 +143,19 @@ export const mintableEpisodes: {
       clip: "intro",
     },
   },
+  49: {
+    episode: 49,
+    name: "EP#49 - Andriy and AllBridge",
+    description:
+      "Andriy, the founder of AllBridge, joins to discuss how AllBridge operates a" +
+      "cross-chain bridging protocol using stable coin based liquidity pools.",
+    image: `https://solfate.com/media/podcast/mintable/ep49.jpg`,
+    // animationUrl: `https://todo.ipfs.dweb.link/`,
+    attributes: {
+      episode: 49,
+      guest: "Andriy",
+      project: "AllBridge",
+      clip: "intro",
+    },
+  },
 };
