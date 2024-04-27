@@ -18,3 +18,8 @@ export const TWITTER = {
 };
 
 export const GITHUB = "https://github.com/solfate/website";
+
+export const ROUTE_PREFIX_BLOG = "/blog";
+export const ROUTE_PREFIX_PODCAST = "/podcast";
+export const ROUTE_PREFIX_DEVLIST = "/devlist";
+export const ROUTE_PREFIX_SNAPSHOT = "/snapshot";

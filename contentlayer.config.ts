@@ -1,6 +1,11 @@
 import { podcastEpisodeImage } from "./src/lib/podcast";
 import { createStandardSlug } from "./src/lib/helpers";
 import { defineDocumentType, makeSource } from "contentlayer/source-files";
+import {
+  ROUTE_PREFIX_BLOG,
+  ROUTE_PREFIX_PODCAST,
+  ROUTE_PREFIX_SNAPSHOT,
+} from "./src/lib/const/general";
 
 /**
  * Podcast episode schema
@@ -86,7 +91,7 @@ export const PodcastEpisode = defineDocumentType(() => ({
       description: "Local url path of the episode",
       type: "string",
       resolve: (record) =>
-        `/podcast/${record?.slug ?? createStandardSlug(record._id)}`,
+        `${ROUTE_PREFIX_PODCAST}/${record?.slug ?? createStandardSlug(record._id)}`,
     },
     image: {
       description: "Primary image for the podcast episode",
@@ -167,7 +172,7 @@ export const BlogPost = defineDocumentType(() => ({
       description: "Local url path of the post",
       type: "string",
       resolve: (record) =>
-        `/blog/${record?.slug ?? createStandardSlug(record._id)}`,
+        `${ROUTE_PREFIX_BLOG}/${record?.slug ?? createStandardSlug(record._id)}`,
     },
     image: {
       description: "Primary image for the post",
@@ -196,7 +201,7 @@ export const NewsletterPost = defineDocumentType(() => ({
   fields: {
     title: {
       type: "string",
-      description: "The title of the newsletter issue",
+      description: "The title of the newsletter edition",
       required: true,
     },
     longTitle: {
@@ -237,8 +242,8 @@ export const NewsletterPost = defineDocumentType(() => ({
     },
   },
   computedFields: {
-    issue: {
-      description: "Newsletter issue number (aka the file name)",
+    id: {
+      description: "Newsletter edition number (aka the file name)",
       type: "string",
       resolve: (record) => createStandardSlug(record._id),
     },
@@ -251,13 +256,14 @@ export const NewsletterPost = defineDocumentType(() => ({
     slug: {
       description: "Computed slug of the post",
       type: "string",
-      resolve: (record) => record?.slug ?? createStandardSlug(record._id),
+      resolve: (record) =>
+        `${record?.slug || createStandardSlug(record.title)}-${createStandardSlug(record._id)}`,
     },
     href: {
       description: "Local url path of the post",
       type: "string",
       resolve: (record) =>
-        `/blog/${record?.slug ?? createStandardSlug(record._id)}`,
+        `${ROUTE_PREFIX_SNAPSHOT}/${record?.slug || createStandardSlug(record.title)}-${createStandardSlug(record._id)}`,
     },
     image: {
       description: "Primary image for the post",
@@ -269,7 +275,7 @@ export const NewsletterPost = defineDocumentType(() => ({
           !record.image.startsWith("/") &&
           !new RegExp(/^https?:\/\//gi).test(record.image)
         )
-          return `/media/blog/${record.image}`;
+          return `/media/newsletter/${record.image}`;
 
         return record.image;
       },
