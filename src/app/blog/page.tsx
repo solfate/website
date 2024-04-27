@@ -27,7 +27,7 @@ export default function Page() {
         <BlogHeading
           title="All posts"
           href="/blog"
-          description="Welcome the the Solfate blog"
+          description="Welcome the the Solfate blog. We write about blockchain things, mostly in the Solana ecosystem."
         />
 
         {/* <div className="">search</div> */}
