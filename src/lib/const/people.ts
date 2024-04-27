@@ -10,7 +10,7 @@ import { Person } from "@/types";
  * note: adding new people requires updating the ContentLayer `BlogPost.author` field
  */
 export const SOLFATE_AUTHORS: {
-  [key in "nick" | "james"]: Person;
+  [key in "nick" | "james" | "teague"]: Person;
 } = {
   nick: {
     name: "Nick Frostbutter",
@@ -32,5 +32,17 @@ export const SOLFATE_AUTHORS: {
     bio: "James is still trying to figure out what to do when he grows up, \
     but he's been making a living for almost a decade by creating software \
     and educating devs through his software agency Unboxed. So much for that Econ degree.",
+  },
+  teague: {
+    name: "Teague Kaylor",
+    img: "/img/teague.png",
+    twitter: "TeagueSOL",
+    website: "https://www.linkedin.com/in/teague-kaylor-69b032199/",
+    title: "Writer at Solfate",
+    bio:
+      "Teague has been working in the Web3 space since 2021, managing business " +
+      "operations and marketing for multiple DeFi protocols, news organizations, " +
+      "and infrastructure services. He is a long-time Solana advocate and is " +
+      "currently scaling teams in Web3 & contributing to Solfate.",
   },
 };
