@@ -7,8 +7,14 @@ export function createStandardSlug(input: string) {
   const splitter: string | string[] = input.toLowerCase().split("/");
   return splitter[splitter.length - 1]
     .split(".md")[0]
-    .replace(/[\s\,]+/g, "-")
-    .replaceAll("--", "-");
+    .toString()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase()
+    .trim()
+    .replace(/\s+/g, "-")
+    .replace(/[^\w-]+/g, "")
+    .replace(/--+/g, "-");
 }
 
 /**
