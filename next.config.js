@@ -70,6 +70,11 @@ const nextConfig = {
         permanent: true,
       },
       {
+        source: "/podcast/7.5",
+        destination: "/podcast/7-5",
+        permanent: true,
+      },
+      {
         source: "/podcast/nickfrosty",
         destination: "https://twitter.com/nickfrosty",
         permanent: true,

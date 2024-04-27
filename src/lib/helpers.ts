@@ -12,6 +12,7 @@ export function createStandardSlug(input: string) {
     .replace(/[\u0300-\u036f]/g, "")
     .toLowerCase()
     .trim()
+    .replace(".", "-")
     .replace(/\s+/g, "-")
     .replace(/[^\w-]+/g, "")
     .replace(/--+/g, "-");
