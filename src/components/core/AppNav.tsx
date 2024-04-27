@@ -9,7 +9,7 @@ export const AppNav = ({ className = "" }: AppNavProps) => {
       <NavLink href="/podcast">Podcast</NavLink>
       {/* <NavLink href="/discover">Discover</NavLink> */}
       <NavLink href="/devlist">DevList</NavLink>
-      {/* <NavLink href="/extension">Extension</NavLink> */}
+      <NavLink href="/snapshot">Snapshot</NavLink>
     </nav>
   );
 };
