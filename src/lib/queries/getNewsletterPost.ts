@@ -20,7 +20,7 @@ export const getNewsletterPost = ({
   // get the current post being requested
   // (sorted from latest to oldest)
   const posts = allNewsletterPosts.sort(
-    (a, b) => parseFloat(b.slug) - parseFloat(a.slug),
+    (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime(),
   );
 
   // locate the desired post, and the next/prev associated

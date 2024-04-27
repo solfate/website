@@ -54,7 +54,7 @@ PageProps) {
 
   // get the listing of episodes, sorted by their episode date
   const episodes = allPodcastEpisodes
-    .sort((a, b) => parseFloat(b.ep) - parseFloat(a.ep))
+    .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
     .slice(pagination.startIndex, pagination.startIndex + pagination.take);
 
   return (

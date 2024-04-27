@@ -15,7 +15,7 @@ export const metadata: Metadata = {
 export default function Page() {
   // get the listing of posts, sorted by their post id
   const posts = allNewsletterPosts
-    .sort((a, b) => parseFloat(b.id) - parseFloat(a.id))
+    .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
     .slice(0); // prevent mutating the original
 
   // extract the most recent episode

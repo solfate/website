@@ -27,7 +27,7 @@ export const PodcastEpisode = defineDocumentType(() => ({
     date: {
       type: "date",
       description: "The public date of the episode",
-      required: false,
+      required: true,
     },
     draft: {
       type: "boolean",
@@ -121,7 +121,7 @@ export const BlogPost = defineDocumentType(() => ({
     date: {
       type: "date",
       description: "The public date of the post",
-      required: false,
+      required: true,
     },
     draft: {
       type: "boolean",
@@ -212,7 +212,7 @@ export const NewsletterPost = defineDocumentType(() => ({
     date: {
       type: "date",
       description: "The public date of the post",
-      required: false,
+      required: true,
     },
     draft: {
       type: "boolean",

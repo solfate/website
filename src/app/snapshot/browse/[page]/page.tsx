@@ -53,7 +53,7 @@ PageProps) {
   });
 
   const posts = allNewsletterPosts
-    .sort((a, b) => parseFloat(b.id) - parseFloat(a.id))
+    .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
     .slice(pagination.startIndex, pagination.startIndex + pagination.take);
 
   return (
