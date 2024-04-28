@@ -30,6 +30,16 @@ export default function Page() {
           "where we'll be diving into some of the biggest updates from Solana ecosystem teams and builders from the last week! Last week we saw many new product launches, NFT standards, and protocol features entering the space."
         }
         href={ROUTE_PREFIX_SNAPSHOT}
+        ctaChildren={
+          <iframe
+            className={"mt-4 w-full max-w-sm"}
+            src="https://embeds.beehiiv.com/a66adadb-697d-4f5a-b645-69fd28b6c9f9?slim=true"
+            data-test-id="beehiiv-embed"
+            height="52"
+            frameBorder="0"
+            scrolling="no"
+          ></iframe>
+        }
       >
         <SimplePostCard
           href={mostRecent.href}
