@@ -2,16 +2,26 @@ import { memo } from "react";
 import Link from "next/link";
 
 type PageHeroProps = {
-  title: string;
+  title: React.ReactNode;
   href: string;
+  className?: string;
   description: React.ReactNode;
   children?: React.ReactNode;
   ctaChildren?: React.ReactNode;
 };
 
 export const PageHero = memo(
-  ({ title, children, ctaChildren, href, description }: PageHeroProps) => (
-    <section className="flex flex-col md:flex-row items-center justify-center md:flex lg:flex gap-8 gap-y-10 lg:mx-32">
+  ({
+    title,
+    children,
+    ctaChildren,
+    href,
+    description,
+    className,
+  }: PageHeroProps) => (
+    <section
+      className={`flex flex-col md:flex-row items-center justify-center md:flex lg:flex gap-8 gap-y-10 lg:mx-32 py-3 ${className || ""}`}
+    >
       <div className="col-span-2 items-center flex text-center md:text-left">
         <div>
           <section className={"py-4 max-w-lg space-y-2"}>
