@@ -17,6 +17,7 @@ import { Metadata, ResolvingMetadata } from "next";
 import { PodcastRatingButtons } from "@/components/podcast/PodcastRatingButtons";
 import { EpisodeMintButton } from "@/components/podcast/EpisodeMintButton";
 import { mintableEpisodes } from "@/lib/const/podcast/mintable";
+import { NewsletterSignupWidget } from "@/components/content/NewsletterSignupWidget";
 
 type PageProps = {
   params: {
@@ -190,6 +191,8 @@ export default async function Page({ params }: PageProps) {
       <PodcastDisclaimer />
 
       <PodcastRatingButtons />
+
+      <NewsletterSignupWidget />
 
       {/* <AboutTheAuthor /> */}
 

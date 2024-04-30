@@ -15,6 +15,7 @@ import { NextPrevButtons } from "@/components/posts/NextPrevButtons";
 import { Metadata, ResolvingMetadata } from "next";
 import { SOLFATE_AUTHORS } from "@/lib/const/people";
 import { allNewsletterPosts } from "contentlayer/generated";
+import { NewsletterSignupWidget } from "@/components/content/NewsletterSignupWidget";
 
 type PageProps = {
   params: {
@@ -182,6 +183,8 @@ export default async function Page({ params }: PageProps) {
       <article className="prose max-w-full !text-lg">
         <MarkdownFormatter source={mdxSerialized} />
       </article>
+
+      <NewsletterSignupWidget />
 
       <NextPrevButtons
         className="pt-10"

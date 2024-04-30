@@ -13,6 +13,7 @@ import { allBlogPosts } from "contentlayer/generated";
 import { Metadata, ResolvingMetadata } from "next";
 import { SOLFATE_AUTHORS } from "@/lib/const/people";
 import { AboutTheAuthor } from "@/components/posts/AboutTheAuthor";
+import { NewsletterSignupWidget } from "@/components/content/NewsletterSignupWidget";
 
 type PageProps = {
   params: {
@@ -168,6 +169,8 @@ export default async function Page({ params }: PageProps) {
       <article className="prose max-w-full !text-lg">
         <MarkdownFormatter source={mdxSerialized} />
       </article>
+
+      <NewsletterSignupWidget />
 
       <AboutTheAuthor author={author} />
 

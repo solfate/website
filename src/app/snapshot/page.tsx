@@ -1,3 +1,4 @@
+import { NewsletterSignupForm } from "@/components/content/NewsletterSignupForm";
 import { PageHero } from "@/components/core/PageHero";
 import { SimplePostCard } from "@/components/posts/SimplePostCard";
 import { ROUTE_PREFIX_SNAPSHOT } from "@/lib/const/general";
@@ -26,6 +27,7 @@ export default function Page() {
     <main className="page-container">
       <PageHero
         title={"Solfate Snapshot"}
+        className="space-y-5"
         description={
           <div className="space-y-3">
             <p>
@@ -42,16 +44,7 @@ export default function Page() {
           </div>
         }
         href={ROUTE_PREFIX_SNAPSHOT}
-        ctaChildren={
-          <iframe
-            className={"mt-4 w-full max-w-sm"}
-            src="https://embeds.beehiiv.com/a66adadb-697d-4f5a-b645-69fd28b6c9f9?slim=true"
-            data-test-id="beehiiv-embed"
-            height="52"
-            frameBorder="0"
-            scrolling="no"
-          ></iframe>
-        }
+        ctaChildren={<NewsletterSignupForm />}
       >
         <SimplePostCard
           href={mostRecent.href}
