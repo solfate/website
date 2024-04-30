@@ -24,8 +24,8 @@ export const PageHero = memo(
     >
       <div className="col-span-2 items-center flex text-center md:text-left">
         <div>
-          <section className={"py-4 max-w-lg space-y-2"}>
-            <h1 className="text-4xl md:text-5xl font-bold">
+          <section className={"py-4 max-w-lg space-y-5"}>
+            <h1 className="text-4xl md:text-[3.4rem] font-bold">
               <Link href={href}>{title}</Link>
             </h1>
 
