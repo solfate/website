@@ -258,6 +258,19 @@ export const authOptions: NextAuthOptions = {
     async signIn({ user, account, isNewUser }) {
       debug("[api/auth] signIn event");
 
+      // force delete the jwt account since it is used for temporary session refreshes
+      if (account.provider == "jwt") {
+        debug("removing temporary jwt account");
+        await prisma.account.delete({
+          where: {
+            provider_and_account_id_idx: {
+              provider: "jwt",
+              providerAccountId: account.providerAccountId,
+            },
+          },
+        });
+      }
+
       /**
        * todo: handle creating a new Team and TeamMember relationship for newly created users
        * (e.g. for email sign in)
