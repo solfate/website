@@ -4,8 +4,7 @@ import { Metadata } from "next";
 export const metadata: Metadata = {
   title: `Solfate Snapshot`,
   description:
-    "Interviews with blockchain founders and builders in the Solana ecosystem. " +
-    "",
+    "Byte-sized email newsletter filled with the biggest updates from Solana ecosystem teams and builders. ~5 minute read. Every 2 weeks. Simply free. ☀️📸",
 };
 
 export default function Layout({ children }: { children: React.ReactNode }) {

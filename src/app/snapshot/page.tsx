@@ -27,7 +27,19 @@ export default function Page() {
       <PageHero
         title={"Solfate Snapshot"}
         description={
-          "where we'll be diving into some of the biggest updates from Solana ecosystem teams and builders from the last week! Last week we saw many new product launches, NFT standards, and protocol features entering the space."
+          <div className="space-y-3">
+            <p>
+              Byte-sized{" "}
+              <span className="underline text-black">email newsletter</span>{" "}
+              filled with the biggest updates from Solana ecosystem teams and
+              builders.
+            </p>
+
+            <p>
+              ~5 minute read. Every 2 weeks. <br className="md:hidden" />
+              Simply free. ☀️📸
+            </p>
+          </div>
         }
         href={ROUTE_PREFIX_SNAPSHOT}
         ctaChildren={
