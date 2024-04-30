@@ -1,30 +1,31 @@
 import Image from "next/image";
 import Link from "next/link";
-import { SITE } from "@/lib/const/general";
+import { ROUTE_PREFIX_SNAPSHOT, SITE } from "@/lib/const/general";
 
 import solfateLogoOrange from "@/../public/logo-orange.svg";
 import { serialize } from "next-mdx-remote/serialize";
 import MarkdownFormatter from "@/components/MarkdownFormatter";
 import { SocialShareButtons } from "@/components/SocialButtons";
 import { ArrowLeft } from "react-feather";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
+import { getNewsletterPost } from "@/lib/queries/getNewsletterPost";
+import { PODCAST } from "@/lib/const/podcast";
 import { FormattedDateAgo } from "@/components/core/FormattedDateAgo";
-import { allBlogPosts } from "contentlayer/generated";
+import { NextPrevButtons } from "@/components/posts/NextPrevButtons";
 import { Metadata, ResolvingMetadata } from "next";
 import { SOLFATE_AUTHORS } from "@/lib/const/people";
-import { AboutTheAuthor } from "@/components/posts/AboutTheAuthor";
+import { allNewsletterPosts } from "contentlayer/generated";
 import { NewsletterSignupWidget } from "@/components/content/NewsletterSignupWidget";
 
 type PageProps = {
   params: {
-    post: string;
+    slug: string;
   };
-  // searchParams?: {}
 };
 
 export async function generateStaticParams() {
-  return allBlogPosts.map((item) => ({
-    post: item.slug,
+  return allNewsletterPosts.map((item) => ({
+    slug: item.slug,
   }));
 }
 
@@ -32,14 +33,20 @@ export async function generateMetadata(
   { params }: PageProps,
   parent: ResolvingMetadata,
 ): Promise<Metadata> {
-  const post = allBlogPosts.filter((p) => p.slug == params.post)[0];
+  const { post } = getNewsletterPost({
+    slug: params.slug,
+    withNextPrev: false,
+  });
 
   // do nothing if the post was not found
   if (!post) return {};
 
   // get the parent images, and add the post specific ones
   let openGraphImages = (await parent).openGraph?.images || [];
-  openGraphImages.unshift(`${post.href}/opengraph-image`);
+  // todo: we can add a default formatted image if we want
+  // openGraphImages.unshift(
+  //   `${ROUTE_PREFIX_SNAPSHOT}/${post.slug}/opengraph-image`,
+  // );
 
   // when an post image is set, always make that the primary image
   if (!!post.image) {
@@ -56,10 +63,10 @@ export async function generateMetadata(
     alternates: {
       canonical: post.href,
     },
-    title: `${post.title} - ${SITE.name} Blog`,
+    title: `${post.title} - Solfate Snapshot #${post.id}`,
     description: post.description,
     openGraph: {
-      title: `${SITE.name} - ${post.longTitle ?? post.title}`,
+      title: `Solfate Snapshot #${post.id} - ${post.longTitle || post.title}`,
       description: post.description,
       // note: `images` will be auto populated by the `opengraph-image` generator
       images: openGraphImages,
@@ -69,16 +76,19 @@ export async function generateMetadata(
 
 export default async function Page({ params }: PageProps) {
   // locate the current post being requested
-  const post = allBlogPosts.filter((p) => p.slug == params.post)[0];
-
+  const { post, next, prev } = getNewsletterPost({
+    slug: params.slug,
+    withNextPrev: true,
+  });
   if (!post) {
-    notFound();
+    return notFound();
+  }
+
+  if (post.slug != params.slug.toLowerCase()) {
+    return redirect(`${ROUTE_PREFIX_SNAPSHOT}/${post.slug}`);
   }
 
   const author = SOLFATE_AUTHORS[post.author];
-
-  // load the mintable post details
-  // const mintableEpisode = mintableEpisodes[parseInt(post.ep)];
 
   // serialize the markdown content for parsing via MDX
   const mdxSerialized = await serialize(post.body.raw, {
@@ -86,16 +96,16 @@ export default async function Page({ params }: PageProps) {
   });
 
   return (
-    <main className="page-container max-w-3xl !space-y-6 md:!space-y-8">
+    <main className="page-container max-w-3xl !space-y-4 md:!space-y-6">
       <section className="flex justify-between items-center">
         <ul className="">
           <li>
             <Link
-              href={"/blog"}
-              className="inline-flex items-center text-gray-500 gap-2 hover:underline text-sm hover:text-black"
+              href={ROUTE_PREFIX_SNAPSHOT}
+              className="inline-flex items-center text-gray-700 gap-2 hover:underline text-sm font-semibold"
             >
               <ArrowLeft className="w-4 h-4" />
-              Back to Blog
+              Snapshot Newsletter
             </Link>
           </li>
         </ul>
@@ -104,8 +114,8 @@ export default async function Page({ params }: PageProps) {
       </section>
 
       <h1 className="font-bold text-3xl md:text-4xl max-w-5xl">
-        <Link href={post.href} className="hover:underline">
-          {post.longTitle ?? post.title ?? "[err]"}
+        <Link href={`${ROUTE_PREFIX_SNAPSHOT}/${post.slug}`} className="">
+          {post.longTitle || post.title || "[err]"}
         </Link>
       </h1>
 
@@ -148,12 +158,16 @@ export default async function Page({ params }: PageProps) {
         </section>
 
         <section className="flex items-center gap-3">
-          {/* <SocialShareButtons href={post.href} message={post.title} /> */}
+          {/* <SocialShareButtons
+            href={`${ROUTE_PREFIX_SNAPSHOT}/${post.slug}`}
+            message={post.title}
+          /> */}
 
           {/* <button className="btn btn-blue">Mint</button> */}
         </section>
       </section>
 
+      {/* todo: do we want to display a header image? */}
       {/* <div className="prose-cover-image rounded-2xl overflow-hidden border border-gray-400 bg-slate-100 child-past-parent h-96 max-h-96">
         <Image
           src={"/img/sample.jpg"}
@@ -172,19 +186,17 @@ export default async function Page({ params }: PageProps) {
 
       <NewsletterSignupWidget />
 
-      <AboutTheAuthor author={author} />
-
-      {/* <NextPrevButtons
+      <NextPrevButtons
         className="pt-10"
         next={{
-          label: "Next post",
+          label: "Next Snapshot",
           href: next?.href,
         }}
         prev={{
-          label: "Previous post",
+          label: "Previous Snapshot",
           href: prev?.href,
         }}
-      /> */}
+      />
     </main>
   );
 }

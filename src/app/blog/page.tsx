@@ -12,10 +12,9 @@ export const metadata: Metadata = {
 
 export default function Page() {
   // get the listing of episodes, sorted by their episode date
-  const posts = allBlogPosts.sort(
-    (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime(),
-  );
-  // .slice(0, 3 + 1);
+  const posts = allBlogPosts
+    .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+    .slice(0); // prevents mutation of the original data
 
   // extract the most recent episode
   // trust me: this will always have a value unless contentlayer fails

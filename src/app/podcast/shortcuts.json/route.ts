@@ -11,7 +11,7 @@ const podcastUrl = new URL(`https://${SITE.domain}/podcast`);
 
 export const GET = () => {
   const latestEpisode = allPodcastEpisodes.sort(
-    (a, b) => parseFloat(b.ep) - parseFloat(a.ep),
+    (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime(),
   )[0];
 
   return Response.json({

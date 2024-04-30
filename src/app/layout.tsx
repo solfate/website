@@ -6,6 +6,7 @@ import { SITE, TWITTER } from "@/lib/const/general";
 
 import { Toaster } from "react-hot-toast";
 import { getUserSession } from "@/lib/auth";
+import FathomAnalytics from "@/components/core/FathomAnalytics";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -52,7 +53,7 @@ export default async function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <MarketingHeader session={session} />
+        <FathomAnalytics />
 
         <Toaster
           position="bottom-center"
@@ -84,6 +85,8 @@ export default async function RootLayout({
             },
           }}
         />
+
+        <MarketingHeader session={session} />
 
         {/* make sure to keep Toaster above the `children` */}
 

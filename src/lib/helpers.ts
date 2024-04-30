@@ -5,7 +5,17 @@ import { RequestError } from "octokit";
  */
 export function createStandardSlug(input: string) {
   const splitter: string | string[] = input.toLowerCase().split("/");
-  return splitter[splitter.length - 1].split(".md")[0].replace(/\s+/g, "-");
+  return splitter[splitter.length - 1]
+    .split(".md")[0]
+    .toString()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase()
+    .trim()
+    .replace(".", "-")
+    .replace(/\s+/g, "-")
+    .replace(/[^\w-]+/g, "")
+    .replace(/--+/g, "-");
 }
 
 /**

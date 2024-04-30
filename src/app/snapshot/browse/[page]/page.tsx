@@ -1,9 +1,9 @@
-import { SimpleEpisodeCard } from "@/components/podcast/SimpleEpisodeCard";
-import { PODCAST } from "@/lib/const/podcast";
-import { computePagination } from "@/lib/helpers";
-import { allPodcastEpisodes } from "contentlayer/generated";
 import { Metadata } from "next";
 import Link from "next/link";
+import { ROUTE_PREFIX_SNAPSHOT } from "@/lib/const/general";
+import { allNewsletterPosts } from "contentlayer/generated";
+import { SimplePostCard } from "@/components/posts/SimplePostCard";
+import { computePagination } from "@/lib/helpers";
 import { ArrowLeft, ArrowRight } from "react-feather";
 
 // define the number of episodes per page
@@ -23,7 +23,7 @@ type PageProps = {
 export async function generateStaticParams() {
   const pagination = computePagination({
     take: BROWSE_TAKE_PER_PAGE,
-    totalItems: allPodcastEpisodes.length,
+    totalItems: allNewsletterPosts.length,
   });
 
   return new Array(pagination.totalPages).fill("").map((_item, count) => ({
@@ -35,9 +35,9 @@ export async function generateMetadata({
   params,
 }: PageProps): Promise<Metadata> {
   return {
-    title: `${PODCAST.name} - Browse episodes`,
+    title: `Solfate Snapshot - Browse newsletter editions`,
     alternates: {
-      canonical: `/podcast/browse/${params.page}`,
+      canonical: `${ROUTE_PREFIX_SNAPSHOT}/browse/${params.page}`,
     },
   };
 }
@@ -49,43 +49,36 @@ PageProps) {
   const pagination = computePagination({
     page,
     take: BROWSE_TAKE_PER_PAGE,
-    totalItems: allPodcastEpisodes.length,
+    totalItems: allNewsletterPosts.length,
   });
 
-  // get the listing of episodes, sorted by their episode date
-  const episodes = allPodcastEpisodes
+  const posts = allNewsletterPosts
     .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
     .slice(pagination.startIndex, pagination.startIndex + pagination.take);
 
   return (
     <main className="page-container py-10">
-      {/* <PodcastHero
-        featuredEpisode={mostRecent}
-        featuredLabel={`Latest episode: #${mostRecent.ep}`}
-      /> */}
-
       <section className="space-y-8">
         <section className="flex items-center justify-between">
-          <h1 className="font-semibold text-4xl">Browse Podcast Episodes</h1>
+          <h1 className="font-semibold text-4xl">Browse Snapshot Editions</h1>
           {/* <Link
-            href={"/podcast/browse"}
+            href={`${ROUTE_PREFIX_SNAPSHOT}/browse`}
             className="btn inline-flex items-center gap-2"
           >
-            View more
+            View More
             <ArrowRight className="w-5 h-5" strokeWidth={2} />
           </Link> */}
         </section>
 
         <section className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {episodes.map((episode, key) => (
-            <SimpleEpisodeCard
+          {posts.map((post, key) => (
+            <SimplePostCard
               key={key}
-              href={episode.href}
-              date={episode.date}
-              title={episode.title}
-              imageSrc={episode.image}
-              description={episode.description}
-              duration={episode.duration}
+              href={post.href}
+              date={post.date}
+              title={post.title}
+              imageSrc={post.image}
+              description={post.description}
             />
           ))}
         </section>
@@ -93,7 +86,7 @@ PageProps) {
         <section className=" flex items-center justify-center gap-3">
           {pagination.page > 1 && (
             <Link
-              href={`/podcast/browse/${pagination.prev}`}
+              href={`${ROUTE_PREFIX_SNAPSHOT}/browse/${pagination.prev}`}
               className="btn btn-ghost"
             >
               <ArrowLeft className="w-5 h-5" strokeWidth={2} />
@@ -103,7 +96,7 @@ PageProps) {
 
           {pagination.page < pagination.totalPages && (
             <Link
-              href={`/podcast/browse/${pagination.next}`}
+              href={`${ROUTE_PREFIX_SNAPSHOT}/browse/${pagination.next}`}
               className="btn btn-ghost"
             >
               Next

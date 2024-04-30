@@ -34,6 +34,7 @@
     "clsx": "^2.0.0",
     "contentlayer": "^0.3.4",
     "date-fns": "^2.30.0",
+    "fathom-client": "^3.6.0",
     "next": "14.0.3",
     "next-auth": "^4.24.5",
     "next-contentlayer": "^0.3.4",
