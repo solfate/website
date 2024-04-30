@@ -46,6 +46,7 @@ export default function Page() {
           title={mostRecent.title}
           imageSrc={mostRecent.image}
           description={mostRecent.description}
+          date={mostRecent.date}
         />
       </PageHero>
 
