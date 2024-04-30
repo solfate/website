@@ -252,7 +252,8 @@ export const ProfileEditorForm = memo(({ profile }: ComponentProps) => {
                 </span>
               )}
               <Avatar
-                href=""
+                href="#"
+                as="span"
                 size={128}
                 imageSrc={previewImage || formData.image}
                 className=""
