@@ -30,11 +30,12 @@ export const getNewsletterPost = ({
 
     post = posts[i];
 
-    // do not allow prev post to have id lower than 1
-    if (withNextPrev && i > 0) prev = posts[i - 1];
+    // do not allow next post to have id lower than 1
+    if (withNextPrev && i > 0) next = posts[i - 1];
 
     // do not exceed the number of posts
-    if (withNextPrev && i < posts.length - 1) next = posts[i + 1];
+    if (withNextPrev && i < posts.length - 1 && i + 1 != posts.length)
+      prev = posts[i + 1];
   }
 
   return { post, next, prev };
