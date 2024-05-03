@@ -3,10 +3,10 @@ import { GitHub, Linkedin, Link as LinkIcon, Twitter } from "react-feather";
 import { SocialButtonLink } from "./SocialButtons";
 
 type SocialLinksProps = {
-  className?: string;
-  website?: string;
-  twitter?: string;
-  github?: string;
+  className?: Option<string>;
+  website?: Option<string>;
+  twitter?: Option<string>;
+  github?: Option<string>;
 };
 
 export const SocialLinks = memo(

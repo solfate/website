@@ -259,7 +259,7 @@ export const authOptions: NextAuthOptions = {
       debug("[api/auth] signIn event");
 
       // force delete the jwt account since it is used for temporary session refreshes
-      if (account.provider == "jwt") {
+      if (account?.provider == "jwt") {
         debug("removing temporary jwt account");
         await prisma.account.delete({
           where: {

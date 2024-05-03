@@ -44,7 +44,7 @@ export const GeneralSettingsEditor = memo(({ user }: ComponentProps) => {
   );
 
   const [formData, dispatch] = useReducer(formReducer, {
-    username: user.username,
+    username: user?.username || "",
   });
 
   const handleInputChange = (
@@ -75,7 +75,7 @@ export const GeneralSettingsEditor = memo(({ user }: ComponentProps) => {
 
         // force update the user's current session
         // (to capture their new username change in the jwt)
-        if (!!formData.username && formData.username !== user.username) {
+        if (!!formData.username && formData.username !== user?.username) {
           await signIn("jwt", {
             redirect: false,
           });
@@ -93,7 +93,7 @@ export const GeneralSettingsEditor = memo(({ user }: ComponentProps) => {
         setLoading(false);
       }
     },
-    [pendingChanges, formData, loading, setLoading],
+    [user?.username, pendingChanges, formData, loading, setLoading],
   );
 
   return (

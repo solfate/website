@@ -8,7 +8,7 @@ import BoringAvatar from "boring-avatars";
 type AvatarProps = {
   href: string;
   title?: string;
-  imageSrc?: string;
+  imageSrc?: Option<string>;
   className?: string;
   size: number;
   as?: "span" | "a" | "link";
@@ -33,7 +33,7 @@ export const Avatar = memo(
     return (
       <ComponentToUse
         title={title}
-        href={as != "span" ? href : undefined}
+        href={as != "span" ? href : ""}
         className={clsx(
           "overflow-hidden rounded-full border border-gray-200 bg-white",
           "flex items-center justify-center flex-shrink-0 aspect-square",

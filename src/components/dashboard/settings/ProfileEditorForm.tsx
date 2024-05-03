@@ -58,13 +58,13 @@ export const ProfileEditorForm = memo(({ profile }: ComponentProps) => {
   );
 
   const [formData, dispatch] = useReducer(formReducer, {
-    name: profile.name || "",
-    bio: profile.bio || "",
-    oneLiner: profile.oneLiner || "",
-    website: profile.website || "",
-    twitter: profile.twitter || "",
-    github: profile.github || "",
-    image: profile.image || "",
+    name: profile?.name || "",
+    bio: profile?.bio || "",
+    oneLiner: profile?.oneLiner || "",
+    website: profile?.website || "",
+    twitter: profile?.twitter || "",
+    github: profile?.github || "",
+    image: profile?.image || "",
   });
 
   const handleInputChange = (
@@ -95,7 +95,7 @@ export const ProfileEditorForm = memo(({ profile }: ComponentProps) => {
 
         // force update the user's current session
         // (to capture their new image change in the jwt)
-        if (!!formData.image && formData.image !== profile.image) {
+        if (!!formData.image && formData.image !== profile?.image) {
           await signIn("jwt", {
             redirect: false,
           });
@@ -114,7 +114,7 @@ export const ProfileEditorForm = memo(({ profile }: ComponentProps) => {
         setLoading(false);
       }
     },
-    [pendingChanges, formData, loading, setLoading],
+    [profile?.image, pendingChanges, formData, loading, setLoading],
   );
 
   /**
@@ -183,7 +183,7 @@ export const ProfileEditorForm = memo(({ profile }: ComponentProps) => {
         toast.error(message);
       }
 
-      fileRef.current.blur();
+      fileRef.current?.blur();
       setPreviewImage(null);
       setUploading(false);
     },
@@ -271,9 +271,9 @@ export const ProfileEditorForm = memo(({ profile }: ComponentProps) => {
                 type="text"
                 name="name"
                 id="name"
-                value={formData.name}
+                value={formData.name || ""}
                 onChange={handleInputChange}
-                placeholder={formData.name || `@${profile.username}`}
+                placeholder={formData.name || `@${profile!.username}`}
                 className="input-box w-full"
               />
             </div>
@@ -291,7 +291,7 @@ export const ProfileEditorForm = memo(({ profile }: ComponentProps) => {
                 type="text"
                 name="oneLiner"
                 id="oneLiner"
-                value={formData.oneLiner}
+                value={formData.oneLiner || ""}
                 onChange={handleInputChange}
                 placeholder={""}
                 className="input-box w-full"
@@ -308,7 +308,7 @@ export const ProfileEditorForm = memo(({ profile }: ComponentProps) => {
               <textarea
                 name="bio"
                 id="bio"
-                value={formData.bio}
+                value={formData.bio || ""}
                 onChange={handleInputChange}
                 placeholder="Describe yourself"
                 className="w-full h-28 max-h-28"
@@ -338,7 +338,7 @@ export const ProfileEditorForm = memo(({ profile }: ComponentProps) => {
               type="text"
               name="website"
               id="website"
-              value={formData.website}
+              value={formData.website || ""}
               onChange={handleInputChange}
               placeholder="Website URL"
               className="input-box w-full"
@@ -350,7 +350,7 @@ export const ProfileEditorForm = memo(({ profile }: ComponentProps) => {
               type="text"
               name="twitter"
               id="twitter"
-              value={formData.twitter}
+              value={formData.twitter || ""}
               onChange={handleInputChange}
               placeholder="Twitter handle"
               className="input-box w-full"
@@ -363,7 +363,7 @@ export const ProfileEditorForm = memo(({ profile }: ComponentProps) => {
               type="text"
               name="github"
               id="github"
-              value={formData.github}
+              value={formData.github || ""}
               onChange={handleInputChange}
               placeholder="github"
               className="input-box w-full"

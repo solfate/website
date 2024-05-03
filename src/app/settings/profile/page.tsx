@@ -18,9 +18,10 @@ export default async function Page() {
     const session = await getUserSession();
     profile = await prisma.profile.create({
       data: {
-        username: session.user.username,
+        username: session!.user.username,
       },
     });
+    // todo: we should check and ensure the profile was created
   }
 
   return <ProfileEditorForm profile={profile} />;

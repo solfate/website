@@ -17,11 +17,11 @@ export const PATCH = withUserAuth(async ({ req, session }) => {
 
     // todo: validate each input
 
-    if (typeof input.name != "undefined") {
+    if (!!input.name) {
       validatedProfileData.name = input.name.trim();
     }
 
-    if (typeof input.image != "undefined") {
+    if (!!input.image) {
       try {
         const url = new URL(input.image);
 
@@ -54,15 +54,15 @@ export const PATCH = withUserAuth(async ({ req, session }) => {
       }
     }
 
-    if (typeof input.oneLiner != "undefined") {
+    if (!!input.oneLiner) {
       validatedProfileData.oneLiner = input.oneLiner.trim();
     }
 
-    if (typeof input.bio != "undefined") {
+    if (!!input.bio) {
       validatedProfileData.bio = input.bio.trim();
     }
 
-    if (typeof input.website != "undefined") {
+    if (!!input.website) {
       try {
         validatedProfileData.website = new URL(
           input.website.replace(/^(https?:\/\/)?/gi, "https://"),
@@ -74,25 +74,25 @@ export const PATCH = withUserAuth(async ({ req, session }) => {
       }
     }
 
-    if (typeof input.twitter != "undefined") {
+    if (!!input.twitter) {
       try {
         const twitterRegex = new RegExp(
           /^(https?:\/\/(twitter|x)\.com\/)?@?([a-zA-Z0-9_]+)\/?/g,
         );
-        const twitter = twitterRegex.exec(input.twitter);
+        const twitter = twitterRegex.exec(input.twitter) || [];
         validatedProfileData.twitter = twitter[twitter.length - 1];
       } catch (err) {
         throw "Invalid twitter";
       }
     }
 
-    if (typeof input.github != "undefined") {
+    if (!!input.github) {
       validatedProfileData.github = input.github;
       try {
         const githubRegex = new RegExp(
           /^(https?:\/\/(github)\.com\/)?@?(^[a-zA-Z\d](?:[a-zA-Z\d]|-(?=[a-zA-Z\d])){0,38})\/?/g,
         );
-        const github = githubRegex.exec(input.github);
+        const github = githubRegex.exec(input.github) || [];
         validatedProfileData.github = github[github.length - 1];
       } catch (err) {
         throw "Invalid twitter";

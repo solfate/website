@@ -14,7 +14,7 @@ export const POST = withUserAuth(async ({ req, session }) => {
 
     let fileKey = "";
     let contentType = input.fileDetails.type;
-    let fileType = contentType.split("/").pop().toLocaleLowerCase();
+    let fileType = contentType.split("/").pop()?.toLocaleLowerCase();
 
     switch (fileType) {
       case "jpg":
