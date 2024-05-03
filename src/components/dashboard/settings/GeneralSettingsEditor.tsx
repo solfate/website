@@ -7,7 +7,7 @@ import clsx from "clsx";
 import { User } from "@prisma/client";
 import toast from "react-hot-toast";
 import { fetcher } from "@/lib/api";
-import { ApiProfilePatchInput } from "@/types/api/social";
+import { ApiSettingsPatchInput } from "@/lib/schemas/settings";
 import { SITE } from "@/lib/const/general";
 import { USERNAME_MAX_LEN } from "@/lib/const/profile";
 import { signIn } from "next-auth/react";
@@ -68,7 +68,7 @@ export const GeneralSettingsEditor = memo(({ user }: ComponentProps) => {
       setLoading(true);
 
       try {
-        const res = await fetcher<ApiProfilePatchInput>("/api/settings", {
+        const res = await fetcher<ApiSettingsPatchInput>("/api/settings", {
           method: "PATCH",
           body: formData,
         });

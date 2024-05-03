@@ -5,9 +5,11 @@
 import { ApiErrorResponse } from "@/lib/api";
 import { withUserAuth } from "@/lib/auth";
 import prisma from "@/lib/prisma";
-import { ApiProfilePatchInputSchema } from "@/lib/schemas/profile";
-import { ApiProfilePatchInput } from "@/types/api/social";
 import { Prisma } from "@prisma/client";
+import {
+  ApiProfilePatchInputSchema,
+  ApiProfilePatchInput,
+} from "@/lib/schemas/profile";
 
 export const PATCH = withUserAuth(async ({ req, session }) => {
   try {
