@@ -49,7 +49,8 @@
     "react-feather": "^2.0.10",
     "react-hot-toast": "^2.4.1",
     "react-spinners": "^0.13.8",
-    "solana-auth": "^0.0.10"
+    "solana-auth": "^0.0.10",
+    "zod": "^3.23.6"
   },
   "devDependencies": {
     "@tailwindcss/typography": "^0.5.10",
