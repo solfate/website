@@ -6,7 +6,7 @@ import { withUserAuth } from "@/lib/auth";
 import prisma from "@/lib/prisma";
 import { z } from "zod";
 import { ApiSettingsPatchInput } from "@/types/api/social";
-import { usernameSchema } from "@/lib/schema/prisma";
+import { usernameSchema } from "@/lib/validators";
 import { ApiErrorResponse } from "@/lib/api";
 
 export const PATCH = withUserAuth(async ({ req, session }) => {

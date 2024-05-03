@@ -2,101 +2,66 @@
  * API handlers for the "/api/profile" endpoint
  */
 
+import { ApiErrorResponse } from "@/lib/api";
 import { withUserAuth } from "@/lib/auth";
 import { ASSETS_DOMAIN } from "@/lib/const/general";
 import prisma from "@/lib/prisma";
-import { ApiProfilePatchInput } from "@/types/api/social";
+import {
+  secureUrl,
+  isValidLocalAssetImage,
+  twitterUrlToUsername,
+  githubUrlToUsername,
+} from "@/lib/validators";
 import { Prisma } from "@prisma/client";
+import { z } from "zod";
+
+export const ApiProfilePatchInputSchema = z.object({
+  name: z.union([z.string().trim().nullish(), z.literal("")]),
+  bio: z.union([z.string().trim().nullish(), z.literal("")]),
+  oneLiner: z.union([z.string().trim().nullish(), z.literal("")]),
+  image: z.union([
+    secureUrl.refine(isValidLocalAssetImage).nullish(),
+    z.literal(""),
+  ]),
+  website: z.union([secureUrl.nullish(), z.literal("")]),
+  twitter: z.union([twitterUrlToUsername.nullish(), z.literal("")]),
+  github: z.union([githubUrlToUsername.nullish(), z.literal("")]),
+});
+
+export type ApiProfilePatchInput = z.infer<typeof ApiProfilePatchInputSchema>;
 
 export const PATCH = withUserAuth(async ({ req, session }) => {
   try {
-    const input: ApiProfilePatchInput = await req.json();
-    if (!input) throw "Invalid input";
+    const input: ApiProfilePatchInput = ApiProfilePatchInputSchema.parse(
+      await req.json(),
+    );
 
-    const validatedProfileData: Prisma.ProfileUpdateInput = {};
-
-    // todo: validate each input
-
-    if (!!input.name) {
-      validatedProfileData.name = input.name.trim();
-    }
+    // init the with the data that requires no additional validation
+    const validatedProfileData: Prisma.ProfileUpdateInput = {
+      name: input.name,
+      oneLiner: input.oneLiner,
+      bio: input.bio,
+      website: input.website,
+      twitter: input.twitter,
+      github: input.github,
+    };
 
     if (!!input.image) {
-      try {
-        const url = new URL(input.image);
+      const url = new URL(input.image);
 
-        switch (url.hostname.toLowerCase()) {
-          case ASSETS_DOMAIN: {
-            // valid and accepted
-            break;
-          }
-          case "storage.googleapis.com": {
-            // valid and accepted
-            if (url.pathname.startsWith("/" + ASSETS_DOMAIN)) break;
-          }
-          default:
-            throw "Invalid image";
-        }
-
-        if (!url.pathname.startsWith(`/profile/${session.user.id}`)) {
-          throw "Invalid profile image url";
-        }
-
-        validatedProfileData.image = url.toString();
-        validatedProfileData.user = {
-          update: {
-            image: validatedProfileData.image,
-          },
-        };
-      } catch (err) {
-        if (typeof err == "string") throw err;
-        throw "Invalid image";
+      // only allow the user to use images that they uploaded
+      if (!url.pathname.startsWith(`/profile/${session.user.id}`)) {
+        throw "Invalid profile image url";
       }
-    }
 
-    if (!!input.oneLiner) {
-      validatedProfileData.oneLiner = input.oneLiner.trim();
-    }
-
-    if (!!input.bio) {
-      validatedProfileData.bio = input.bio.trim();
-    }
-
-    if (!!input.website) {
-      try {
-        validatedProfileData.website = new URL(
-          input.website.replace(/^(https?:\/\/)?/gi, "https://"),
-        )
-          .toString()
-          .trim();
-      } catch (err) {
-        throw "Invalid website";
-      }
-    }
-
-    if (!!input.twitter) {
-      try {
-        const twitterRegex = new RegExp(
-          /^(https?:\/\/(twitter|x)\.com\/)?@?([a-zA-Z0-9_]+)\/?/g,
-        );
-        const twitter = twitterRegex.exec(input.twitter) || [];
-        validatedProfileData.twitter = twitter[twitter.length - 1];
-      } catch (err) {
-        throw "Invalid twitter";
-      }
-    }
-
-    if (!!input.github) {
-      validatedProfileData.github = input.github;
-      try {
-        const githubRegex = new RegExp(
-          /^(https?:\/\/(github)\.com\/)?@?(^[a-zA-Z\d](?:[a-zA-Z\d]|-(?=[a-zA-Z\d])){0,38})\/?/g,
-        );
-        const github = githubRegex.exec(input.github) || [];
-        validatedProfileData.github = github[github.length - 1];
-      } catch (err) {
-        throw "Invalid twitter";
-      }
+      // we have to update the image in both locations
+      // todo: make it so we don't have to update in two places
+      validatedProfileData.image = url.toString();
+      validatedProfileData.user = {
+        update: {
+          image: validatedProfileData.image,
+        },
+      };
     }
 
     const updatedProfile = await prisma.profile.update({
@@ -111,15 +76,6 @@ export const PATCH = withUserAuth(async ({ req, session }) => {
     // success! yay :)
     return new Response("Your profile was updated");
   } catch (err) {
-    console.warn("[API error]", err);
-
-    let message = "An unknown error occurred";
-
-    if (typeof err == "string") message = err;
-    else if (err instanceof Error) message = err.message;
-
-    return new Response(message, {
-      status: 400,
-    });
+    return ApiErrorResponse(err);
   }
 });

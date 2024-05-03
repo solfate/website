@@ -2,7 +2,6 @@
 
 import { memo, useCallback, useReducer, useRef, useState } from "react";
 import type { Profile } from "@prisma/client";
-import type { ApiProfilePatchInput } from "@/types/api/social";
 import type {
   ApiUploadPostInput,
   ApiUploadPostResponse,
@@ -15,6 +14,7 @@ import { fetcher } from "@/lib/api";
 import { FeatherIcon } from "@/components/core/FeatherIcon";
 import { Avatar } from "@/components/core/Avatar";
 import { signIn } from "next-auth/react";
+import { ApiProfilePatchInput } from "@/app/api/profile/route";
 
 type FormState = {
   name: Profile["name"];
@@ -90,7 +90,15 @@ export const ProfileEditorForm = memo(({ profile }: ComponentProps) => {
       try {
         const res = await fetcher<ApiProfilePatchInput>("/api/profile", {
           method: "PATCH",
-          body: formData,
+          body: Object.assign(formData, {
+            // forcing the twitter and github into the url format for better validation
+            twitter: !!formData.twitter
+              ? `https://twitter.com/${formData.twitter}`
+              : undefined,
+            github: !!formData.github
+              ? `https://github.com/${formData.github}`
+              : undefined,
+          }),
         });
 
         // force update the user's current session
