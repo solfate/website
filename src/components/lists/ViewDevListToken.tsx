@@ -41,15 +41,21 @@ export const ViewDevListToken = ({
     (async () => {
       // get the token metadata for active tokens
       try {
+        if (!assetId) throw "No asset id";
+
         const tokenMetadata = await getTokenMetadata(
           connection,
           new PublicKey(assetId),
         );
 
+        if (!tokenMetadata) throw "No token metadata account";
+
         if (Array.isArray(tokenMetadata.additionalMetadata)) {
           tokenMetadata.additionalMetadata.forEach((record) => {
-            if (Object.hasOwn(parsedMetadata, record[0]))
+            if (Object.hasOwn(parsedMetadata, record[0])) {
+              // @ts-ignore
               parsedMetadata[record[0]] = record[1];
+            }
           });
         }
       } catch (err) {
@@ -60,6 +66,7 @@ export const ViewDevListToken = ({
       setMetadata(parsedMetadata);
       setLoading(false);
     })();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
