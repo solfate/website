@@ -90,7 +90,8 @@ export const ProfileEditorForm = memo(({ profile }: ComponentProps) => {
       try {
         const res = await fetcher<ApiProfilePatchInput>("/api/profile", {
           method: "PATCH",
-          body: Object.assign(formData, {
+          body: {
+            ...formData,
             // forcing the twitter and github into the url format for better validation
             twitter: !!formData.twitter
               ? `https://twitter.com/${formData.twitter}`
@@ -98,7 +99,7 @@ export const ProfileEditorForm = memo(({ profile }: ComponentProps) => {
             github: !!formData.github
               ? `https://github.com/${formData.github}`
               : undefined,
-          }),
+          },
         });
 
         // force update the user's current session
