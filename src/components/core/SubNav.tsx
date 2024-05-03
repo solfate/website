@@ -1,6 +1,6 @@
 import { memo } from "react";
 import styles from "@/styles/Nav.module.css";
-import { NavLink } from "@/components/core/NavLink";
+import NavLink from "@/components/core/NavLink";
 
 export const SubNav = memo(
   ({
