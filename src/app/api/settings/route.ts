@@ -4,29 +4,24 @@
 
 import { withUserAuth } from "@/lib/auth";
 import prisma from "@/lib/prisma";
-import { z } from "zod";
-import { ApiSettingsPatchInput } from "@/types/api/social";
-import { usernameSchema } from "@/lib/validators";
 import { ApiErrorResponse } from "@/lib/api";
+import {
+  ApiSettingsPatchInput,
+  ApiSettingsPatchInputSchema,
+} from "@/lib/schemas/settings";
 
 export const PATCH = withUserAuth(async ({ req, session }) => {
   try {
-    const rawInput: ApiSettingsPatchInput = await req.json();
-    if (!rawInput) throw "Invalid input";
+    const input: ApiSettingsPatchInput = ApiSettingsPatchInputSchema.parse(
+      await req.json(),
+    );
 
     if (
-      typeof rawInput.username != "undefined" &&
-      !!rawInput?.username &&
-      rawInput.username.toLowerCase() == session.user.username.toLowerCase()
+      !!input.username &&
+      input.username.toLowerCase() == session.user.username.toLowerCase()
     ) {
       return new Response("Your username was unchanged");
     }
-
-    const inputSchema = z.object({
-      username: usernameSchema,
-    });
-
-    const input = inputSchema.parse(rawInput);
 
     if (!!input.username) {
       const isUsernameTaken = await prisma.user.findUnique({
