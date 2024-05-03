@@ -81,6 +81,14 @@ export const GeneralSettingsEditor = memo(({ user }: ComponentProps) => {
           });
         }
 
+        if (!formData.username) {
+          dispatch({
+            type: "update",
+            field: "username",
+            value: user?.username || "",
+          });
+        }
+
         setPendingChanges(false);
         return toast.success(res);
       } catch (err) {
