@@ -4,31 +4,10 @@
 
 import { ApiErrorResponse } from "@/lib/api";
 import { withUserAuth } from "@/lib/auth";
-import { ASSETS_DOMAIN } from "@/lib/const/general";
 import prisma from "@/lib/prisma";
-import {
-  secureUrl,
-  isValidLocalAssetImage,
-  twitterUrlToUsername,
-  githubUrlToUsername,
-} from "@/lib/validators";
+import { ApiProfilePatchInputSchema } from "@/lib/schemas/profile";
+import { ApiProfilePatchInput } from "@/types/api/social";
 import { Prisma } from "@prisma/client";
-import { z } from "zod";
-
-export const ApiProfilePatchInputSchema = z.object({
-  name: z.union([z.string().trim().nullish(), z.literal("")]),
-  bio: z.union([z.string().trim().nullish(), z.literal("")]),
-  oneLiner: z.union([z.string().trim().nullish(), z.literal("")]),
-  image: z.union([
-    secureUrl.refine(isValidLocalAssetImage).nullish(),
-    z.literal(""),
-  ]),
-  website: z.union([secureUrl.nullish(), z.literal("")]),
-  twitter: z.union([twitterUrlToUsername.nullish(), z.literal("")]),
-  github: z.union([githubUrlToUsername.nullish(), z.literal("")]),
-});
-
-export type ApiProfilePatchInput = z.infer<typeof ApiProfilePatchInputSchema>;
 
 export const PATCH = withUserAuth(async ({ req, session }) => {
   try {

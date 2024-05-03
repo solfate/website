@@ -14,7 +14,7 @@ import { fetcher } from "@/lib/api";
 import { FeatherIcon } from "@/components/core/FeatherIcon";
 import { Avatar } from "@/components/core/Avatar";
 import { signIn } from "next-auth/react";
-import { ApiProfilePatchInput } from "@/app/api/profile/route";
+import { ApiProfilePatchInput } from "@/lib/schemas/profile";
 
 type FormState = {
   name: Profile["name"];
