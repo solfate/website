@@ -140,7 +140,7 @@ To participate in trading these conditional markets, you will need to obtain
 $META through a DEX platform, and then use those tokens to mint your conditional
 tokens which are then used to vote on the proposals.
 
-todo: image here
+![Proposal on MetaDAO](/public/media/blog/articles/futarchy-and-metadao/futarchy-proposal.png)
 
 Aside from participating in trading the conditional markets for proposals,
 futards can also participate in the MetaDAO by creating proposals using the
