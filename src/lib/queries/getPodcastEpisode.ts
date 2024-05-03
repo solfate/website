@@ -20,7 +20,7 @@ export const getPodcastEpisode = ({
   // get the current episode being viewed
   // (sorted from latest to oldest)
   const episodes = allPodcastEpisodes.sort(
-    (a, b) => parseFloat(b.slug) - parseFloat(a.slug),
+    (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime(),
   );
 
   // detect when requesting the next "to-be-published" episode
@@ -40,7 +40,8 @@ export const getPodcastEpisode = ({
       if (withNextPrev && i > 0) next = episodes[i - 1];
 
       // do not exceed the number of episodes
-      if (withNextPrev && i < episodes.length - 1) prev = episodes[i + 1];
+      if (withNextPrev && i < episodes.length - 1 && i + 1 != episodes.length)
+        prev = episodes[i + 1];
     }
   }
 

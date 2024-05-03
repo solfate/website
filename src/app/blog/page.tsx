@@ -13,8 +13,8 @@ export const metadata: Metadata = {
 export default function Page() {
   // get the listing of episodes, sorted by their episode date
   const posts = allBlogPosts
-    // .sort((a, b) => parseFloat(b.ep) - parseFloat(a.ep))
-    .slice(0, 3 + 1);
+    .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+    .slice(0); // prevents mutation of the original data
 
   // extract the most recent episode
   // trust me: this will always have a value unless contentlayer fails
@@ -26,7 +26,7 @@ export default function Page() {
         <BlogHeading
           title="All posts"
           href="/blog"
-          description="Welcome the the Solfate blog"
+          description="Welcome the the Solfate blog. We write about blockchain things, mostly in the Solana ecosystem."
         />
 
         {/* <div className="">search</div> */}

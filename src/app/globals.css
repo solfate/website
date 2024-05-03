@@ -85,7 +85,7 @@ input[type="password"] {
   /* todo: handle different screen sizes */
 }
 .prose a {
-  @apply hover:text-hot-pink hover:underline;
+  @apply text-hot-pink no-underline hover:underline;
 }
 .prose img {
   --child-width: 120%;

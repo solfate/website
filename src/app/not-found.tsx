@@ -21,7 +21,7 @@ export const metadata: Metadata = {
 export default async function NotFound() {
   // get the listing of episodes, sorted by their episode date
   const recentEpisode = allPodcastEpisodes
-    .sort((a, b) => parseFloat(b.ep) - parseFloat(a.ep))
+    .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
     .slice(0, 1)[0] as PodcastEpisode;
 
   return (

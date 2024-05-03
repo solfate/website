@@ -11,7 +11,7 @@ type SimplePostCardProps = {
   description?: string;
   imageAlt?: string;
   date?: string;
-  username: string;
+  username?: string;
   avatarImage?: string;
 };
 
@@ -46,23 +46,25 @@ export const SimplePostCard = memo(
           </h4>
 
           <section className={styles.meta}>
-            <Link
-              href={`/profile/${username}`}
-              className={styles.userContainer}
-            >
-              {!!avatarImage && (
-                <span className={styles.avatar}>
-                  <Image
-                    width={64}
-                    height={64}
-                    src={avatarImage}
-                    alt={username}
-                    title={username}
-                  />
-                </span>
-              )}
-              <span className={""}>{username}</span>
-            </Link>
+            {username && (
+              <Link
+                href={`/profile/${username}`}
+                className={styles.userContainer}
+              >
+                {!!avatarImage && (
+                  <span className={styles.avatar}>
+                    <Image
+                      width={64}
+                      height={64}
+                      src={avatarImage}
+                      alt={username}
+                      title={username}
+                    />
+                  </span>
+                )}
+                <span className={""}>{username}</span>
+              </Link>
+            )}
 
             {!!date && <FormattedDateAgo date={date} />}
           </section>

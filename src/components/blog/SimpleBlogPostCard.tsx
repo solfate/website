@@ -48,7 +48,7 @@ export const SimpleBlogPostCard = memo(
           </h4>
 
           <section className={styles.meta}>
-            {!!author && (
+            {!!author?.img && (
               <p className={styles.minor}>
                 <Image
                   src={author.img}

@@ -10,7 +10,7 @@ import { Metadata } from "next";
 export const metadata: Metadata = {
   title: `${SITE.name} - Blog`,
   description:
-    "Blog posts from the Solfate team. " +
+    "Blog posts and articles about blockchain and crypto related topics. " +
     "Discover the latest in the Solana ecosystem.",
   openGraph: {
     type: "website",

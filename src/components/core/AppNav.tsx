@@ -1,21 +1,21 @@
-import styles from "@/styles/Nav.module.css";
-import { NavLink } from "@/components/core/NavLink";
+import NavLink from "@/components/core/NavLink";
+import {
+  ROUTE_PREFIX_BLOG,
+  ROUTE_PREFIX_DEVLIST,
+  ROUTE_PREFIX_PODCAST,
+  ROUTE_PREFIX_SNAPSHOT,
+} from "@/lib/const/general";
 
 type AppNavProps = SimpleComponentProps;
 
 export const AppNav = ({ className = "" }: AppNavProps) => {
   return (
     <nav className={className}>
-      <NavLink href="/podcast" className={styles.primaryNavLink}>
-        Podcast
-      </NavLink>
-      <NavLink href="/devlist" className={styles.primaryNavLink}>
-        DevList
-      </NavLink>
-      <NavLink href="/blog" className={styles.primaryNavLink}>
-        Blog
-      </NavLink>
-      {/* <NavLink href="/extension">Extension</NavLink> */}
+      {/* <NavLink href={ROUTE_PREFIX_DISCOVER}>Discover</NavLink> */}
+      <NavLink href={ROUTE_PREFIX_BLOG}>Blog</NavLink>
+      <NavLink href={ROUTE_PREFIX_PODCAST}>Podcast</NavLink>
+      <NavLink href={ROUTE_PREFIX_SNAPSHOT}>Snapshot</NavLink>
+      <NavLink href={ROUTE_PREFIX_DEVLIST}>DevList</NavLink>
     </nav>
   );
 };

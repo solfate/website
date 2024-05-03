@@ -15,7 +15,7 @@ export const metadata: Metadata = {
 export default function Page() {
   // get the listing of episodes, sorted by their episode date
   const episodes = allPodcastEpisodes
-    .sort((a, b) => parseFloat(b.ep) - parseFloat(a.ep))
+    .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
     .slice(0, 3 + 1);
 
   // extract the most recent episode
