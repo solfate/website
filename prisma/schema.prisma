@@ -1,5 +1,5 @@
 datasource db {
-    provider     = "mysql"
+    provider     = "postgresql"
     url          = env("DATABASE_URL")
     relationMode = "prisma"
 }
@@ -13,7 +13,7 @@ model User {
     username String @unique @default(uuid()) @db.VarChar(255)
 
     // start next-auth required
-    uid           Int       @unique @default(autoincrement()) @db.UnsignedInt
+    uid           Int       @unique @default(autoincrement()) @db.Integer
     id            String    @id @default(cuid())
     name          String?
     email         String?   @unique
@@ -28,7 +28,7 @@ model User {
     type      UserType? @default(USER)
     status    Status?   @default(ACTIVE)
     flags     String?   @db.VarChar(500)
-    createdAt DateTime? @default(now()) @db.DateTime(0)
+    createdAt DateTime? @default(now()) @db.Timestamp()
     updatedAt DateTime? @updatedAt
 
     // billing information and settings
@@ -80,7 +80,7 @@ model Profile {
 
 // Listing of people and their wallets that have particiapted in our special lists
 model WalletList {
-    id     Int    @unique @default(autoincrement()) @db.UnsignedInt
+    id     Int    @unique @default(autoincrement()) @db.Integer
     userId String
     user   User   @relation("userId", fields: [userId], references: [id])
 
@@ -92,7 +92,7 @@ model WalletList {
     data      Json?          @default("{}")
     flags     String?        @db.VarChar(500)
     status    Status?        @default(PENDING)
-    lastCheck DateTime?      @db.DateTime(0)
+    lastCheck DateTime?      @db.Timestamp()
     // track a single unique asset per record
     assetId   String?
 
