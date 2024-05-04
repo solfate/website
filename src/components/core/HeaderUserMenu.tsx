@@ -1,4 +1,4 @@
-import React, { Fragment, memo } from "react";
+import React, { Fragment, memo, useEffect } from "react";
 import { Menu, Transition } from "@headlessui/react";
 import { FeatherIcon, FeatherIconName } from "./FeatherIcon";
 import styles from "@/styles/HeaderUserMenu.module.css";
@@ -8,7 +8,19 @@ import { signOut, useSession } from "next-auth/react";
 import { Avatar } from "@/components/core/Avatar";
 
 export const HeaderUserMenu = memo(({}: SimpleComponentProps) => {
-  const { data: session } = useSession();
+  const { data: session, update } = useSession();
+
+  useEffect(() => {
+    window.onfocus = () => {
+      update();
+    };
+
+    return () => {
+      window.onfocus = () => {
+        update();
+      };
+    };
+  }, []);
 
   if (!session?.user) {
     return (
