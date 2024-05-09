@@ -8,13 +8,13 @@ import MarkdownFormatter from "@/components/MarkdownFormatter";
 import { SocialShareButtons } from "@/components/SocialButtons";
 import { ArrowLeft } from "react-feather";
 import { notFound, redirect } from "next/navigation";
-import { getNewsletterPost } from "@/lib/queries/getNewsletterPost";
+import { getBlogPost } from "@/lib/queries/getBlogPost";
 import { PODCAST } from "@/lib/const/podcast";
 import { FormattedDateAgo } from "@/components/core/FormattedDateAgo";
 import { NextPrevButtons } from "@/components/posts/NextPrevButtons";
 import { Metadata, ResolvingMetadata } from "next";
 import { SOLFATE_AUTHORS } from "@/lib/const/people";
-import { allNewsletterPosts } from "contentlayer/generated";
+import { allBlogPosts } from "contentlayer/generated";
 import { NewsletterSignupWidget } from "@/components/content/NewsletterSignupWidget";
 
 type PageProps = {
@@ -24,16 +24,18 @@ type PageProps = {
 };
 
 export async function generateStaticParams() {
-  return allNewsletterPosts.map((item) => ({
-    slug: item.slug,
-  }));
+  return allBlogPosts
+    .filter((post) => post.category == "snapshot")
+    .map((item) => ({
+      slug: item.slug,
+    }));
 }
 
 export async function generateMetadata(
   { params }: PageProps,
   parent: ResolvingMetadata,
 ): Promise<Metadata> {
-  const { post } = getNewsletterPost({
+  const { post } = getBlogPost({
     slug: params.slug,
     withNextPrev: false,
   });
@@ -76,7 +78,7 @@ export async function generateMetadata(
 
 export default async function Page({ params }: PageProps) {
   // locate the current post being requested
-  const { post, next, prev } = getNewsletterPost({
+  const { post, next, prev } = getBlogPost({
     slug: params.slug,
     withNextPrev: true,
   });

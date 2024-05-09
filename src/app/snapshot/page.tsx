@@ -2,7 +2,7 @@ import { NewsletterSignupForm } from "@/components/content/NewsletterSignupForm"
 import { PageHero } from "@/components/core/PageHero";
 import { SimplePostCard } from "@/components/posts/SimplePostCard";
 import { ROUTE_PREFIX_SNAPSHOT } from "@/lib/const/general";
-import { NewsletterPost, allNewsletterPosts } from "contentlayer/generated";
+import { allBlogPosts, BlogPost } from "contentlayer/generated";
 import { Metadata } from "next";
 import Link from "next/link";
 import { ArrowRight } from "react-feather";
@@ -15,13 +15,14 @@ export const metadata: Metadata = {
 
 export default function Page() {
   // get the listing of posts, sorted by their post id
-  const posts = allNewsletterPosts
+  const posts = allBlogPosts
+    .filter((post) => post.category == "snapshot")
     .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
     .slice(0); // prevent mutating the original
 
   // extract the most recent episode
   // trust me: this will always have a value unless contentlayer fails
-  const mostRecent = posts.shift() as NewsletterPost;
+  const mostRecent = posts.shift() as BlogPost;
 
   return (
     <main className="page-container">
