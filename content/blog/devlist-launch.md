@@ -1,6 +1,6 @@
 ---
 date: "Jan 30 2024 01:00 EST"
-image: devlist-launch.jpg
+image: /media/blog/devlist-launch.jpg
 title: "Launch of the Solana DevList"
 description:
   "Using soul-bound NFTs, the Solana DevList is a public list of wallets
@@ -9,8 +9,8 @@ author: nick
 tags: devlist, token-extensions
 ---
 
-Introducing the [Solana DevList](./devlist-launch), a publicly accessible list
-of Solana wallet addresses verified to be owned by Solana developers. Each
+Introducing the [Solana DevList](./devlist-launch.md), a publicly accessible
+list of Solana wallet addresses verified to be owned by Solana developers. Each
 member of the DevList was approved to join, claiming a non-transferrable
 membership token, because they were verified having code contributions to the
 Solana ecosystem.

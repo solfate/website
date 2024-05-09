@@ -1,7 +1,7 @@
 ---
 author: teague
 date: "May 08 2024"
-image: articles/solana-for-payments.jpg
+image: /media/blog/articles/solana-for-payments.jpg
 title: "Revolutionizing Payments with Solana"
 description:
   "With its near-instant settlement and low fees, the Solana blockchain is
