@@ -1,2 +1,0 @@
-- redirect logged in user to their profile settings page when they do not have a profile
-- shorten the username if its a wallet address

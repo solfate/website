@@ -76,11 +76,6 @@ export const PODCAST_FEED_LOCATIONS: PodcastFeedLocation[] = [
     icon: "/icons/pocketcasts.svg",
   },
   {
-    label: "Google Podcasts",
-    href: "https://podcasts.google.com/feed/aHR0cHM6Ly9mZWVkcy50cmFuc2lzdG9yLmZtL3NvbGZhdGU",
-    icon: "/icons/google.svg",
-  },
-  {
     label: "YouTube",
     href: "https://www.youtube.com/@SolfatePod/podcasts",
     icon: "/icons/youtube.svg",
@@ -98,9 +93,4 @@ export const PODCAST_RATING_LOCATIONS: PodcastRatingLocation[] = [
     href: "https://open.spotify.com/show/5YnYJdFDfEM16Om3v4VRcs",
     icon: "/icons/spotify.svg",
   },
-  // {
-  //   label: "Google Podcasts",
-  //   href: "https://podcasts.google.com/feed/aHR0cHM6Ly9mZWVkcy50cmFuc2lzdG9yLmZtL3NvbGZhdGU",
-  //   icon: "/icons/google.svg",
-  // },
 ];
