@@ -1,7 +1,7 @@
 import { Metadata } from "next";
 import Link from "next/link";
 import { ROUTE_PREFIX_SNAPSHOT } from "@/lib/const/general";
-import { allNewsletterPosts } from "contentlayer/generated";
+import { allBlogPosts } from "contentlayer/generated";
 import { SimplePostCard } from "@/components/posts/SimplePostCard";
 import { computePagination } from "@/lib/helpers";
 import { ArrowLeft, ArrowRight } from "react-feather";
@@ -23,7 +23,8 @@ type PageProps = {
 export async function generateStaticParams() {
   const pagination = computePagination({
     take: BROWSE_TAKE_PER_PAGE,
-    totalItems: allNewsletterPosts.length,
+    totalItems: allBlogPosts.filter((post) => post.category == "snapshot")
+      .length,
   });
 
   return new Array(pagination.totalPages).fill("").map((_item, count) => ({
@@ -46,15 +47,20 @@ export default function Page({
   params: { page = "1" },
 }: // searchParams: { take = "9" },
 PageProps) {
+  let posts = allBlogPosts
+    .filter((post) => post.category == "snapshot")
+    .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+
   const pagination = computePagination({
     page,
     take: BROWSE_TAKE_PER_PAGE,
-    totalItems: allNewsletterPosts.length,
+    totalItems: posts.length,
   });
 
-  const posts = allNewsletterPosts
-    .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
-    .slice(pagination.startIndex, pagination.startIndex + pagination.take);
+  posts = posts.slice(
+    pagination.startIndex,
+    pagination.startIndex + pagination.take,
+  );
 
   return (
     <main className="page-container py-10">

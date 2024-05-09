@@ -5,7 +5,7 @@ import { SITE } from "@/lib/const/general";
 import solfateLogoOrange from "@/../public/logo-orange.svg";
 import { serialize } from "next-mdx-remote/serialize";
 import MarkdownFormatter from "@/components/MarkdownFormatter";
-import { SocialShareButtons } from "@/components/SocialButtons";
+// import { SocialShareButtons } from "@/components/SocialButtons";
 import { ArrowLeft } from "react-feather";
 import { notFound } from "next/navigation";
 import { FormattedDateAgo } from "@/components/core/FormattedDateAgo";
@@ -14,6 +14,7 @@ import { Metadata, ResolvingMetadata } from "next";
 import { SOLFATE_AUTHORS } from "@/lib/const/people";
 import { AboutTheAuthor } from "@/components/posts/AboutTheAuthor";
 import { NewsletterSignupWidget } from "@/components/content/NewsletterSignupWidget";
+import { getBlogPost } from "@/lib/queries/getBlogPost";
 
 type PageProps = {
   params: {
@@ -23,17 +24,22 @@ type PageProps = {
 };
 
 export async function generateStaticParams() {
-  return allBlogPosts.map((item) => ({
-    post: item.slug,
-  }));
+  return allBlogPosts
+    .filter((post) => post.category == "blog")
+    .map((item) => ({
+      post: item.slug,
+    }));
 }
 
 export async function generateMetadata(
   { params }: PageProps,
   parent: ResolvingMetadata,
 ): Promise<Metadata> {
-  const post = allBlogPosts.filter((p) => p.slug == params.post)[0];
-
+  // locate the current post being requested
+  const { post } = getBlogPost({
+    slug: params.post,
+    withNextPrev: false,
+  });
   // do nothing if the post was not found
   if (!post) return {};
 
@@ -69,10 +75,12 @@ export async function generateMetadata(
 
 export default async function Page({ params }: PageProps) {
   // locate the current post being requested
-  const post = allBlogPosts.filter((p) => p.slug == params.post)[0];
-
+  const { post, next, prev } = getBlogPost({
+    slug: params.post,
+    withNextPrev: true,
+  });
   if (!post) {
-    notFound();
+    return notFound();
   }
 
   const author = SOLFATE_AUTHORS[post.author];
