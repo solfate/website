@@ -13,20 +13,16 @@ export const getBlogPost = ({
 }: GetNewsletterPostProps) => {
   let [post, next, prev]: Array<BlogPost | null> = [null, null, null];
 
-  const postId = new RegExp(/^(?:.*)-([\d])+$/i).exec(slug)?.[1] || false;
-
-  if (!postId) return { post };
-
   // get the current post being requested
   // (sorted from latest to oldest)
-  const posts = allBlogPosts
-    .filter((post) => post.category == "snapshot")
-    .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+  const posts = allBlogPosts.sort(
+    (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime(),
+  );
 
   // locate the desired post, and the next/prev associated
   for (let i = 0; i < posts.length; i++) {
     // ignore all except the current `slug`
-    if (posts[i].id != postId) continue;
+    if (posts[i].slug != slug && posts[i].id != slug) continue;
 
     post = posts[i];
 

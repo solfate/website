@@ -79,9 +79,10 @@ export async function generateMetadata(
 export default async function Page({ params }: PageProps) {
   // locate the current post being requested
   const { post, next, prev } = getBlogPost({
-    slug: params.slug,
+    slug: new RegExp(/^(?:.*)-([\d])+$/i).exec(params.slug)?.[1] || params.slug,
     withNextPrev: true,
   });
+
   if (!post) {
     return notFound();
   }
