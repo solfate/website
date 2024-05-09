@@ -29,8 +29,10 @@ export default function MarketingFooter() {
         </ul>
         <ul className="space-y-2">
           <FooterSectionTitle title="Tools & Resources" />
-          <FooterSectionLink href="/developers" label="Solana DevList" />
+          <FooterSectionLink href="/devlist" label="Solana DevList" />
           <FooterSectionLink href="/faucet" label="Solana Faucet" />
+          <FooterSectionLink href="/snapshot" label="Snapshot Newsletter" />
+          <FooterSectionLink href="/blog" label="Blog & Articles" />
         </ul>
         {/* <ul className="space-y-2">
           <FooterSectionTitle title="Resources" />
