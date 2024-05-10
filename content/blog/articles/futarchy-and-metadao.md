@@ -1,7 +1,7 @@
 ---
 author: teague
 date: "Apr 26 2024"
-image: articles/futarchy-and-metadao/cover.jpg
+image: /media/blog/articles/futarchy-and-metadao/cover.jpg
 title: "MetaDAO: The First Futarchy"
 description:
   "Exploring futarchy, its principles, and applications, particularly how
@@ -14,7 +14,7 @@ due to human error at high levels of varying organizations. Whether it's a small
 community or a large nation, making decisions that benefit the collective while
 considering diverse perspectives is complex and difficult.
 
-![](/public/media/blog/articles/futarchy-and-metadao/cover.jpg)
+![MetaDAO and the First Futarchy](/public/media/blog/articles/futarchy-and-metadao/cover.jpg)
 
 Traditional governance systems often rely on elected officials or appointed
 leaders to make these decisions, but what if there was a more efficient and

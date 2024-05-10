@@ -158,4 +158,22 @@ export const mintableEpisodes: {
       clip: "intro",
     },
   },
+  // 50: {
+  //   episode: 50,
+  //   name: "EP#50 - Thorsten and Luzid",
+  //   description:
+  //     "Thorsten, the creator of the Luzid validator, joins James in our first in person " +
+  //     "episode. Thorsten shares his unique journey getting into software development " +
+  //     "and into Solana, starting as a jazz musician, then a poker player, then writing " +
+  //     "poker bots and diving into more development. Including building some of the most " +
+  //     "popular developer tooling at Metaplex.",
+  //   image: `https://solfate.com/media/podcast/mintable/ep50.jpg`,
+  //   // animationUrl: `https://todo.ipfs.dweb.link/`,
+  //   attributes: {
+  //     episode: 50,
+  //     guest: "Thorsten",
+  //     project: "Luzid",
+  //     clip: "thumbnail",
+  //   },
+  // },
 };

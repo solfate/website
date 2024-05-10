@@ -20,6 +20,11 @@ const nextConfig = {
         permanent: true,
       },
       {
+        source: "/snapshotref",
+        destination: "/snapshot",
+        permanent: true,
+      },
+      {
         source: "/newsletters",
         destination: "/snapshot",
         permanent: true,

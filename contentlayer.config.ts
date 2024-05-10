@@ -108,6 +108,13 @@ export const BlogPost = defineDocumentType(() => ({
   name: "BlogPost",
   filePathPattern: `blog/**/*.md`,
   fields: {
+    category: {
+      type: "enum",
+      description: "The type of post",
+      options: ["blog", "snapshot"],
+      default: "blog",
+      required: true,
+    },
     title: {
       type: "string",
       description: "The title of the post",
@@ -131,92 +138,6 @@ export const BlogPost = defineDocumentType(() => ({
     featured: {
       type: "boolean",
       description: "Whether or not this post is featured",
-      required: false,
-    },
-
-    description: {
-      type: "string",
-      description:
-        "Brief description of the post (also used in the SEO metadata)",
-      required: true,
-    },
-    tags: {
-      type: "string",
-      description: "Comma separated listing of tags",
-      required: false,
-    },
-    image: {
-      type: "string",
-      description: "Social share image",
-    },
-    author: {
-      required: true,
-      type: "enum",
-      options: ["nick", "james", "teague"],
-      description: "Author of the post",
-    },
-  },
-  computedFields: {
-    draft: {
-      description: "Draft status of the post",
-      type: "boolean",
-      resolve: (record) =>
-        record?.draft ?? record._raw.sourceFileName.startsWith("_"),
-    },
-    slug: {
-      description: "Computed slug of the post",
-      type: "string",
-      resolve: (record) => record?.slug ?? createStandardSlug(record._id),
-    },
-    href: {
-      description: "Local url path of the post",
-      type: "string",
-      resolve: (record) =>
-        `${ROUTE_PREFIX_BLOG}/${record?.slug ?? createStandardSlug(record._id)}`,
-    },
-    image: {
-      description: "Primary image for the post",
-      type: "string",
-      resolve: (record) => {
-        if (!record.image) return undefined;
-
-        if (
-          !record.image.startsWith("/") &&
-          !new RegExp(/^https?:\/\//gi).test(record.image)
-        )
-          return `/media/blog/${record.image}`;
-
-        return record.image;
-      },
-    },
-  },
-}));
-
-/**
- * Newsletter post schema
- */
-export const NewsletterPost = defineDocumentType(() => ({
-  name: "NewsletterPost",
-  filePathPattern: `newsletter/**/*.md`,
-  fields: {
-    title: {
-      type: "string",
-      description: "The title of the newsletter edition",
-      required: true,
-    },
-    longTitle: {
-      type: "string",
-      description: "The longer title of the post",
-      required: false,
-    },
-    date: {
-      type: "date",
-      description: "The public date of the post",
-      required: true,
-    },
-    draft: {
-      type: "boolean",
-      description: "Draft status of the post",
       required: false,
     },
     description: {
@@ -256,28 +177,23 @@ export const NewsletterPost = defineDocumentType(() => ({
     slug: {
       description: "Computed slug of the post",
       type: "string",
-      resolve: (record) =>
-        `${record?.slug || createStandardSlug(record.title)}-${createStandardSlug(record._id)}`,
+      resolve: (record) => {
+        if (record.category == "snapshot") {
+          return `${record?.slug || createStandardSlug(record.title)}-${createStandardSlug(record._id)}`;
+        }
+
+        return record?.slug ?? createStandardSlug(record._id);
+      },
     },
     href: {
-      description: "Local url path of the post",
-      type: "string",
-      resolve: (record) =>
-        `${ROUTE_PREFIX_SNAPSHOT}/${record?.slug || createStandardSlug(record.title)}-${createStandardSlug(record._id)}`,
-    },
-    image: {
-      description: "Primary image for the post",
+      description: "Local url route of the post",
       type: "string",
       resolve: (record) => {
-        if (!record.image) return undefined;
+        if (record.category == "snapshot") {
+          return `${ROUTE_PREFIX_SNAPSHOT}/${record?.slug || createStandardSlug(record.title)}-${createStandardSlug(record._id)}`;
+        }
 
-        if (
-          !record.image.startsWith("/") &&
-          !new RegExp(/^https?:\/\//gi).test(record.image)
-        )
-          return `/media/newsletter/${record.image}`;
-
-        return record.image;
+        return `${ROUTE_PREFIX_BLOG}/${record?.slug ?? createStandardSlug(record._id)}`;
       },
     },
   },
@@ -285,7 +201,7 @@ export const NewsletterPost = defineDocumentType(() => ({
 
 export default makeSource({
   contentDirPath: "content",
-  documentTypes: [PodcastEpisode, BlogPost, NewsletterPost],
+  documentTypes: [PodcastEpisode, BlogPost],
   onMissingOrIncompatibleData: "fail",
   onUnknownDocuments: "fail",
   onExtraFieldData: "fail",
