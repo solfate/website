@@ -240,34 +240,61 @@ export const ProfileEditorForm = memo(({ profile }: ComponentProps) => {
           </div>
         </div>
 
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid lg:grid-cols-2 gap-4">
           <div className="space-y-2">
-            <button
-              onClick={() => fileRef?.current?.click()}
-              title="Upload an avatar image"
-              className={clsx(
-                "relative border border-transparent hover:border-gray-500 rounded-full",
-                uploading ? "opacity-50 " : "",
-              )}
-              disabled={uploading}
-            >
-              {uploading && (
-                <span className="absolute w-full items-center align-middle justify-center h-full flex bg-white bg-opacity-50 z-10">
-                  <FeatherIcon
-                    name="UploadCloud"
-                    size={48}
-                    className="text-black"
-                  />
-                </span>
-              )}
-              <Avatar
-                href="#"
-                as="span"
-                size={128}
-                imageSrc={previewImage || formData.image}
-                className=""
-              />
-            </button>
+            <div className="flex gap-6 items-center">
+              <button
+                onClick={() => fileRef?.current?.click()}
+                title="Upload an avatar image"
+                className={clsx(
+                  "relative border border-transparent hover:border-gray-500 rounded-full",
+                  uploading ? "opacity-50 " : "",
+                )}
+                disabled={uploading}
+              >
+                {uploading && (
+                  <span className="absolute w-full items-center align-middle justify-center h-full flex bg-white bg-opacity-50 z-10">
+                    <FeatherIcon
+                      name="UploadCloud"
+                      size={48}
+                      className="text-black"
+                    />
+                  </span>
+                )}
+                <Avatar
+                  href="#"
+                  as="span"
+                  size={128}
+                  imageSrc={previewImage || formData.image}
+                  className=""
+                />
+              </button>
+
+              <div className="space-y-4">
+                <button
+                  type="button"
+                  disabled={uploading}
+                  onClick={() => fileRef?.current?.click()}
+                  className="btn btn-black"
+                >
+                  Change Photo
+                </button>
+                <button
+                  type="button"
+                  disabled={uploading}
+                  onClick={() => {
+                    dispatch({
+                      type: "update",
+                      field: "image",
+                      value: "",
+                    });
+                  }}
+                  className="btn btn-ghost"
+                >
+                  Remove Photo
+                </button>
+              </div>
+            </div>
 
             <div className="space-y-1">
               <label htmlFor="name" className="block">
