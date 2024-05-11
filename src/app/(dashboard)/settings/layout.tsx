@@ -1,6 +1,4 @@
 import { Metadata } from "next";
-import { redirect } from "next/navigation";
-import { getUserSession } from "@/lib/auth";
 import { SettingsSidebar } from "@/components/dashboard/settings/SettingsSidebar";
 
 type LayoutProps = {
@@ -12,12 +10,6 @@ export const metadata: Metadata = {
 };
 
 export default async function Layout({ children }: LayoutProps) {
-  // ensure a user is logged in for all dashboard/settings routes
-  const session = await getUserSession();
-  if (!session?.user) {
-    redirect("/signin");
-  }
-
   return (
     <>
       {/* <DashboardHeader session={session} /> */}
