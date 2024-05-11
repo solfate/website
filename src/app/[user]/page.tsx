@@ -22,9 +22,10 @@ export default async function Page({ params }: PageProps) {
 
   if (!profile) {
     // direct the user to setup their profile
-    // if (session?.user.username == params.user) {
-    //   return redirect("/onboarding");
-    // }
+    if (session?.user.username == params.user) {
+      return redirect("/settings/profile");
+      // return redirect("/onboarding");
+    }
 
     return notFound();
   }
