@@ -1,12 +1,12 @@
+import { NextResponse } from "next/server";
 import { getUserSession } from "@/lib/auth";
-import { redirect } from "next/navigation";
 
-export async function GET(request: Request) {
+export async function GET(req: Request) {
   const session = await getUserSession();
 
   if (!!session?.user?.username) {
-    redirect(`/${session.user.username}`);
+    return NextResponse.redirect(new URL(`/${session.user.username}`, req.url));
   } else {
-    redirect("/signin");
+    return NextResponse.redirect(new URL(`/signin`, req.url));
   }
 }
