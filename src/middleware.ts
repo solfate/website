@@ -33,12 +33,15 @@ export default async function middleware(req: NextRequest, ev: NextFetchEvent) {
   }
 
   // require the user to be authenticated to access these routes
-  protectRoutesViaMiddleware({
-    protectedKeys: ["dashboard", "settings", "welcome", "onboarding"],
-    req: req,
-    currentKey: key,
-    destination: "/signin",
-  });
+  if (
+    await protectRoutesViaMiddleware({
+      protectedKeys: ["dashboard", "settings", "welcome", "onboarding"],
+      req: req,
+      currentKey: key,
+    })
+  ) {
+    return NextResponse.redirect(new URL("/signin", req.url));
+  }
 
   return NextResponse.next();
 }

@@ -46,17 +46,16 @@ export async function protectRoutesViaMiddleware({
   protectedKeys,
   currentKey,
   req,
-  destination = "/signin",
 }: {
   protectedKeys: string[];
   currentKey: string;
   req: NextRequest;
-  destination?: string;
 }) {
   if (protectedKeys.includes(currentKey)) {
     const session = await getTokenSession(req);
     if (!session || !session.id || !session.username) {
-      return NextResponse.redirect(new URL(destination, req.url));
+      return true;
     }
   }
+  return false;
 }
