@@ -3,7 +3,7 @@ import {
   type NextRequest,
   NextResponse,
 } from "next/server";
-import { parse, protectRoutesViaMiddleware } from "@/lib/middleware/utils";
+import { parse, shouldProtectRoute } from "@/lib/middleware/utils";
 import RedirectMiddleware from "@/lib/middleware/RedirectMiddleware";
 
 export const config = {
@@ -34,7 +34,7 @@ export default async function middleware(req: NextRequest, ev: NextFetchEvent) {
 
   // require the user to be authenticated to access these routes
   if (
-    await protectRoutesViaMiddleware({
+    await shouldProtectRoute({
       protectedKeys: ["dashboard", "settings", "welcome", "onboarding"],
       req: req,
       currentKey: key,

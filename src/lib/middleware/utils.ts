@@ -42,7 +42,7 @@ export async function getTokenSession(req: NextRequest) {
 /**
  * Middleware helper to protect routes from user access unless they meet the desired criteria
  */
-export async function protectRoutesViaMiddleware({
+export async function shouldProtectRoute({
   protectedKeys,
   currentKey,
   req,
