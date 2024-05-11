@@ -1,9 +1,7 @@
-import Link from "next/link";
-import Image from "next/image";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import { getUserProfile } from "@/lib/queries/users";
-import { SocialLinks } from "@/components/SocialLinks";
 import { ProfileSection } from "@/components/users/ProfileSection";
+import { getUserSession } from "@/lib/auth";
 
 type PageProps = {
   params: {
@@ -12,7 +10,9 @@ type PageProps = {
 };
 
 export default async function Page({ params }: PageProps) {
-  if (!params.user) notFound();
+  if (!params.user) return notFound();
+
+  const session = await getUserSession();
 
   // get the product's record from the database
   const profile = await getUserProfile({
@@ -20,7 +20,14 @@ export default async function Page({ params }: PageProps) {
     // include: { people: true },
   });
 
-  if (!profile) notFound();
+  if (!profile) {
+    // direct the user to setup their profile
+    if (session?.user.username == params.user) {
+      return redirect("/onboarding");
+    }
+
+    return notFound();
+  }
 
   return (
     <main className="container md:!py-12 min-h-[60vh] max-w-5xl !space-y-10">
