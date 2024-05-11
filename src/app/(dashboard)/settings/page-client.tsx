@@ -1,7 +1,7 @@
 "use client";
 
 import { memo, useCallback, useReducer, useState } from "react";
-import { SettingsHeader } from "../../../components/dashboard/settings/SettingsHeader";
+import { SettingsHeader } from "@/components/dashboard/settings/SettingsHeader";
 import { getUser } from "@/lib/queries/users";
 import clsx from "clsx";
 import { User } from "@prisma/client";

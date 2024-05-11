@@ -6,7 +6,7 @@ import type {
   ApiUploadPostInput,
   ApiUploadPostResponse,
 } from "@/types/api/general";
-import { SettingsHeader } from "../../../../components/dashboard/settings/SettingsHeader";
+import { SettingsHeader } from "@/components/dashboard/settings/SettingsHeader";
 import { getUserProfile } from "@/lib/queries/users";
 import clsx from "clsx";
 import toast from "react-hot-toast";
