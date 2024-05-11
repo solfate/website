@@ -1,12 +1,16 @@
 import { getServerSession } from "next-auth";
 import { authOptions } from "./options";
 import {
+  AccountConnection,
+  AccountProviders,
   AccountSanitizeKeys,
   AccountsGroupByProvider,
   WithAuthHandler,
   WithSessionHandler,
 } from "@/types";
 import { Account } from "@prisma/client";
+import { GithubProfile } from "next-auth/providers/github";
+import { TwitterProfile } from "next-auth/providers/twitter";
 
 /**
  * Get the current user's session
@@ -49,6 +53,7 @@ export const withUserSession =
 export function groupAccountsByProvider(accounts: Account[], sanitize = true) {
   // init a keyed group tracker (giving type save keys for the supported providers)
   const groupedAccounts: AccountsGroupByProvider = {
+    unknown: undefined,
     solana: undefined,
     twitter: undefined,
     github: undefined,
@@ -67,4 +72,40 @@ export function groupAccountsByProvider(accounts: Account[], sanitize = true) {
   });
 
   return groupedAccounts;
+}
+
+/**
+ *
+ */
+export function convertAccountsToConnections(
+  accounts: Account[],
+): AccountConnection[] {
+  return accounts
+    .filter((account) => account.provider != "jwt")
+    .map((account) => {
+      switch (account.provider.toLowerCase() as AccountProviders) {
+        case "github":
+          return {
+            provider: "github",
+            value: (account.provider_profile as GithubProfile).login,
+          };
+        case "twitter":
+          return {
+            provider: "twitter",
+            value: (account.provider_profile as object as TwitterProfile).data
+              .username,
+          };
+        case "solana":
+          return {
+            provider: "solana",
+            value: account.providerAccountId,
+          };
+        default:
+          // have a catch all in case a
+          return {
+            provider: "unknown",
+            value: "unknown",
+          };
+      }
+    });
 }

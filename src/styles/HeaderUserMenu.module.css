@@ -5,9 +5,6 @@
 .button {
   @apply px-3 py-3 items-center inline-flex w-full justify-center text-sm;
 }
-.button svg {
-  @apply h-5 w-5;
-}
 
 .items {
   @apply absolute right-0 mt-2 w-56 origin-top-right p-1 space-y-1;
@@ -22,7 +19,7 @@
   @apply px-2 py-2 font-medium text-sm;
   @apply flex items-center gap-2 line-clamp-1;
   @apply rounded-md;
-  /* @apply hover:bg-gray-100; */
+  @apply hover:bg-gray-100;
 }
 
 .item {
@@ -34,8 +31,4 @@
 }
 .item.inactive {
   @apply text-gray-900;
-}
-
-.item svg {
-  @apply h-5 w-5;
 }

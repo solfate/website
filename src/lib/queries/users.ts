@@ -4,10 +4,8 @@
 
 import prisma from "@/lib/prisma";
 import { Profile, Prisma, User, Account } from "@prisma/client";
+import { getUserSession } from "../auth";
 
-/**
- * Get a single User's master account from the database
- */
 export async function getUser({
   id,
   username,
@@ -15,12 +13,15 @@ export async function getUser({
   id?: User["id"];
   username?: User["username"];
 }) {
-  if (!id && !username) return null;
+  // require some input, or fallback to the current authed user
+  if (!id && !username) {
+    // auto-magically fallback to the user
+    const session = await getUserSession();
+    if (!!session?.user.id) id = session.user.id;
+    else return null;
+  }
 
-  // smartly determine the methodology to locate the user
-  // if (!!providerAccountId)
-
-  return prisma.user.findMany({
+  return prisma.user.findUnique({
     where: {
       id,
       username,
@@ -65,9 +66,16 @@ export async function getUserByProviderAccountId({
 export async function getUserProfile({
   username,
 }: {
-  username: Profile["username"];
+  username?: Profile["username"];
   // status?: Profile["status"];
 }) {
+  // fallback to the current authed user
+  if (!username) {
+    const session = await getUserSession();
+    if (!!session?.user.username) username = session.user.username;
+    else return null;
+  }
+
   const profile = await prisma.profile.findUnique({
     where: { username },
     // include: {

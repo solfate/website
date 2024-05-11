@@ -94,8 +94,14 @@ const nextConfig = {
   images: {
     remotePatterns: [
       {
-        hostname: "*.ipfs.dweb.link",
+        protocol: "https",
+        hostname: "assets.solfate.com",
       },
+      // {
+      //   protocol: "https",
+      //   hostname: "storage.googleapis.com",
+      //   pathname: "/assets.solfate.com/**",
+      // },
     ],
   },
 };

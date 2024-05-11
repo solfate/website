@@ -33,10 +33,23 @@ export type WithSessionHandler = {
 };
 
 /**
+ * Key of all supported account providers
+ */
+export type AccountProviders = "unknown" | "twitter" | "github" | "solana";
+
+/**
+ *
+ */
+export type AccountConnection = {
+  provider: AccountProviders;
+  value: string;
+};
+
+/**
  * Accounts grouped by their NextAuth `provider` (e.g. twitter, github, etc)
  */
 export type AccountsGroupByProvider = Record<
-  "twitter" | "github" | "solana",
+  AccountProviders,
   Account[] | undefined
 > & {
   [key: string]: Account[] | undefined;

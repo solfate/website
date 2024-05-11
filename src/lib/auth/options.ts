@@ -3,12 +3,14 @@ import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import { NextAuthOptions, getServerSession } from "next-auth";
 import { SITE } from "@/lib/const/general";
 import { debug } from "@/lib/helpers";
+import { getUser } from "@/lib/queries/users";
 import { createAccount, getAccountByProviderId } from "@/lib/queries/accounts";
 
 import { SolanaProvider } from "./SolanaProvider";
+import CredentialsProvider from "next-auth/providers/credentials";
 import Twitter from "next-auth/providers/twitter";
 import Github from "next-auth/providers/github";
-import { Account } from "@prisma/client";
+import { Account, User } from "@prisma/client";
 
 const IS_VERCEL_DEPLOYMENT = !!process.env.VERCEL_URL;
 
@@ -28,6 +30,29 @@ export const authOptions: NextAuthOptions = {
     Github({
       clientId: process.env.GITHUB_ID,
       clientSecret: process.env.GITHUB_SECRET,
+    }),
+    /**
+     * this JWT provider is used as a hack to force update a user's session
+     * by calling `signIn("jwt")` on the client, it forces the session to
+     * refresh the data updated in the token (i.e. updated username)
+     */
+    CredentialsProvider({
+      type: "credentials",
+      id: "jwt",
+      name: "jwt",
+      credentials: {},
+      async authorize() {
+        try {
+          const user = await getUser({});
+          if (!user) throw "Unable to locate current user";
+          // todo: this will create a db Account record for JWT as a provider. prevent this
+          return user as User;
+        } catch (err) {
+          console.warn("jwt:", err);
+          // always return `null` to signify an unauthorized request
+          return null;
+        }
+      },
     }),
   ],
   pages: {
@@ -232,6 +257,19 @@ export const authOptions: NextAuthOptions = {
   events: {
     async signIn({ user, account, isNewUser }) {
       debug("[api/auth] signIn event");
+
+      // force delete the jwt account since it is used for temporary session refreshes
+      if (account?.provider == "jwt") {
+        debug("removing temporary jwt account");
+        await prisma.account.delete({
+          where: {
+            provider_and_account_id_idx: {
+              provider: "jwt",
+              providerAccountId: account.providerAccountId,
+            },
+          },
+        });
+      }
 
       /**
        * todo: handle creating a new Team and TeamMember relationship for newly created users

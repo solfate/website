@@ -2,6 +2,8 @@
  * Collection of helper functions for interacting with the API
  */
 
+import { ZodError } from "zod";
+
 /**
  * Wrapper for the native `Response.json` to provide type safe responses
  */
@@ -47,5 +49,26 @@ export async function fetcher<ApiInputType, ApiResponseType = string>(
     if (res.ok) {
       return (await res.text()) as ApiResponseType;
     } else throw await res.text();
+  });
+}
+
+/**
+ * Standard handler for processing error Responses to send to the client
+ */
+export function ApiErrorResponse(err: any) {
+  // console.warn("[API error]", err);
+  let message = "An unknown error occurred";
+
+  if (err instanceof ZodError) {
+    message = err.errors[0].message;
+  } else if (typeof err == "string") {
+    message = err;
+  }
+  //  else if (err instanceof Error) {
+  //   message = err.message;
+  // }
+
+  return new Response(message, {
+    status: 400,
   });
 }

@@ -22,12 +22,36 @@ body {
   @apply space-y-8 md:space-y-20;
 }
 
-.input {
+.input,
+textarea,
+input[type="url"],
+input[type="text"],
+input[type="number"],
+input[type="email"],
+input[type="password"] {
   @apply px-3 py-2 rounded-lg;
   @apply border bg-white border-gray-300;
+  @apply disabled:pointer-events-none disabled:opacity-60;
 }
-.input:disabled {
-  @apply bg-gray-100 text-gray-400 border-gray-300;
+.input-default {
+  @apply bg-white border border-gray-300;
+}
+
+.prefix-input {
+  @apply input input-default;
+  @apply inline-flex max-w-full overflow-hidden relative items-center p-0;
+}
+.prefix-input label,
+.prefix-input .label {
+  @apply input;
+  @apply !bg-gray-100 !text-gray-400 px-2;
+  @apply rounded-r-none !border-transparent !border-r-gray-300 border-r;
+  @apply flex-shrink-0;
+}
+
+.prefix-input .input-box {
+  @apply !px-2 !rounded-l-none !border-transparent;
+  @apply flex-grow;
 }
 
 .btn {
@@ -52,7 +76,7 @@ body {
 }
 .btn-ghost {
   @apply bg-transparent border-gray-300;
-  @apply hover:border-gray-400;
+  @apply hover:border-gray-400 disabled:text-gray-500;
 }
 
 .prose-cover-image {

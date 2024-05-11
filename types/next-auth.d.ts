@@ -9,7 +9,7 @@ declare module "next-auth" {
       id: string;
       email?: string;
       name: string;
-      image?: string;
+      picture?: string;
       username: string;
     };
   }
@@ -18,7 +18,7 @@ declare module "next-auth" {
    */
   interface User {
     username: string;
-    image?: string;
+    picture?: string;
   }
 }
 
