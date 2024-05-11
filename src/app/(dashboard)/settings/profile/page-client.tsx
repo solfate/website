@@ -6,7 +6,7 @@ import type {
   ApiUploadPostInput,
   ApiUploadPostResponse,
 } from "@/types/api/general";
-import { SettingsHeader } from "./SettingsHeader";
+import { SettingsHeader } from "../../../../components/dashboard/settings/SettingsHeader";
 import { getUserProfile } from "@/lib/queries/users";
 import clsx from "clsx";
 import toast from "react-hot-toast";
@@ -33,7 +33,7 @@ type FormAction =
 
 type ComponentProps = { profile: Awaited<ReturnType<typeof getUserProfile>> };
 
-export const ProfileEditorForm = memo(({ profile }: ComponentProps) => {
+const ProfilePageClient = memo(({ profile }: ComponentProps) => {
   const [pendingChanges, setPendingChanges] = useState(false);
   const [loading, setLoading] = useState(false);
 
@@ -410,3 +410,5 @@ export const ProfileEditorForm = memo(({ profile }: ComponentProps) => {
     </form>
   );
 });
+
+export default ProfilePageClient;

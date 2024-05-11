@@ -1,6 +1,6 @@
 import { Metadata } from "next";
 import { getUser } from "@/lib/queries/users";
-import { GeneralSettingsEditor } from "@/components/dashboard/settings/GeneralSettingsEditor";
+import SettingsPageClient from "./page-client";
 
 export const metadata: Metadata = {
   title: "Settings / General - Solfate",
@@ -9,5 +9,5 @@ export const metadata: Metadata = {
 export default async function Page() {
   const user = await getUser({});
 
-  return <GeneralSettingsEditor user={user} />;
+  return <SettingsPageClient user={user} />;
 }

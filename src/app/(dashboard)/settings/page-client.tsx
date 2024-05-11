@@ -1,7 +1,7 @@
 "use client";
 
 import { memo, useCallback, useReducer, useState } from "react";
-import { SettingsHeader } from "./SettingsHeader";
+import { SettingsHeader } from "../../../components/dashboard/settings/SettingsHeader";
 import { getUser } from "@/lib/queries/users";
 import clsx from "clsx";
 import { User } from "@prisma/client";
@@ -23,7 +23,7 @@ type FormAction =
 
 type ComponentProps = { user: Awaited<ReturnType<typeof getUser>> };
 
-export const GeneralSettingsEditor = memo(({ user }: ComponentProps) => {
+const SettingsPageClient = memo(({ user }: ComponentProps) => {
   const [pendingChanges, setPendingChanges] = useState(false);
   const [loading, setLoading] = useState(false);
 
@@ -154,3 +154,5 @@ export const GeneralSettingsEditor = memo(({ user }: ComponentProps) => {
     </main>
   );
 });
+
+export default SettingsPageClient;

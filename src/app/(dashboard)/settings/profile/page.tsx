@@ -1,8 +1,8 @@
 import { Metadata } from "next";
-import { ProfileEditorForm } from "@/components/dashboard/settings/ProfileEditorForm";
 import { getUserProfile } from "@/lib/queries/users";
 import prisma from "@/lib/prisma";
 import { getUserSession } from "@/lib/auth";
+import ProfilePageClient from "./page-client";
 
 export const metadata: Metadata = {
   title: "Settings / Profile - Solfate",
@@ -24,5 +24,5 @@ export default async function Page() {
     // todo: we should check and ensure the profile was created
   }
 
-  return <ProfileEditorForm profile={profile} />;
+  return <ProfilePageClient profile={profile} />;
 }
