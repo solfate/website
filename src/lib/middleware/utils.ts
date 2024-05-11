@@ -1,5 +1,7 @@
-import { NextRequest } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { SITE } from "@/lib/const/general";
+import { getToken } from "next-auth/jwt";
+import type { Session } from "next-auth";
 
 /**
  * Parse standard data out of a middleware Request
@@ -29,3 +31,32 @@ export const parse = (req: NextRequest) => {
 
   return { domain, path, fullPath, key, fullKey };
 };
+
+/**
+ * Get user's session directly via the JWT. This is useful directly in middleware.
+ */
+export async function getTokenSession(req: NextRequest) {
+  return (await getToken({ req })) as Session["user"];
+}
+
+/**
+ * Middleware helper to protect routes from user access unless they meet the desired criteria
+ */
+export async function protectRoutesViaMiddleware({
+  protectedKeys,
+  currentKey,
+  req,
+  destination = "/signin",
+}: {
+  protectedKeys: string[];
+  currentKey: string;
+  req: NextRequest;
+  destination?: string;
+}) {
+  if (protectedKeys.includes(currentKey)) {
+    const session = await getTokenSession(req);
+    if (!session || !session.id || !session.username) {
+      return NextResponse.redirect(new URL(destination, req.url));
+    }
+  }
+}

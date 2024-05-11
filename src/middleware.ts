@@ -3,7 +3,7 @@ import {
   type NextRequest,
   NextResponse,
 } from "next/server";
-import { parse } from "@/lib/middleware/utils";
+import { parse, protectRoutesViaMiddleware } from "@/lib/middleware/utils";
 import RedirectMiddleware from "@/lib/middleware/RedirectMiddleware";
 
 export const config = {
@@ -22,7 +22,7 @@ export const config = {
 };
 
 export default async function middleware(req: NextRequest, ev: NextFetchEvent) {
-  const { domain } = parse(req);
+  const { domain, key } = parse(req);
 
   if (
     domain == "solfate.link" ||
@@ -31,6 +31,14 @@ export default async function middleware(req: NextRequest, ev: NextFetchEvent) {
   ) {
     return RedirectMiddleware(req);
   }
+
+  // require the user to be authenticated to access these routes
+  protectRoutesViaMiddleware({
+    protectedKeys: ["dashboard", "settings", "welcome", "onboarding"],
+    req: req,
+    currentKey: key,
+    destination: "/signin",
+  });
 
   return NextResponse.next();
 }
