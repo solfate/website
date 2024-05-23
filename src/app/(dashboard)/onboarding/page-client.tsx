@@ -182,12 +182,10 @@ const OnboardingWizard = memo(({ currentStep, state }: OnboardingStepProps) => {
 });
 
 const OnboardingStep1SetUsername = memo(({ state }: OnboardingStepProps) => {
+  const { pending } = useFormStatus();
+
   return (
-    <section
-      // action={isUsernameAvailable}
-      // onSubmit={checkAvailability}
-      className="max-w-lg mx-auto space-y-6 text-center"
-    >
+    <section className="max-w-lg mx-auto space-y-6 text-center">
       <div className="space-y-2">
         <h2 className="font-semibold text-2xl">Choose a username</h2>
         <p className="text-gray-500 text-sm">
@@ -205,12 +203,11 @@ const OnboardingStep1SetUsername = memo(({ state }: OnboardingStepProps) => {
             name="username"
             defaultValue={state.data?.username || ""}
             id="username"
-            // value={formData.username}
             placeholder="username"
             className={`input-box`}
-            // onChange={handleInputChange}
             maxLength={USERNAME_MAX_LEN}
-            // disabled={true}
+            disabled={pending}
+            aria-disabled={pending}
           />
         </div>
 
@@ -235,6 +232,8 @@ const OnboardingStep1SetUsername = memo(({ state }: OnboardingStepProps) => {
       <section className="flex items-center justify-center gap-2">
         {/* <button
           type="button"
+          disabled={pending}
+          aria-disabled={pending}
           className={`btn btn-ghost mx-auto`}
           disabled={loading}
           onClick={(e) => toast.error("Tweet to ask")}
@@ -243,7 +242,8 @@ const OnboardingStep1SetUsername = memo(({ state }: OnboardingStepProps) => {
         </button> */}
         <button
           type="submit"
-          // disabled={loading}
+          disabled={pending}
+          aria-disabled={pending}
           className={`btn btn-black mx-auto inline-flex gap-2`}
         >
           Continue
@@ -259,6 +259,8 @@ const OnboardingStep1SetUsername = memo(({ state }: OnboardingStepProps) => {
  */
 const OnboardingStep2UploadAvatarUploadAvatar = memo(
   ({ currentStep, state }: OnboardingStepProps) => {
+    const { pending } = useFormStatus();
+
     const fileRef = useRef<HTMLInputElement>(null);
     const [uploading, setUploading] = useState(false);
     const [previewImage, setPreviewImage] = useState<string | null>(null);
@@ -331,7 +333,6 @@ const OnboardingStep2UploadAvatarUploadAvatar = memo(
       [
         previewImage,
         fileRef,
-        profileImage,
         setProfileImage,
         setPreviewImage,
         uploading,
@@ -340,10 +341,7 @@ const OnboardingStep2UploadAvatarUploadAvatar = memo(
     );
 
     return (
-      <section
-        // onSubmit={checkAvailability}
-        className="max-w-lg mx-auto space-y-8"
-      >
+      <section className="max-w-lg mx-auto space-y-8">
         <input type="hidden" name="step" value={currentStep} />
         <input
           type="hidden"
@@ -360,6 +358,8 @@ const OnboardingStep2UploadAvatarUploadAvatar = memo(
           aria-hidden={true}
           hidden={true}
           ref={fileRef}
+          disabled={uploading || pending}
+          aria-disabled={uploading || pending}
           className="hidden"
           type="file"
           name="avatar"
@@ -384,7 +384,8 @@ const OnboardingStep2UploadAvatarUploadAvatar = memo(
               "block relative border mx-auto justify-center text-center border-transparent hover:border-gray-500 rounded-full",
               uploading ? "opacity-50 " : "",
             )}
-            disabled={uploading}
+            disabled={uploading || pending}
+            aria-disabled={uploading || pending}
           >
             {uploading && (
               <span className="absolute w-full items-center align-middle justify-center h-full flex bg-white bg-opacity-50 z-10">
@@ -407,7 +408,8 @@ const OnboardingStep2UploadAvatarUploadAvatar = memo(
           <div className="grid grid-rows-2 sm:grid-rows-1 grid-flow-row whitespace-nowrap items-center gap-4 text-center">
             <button
               type="button"
-              // disabled={uploading}
+              disabled={uploading || pending}
+              aria-disabled={uploading || pending}
               // onClick={() => fileRef?.current?.click()}
               className="btn btn-black w-full justify-center text-center"
             >
@@ -415,7 +417,7 @@ const OnboardingStep2UploadAvatarUploadAvatar = memo(
             </button>
             <button
               type="button"
-              disabled={uploading}
+              disabled={uploading || pending}
               onClick={() => {
                 setProfileImage(null);
                 setPreviewImage(null);
@@ -444,7 +446,8 @@ const OnboardingStep2UploadAvatarUploadAvatar = memo(
         <section className="flex items-center justify-center gap-2">
           {/* <button
             type="button"
-            // disabled={loading}
+            disabled={pending}
+            aria-disabled={pending}
             onClick={() => {
               router.replace(`/onboarding?step=${currentStep - 1}`);
             }}
@@ -455,7 +458,8 @@ const OnboardingStep2UploadAvatarUploadAvatar = memo(
           </button> */}
           <button
             type="submit"
-            // disabled={loading}
+            disabled={uploading || pending}
+            aria-disabled={uploading || pending}
             className={`btn btn-black mx-auto inline-flex gap-2`}
           >
             Next
@@ -472,6 +476,8 @@ const OnboardingStep2UploadAvatarUploadAvatar = memo(
  */
 const OnboardingStep3BasicProfile = memo(
   ({ currentStep, state }: OnboardingStepProps) => {
+    const { pending } = useFormStatus();
+
     return (
       <section
         //  action={}
@@ -500,8 +506,8 @@ const OnboardingStep3BasicProfile = memo(
               name="name"
               id="name"
               defaultValue={state.data?.name || ""}
-              // value={formData.name || ""}
-              // onChange={handleInputChange}
+              disabled={pending}
+              aria-disabled={pending}
               placeholder={"Defaults to your username"}
               className="input-box w-full"
             />
@@ -519,8 +525,8 @@ const OnboardingStep3BasicProfile = memo(
               name="oneLiner"
               id="oneLiner"
               defaultValue={state.data?.oneLiner || ""}
-              // value={formData.oneLiner || ""}
-              // onChange={handleInputChange}
+              disabled={pending}
+              aria-disabled={pending}
               placeholder={"Just one line"}
               className="input-box w-full"
             />
@@ -537,8 +543,8 @@ const OnboardingStep3BasicProfile = memo(
               name="bio"
               id="bio"
               defaultValue={state.data?.bio || ""}
-              // value={formData.bio || ""}
-              // onChange={handleInputChange}
+              disabled={pending}
+              aria-disabled={pending}
               placeholder="Describe yourself and tell the world"
               className="w-full h-28 max-h-28"
               // disabled={true}
@@ -561,7 +567,8 @@ const OnboardingStep3BasicProfile = memo(
         <section className="flex items-center justify-center gap-2">
           {/* <button
             type="button"
-            // disabled={loading}
+            disabled={pending}
+            aria-disabled={pending}
             onClick={() => {
               router.replace(`/onboarding?step=${currentStep - 1}`);
             }}
@@ -572,7 +579,8 @@ const OnboardingStep3BasicProfile = memo(
           </button> */}
           <button
             type="submit"
-            // disabled={loading}
+            disabled={pending}
+            aria-disabled={pending}
             className={`btn btn-black mx-auto inline-flex gap-2`}
           >
             Complete Profile
