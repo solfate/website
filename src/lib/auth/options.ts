@@ -57,7 +57,7 @@ export const authOptions: NextAuthOptions = {
   ],
   pages: {
     signIn: "/signin",
-    newUser: "/dashboard", // New users will be directed here on first sign in (leave the property out if not of interest)
+    newUser: "/onboarding", // New users will be directed here on first sign in (leave the property out if not of interest)
     signOut: "/signout",
     // todo: handle the errors (like when a use cancels the auth and returns to the app)
     // error: "/signin", // Error code passed in query string as ?error=
