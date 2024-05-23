@@ -162,7 +162,6 @@ const ProfilePageClient = memo(({ profile }: ComponentProps) => {
                 size: file.size,
                 type: file.type,
                 lastModified: file.lastModified,
-                length: file.length,
               },
             },
           }).then((res) => JSON.parse(res));

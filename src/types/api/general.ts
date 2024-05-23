@@ -8,7 +8,6 @@ export type ApiUploadPostInput = {
     type: string;
     size: number;
     lastModified: number;
-    length: number;
   };
 };
 
