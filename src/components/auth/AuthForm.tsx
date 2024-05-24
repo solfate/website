@@ -69,7 +69,7 @@ export const AuthForm = memo(({ className, callbackPath }: AuthFormProps) => {
     setProcessingStage(WALLET_STAGE.WALLET_CONNECT);
 
     // set the default callback url
-    let callbackUrl = !!callbackPath
+    let callbackUrl: string = !!callbackPath
       ? `${window.location.protocol}//${window.location.host}${
           !!callbackPath ? callbackPath : window.location.pathname
         }`

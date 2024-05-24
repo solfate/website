@@ -1,8 +1,7 @@
 import { Metadata } from "next";
 import { getUserProfile } from "@/lib/queries/users";
-import prisma from "@/lib/prisma";
-import { getUserSession } from "@/lib/auth";
 import ProfilePageClient from "./page-client";
+import { redirect } from "next/navigation";
 
 export const metadata: Metadata = {
   title: "Settings / Profile - Solfate",
@@ -15,13 +14,7 @@ export default async function Page() {
 
   // auto create the authed user's profile if none exists
   if (!profile) {
-    const session = await getUserSession();
-    profile = await prisma.profile.create({
-      data: {
-        username: session!.user.username,
-      },
-    });
-    // todo: we should check and ensure the profile was created
+    return redirect("/onboarding");
   }
 
   return <ProfilePageClient profile={profile} />;
