@@ -1,10 +1,6 @@
 import { memo } from "react";
-import {
-  format as formatDate,
-  formatDistance,
-  isAfter,
-  sub as subDate,
-} from "date-fns";
+import { formatDistance, isAfter, sub as subDate } from "date-fns";
+import { formattedDate } from "@/lib/utils";
 
 type FormattedDateProps = {
   date: string;
@@ -24,7 +20,7 @@ export const FormattedDateAgo = memo(
         ? formatDistance(new Date(date), new Date(), {
             addSuffix: true,
           })
-        : formatDate(new Date(date), "MMM dd, yyyy")}
+        : formattedDate(date)}
     </p>
   ),
 );

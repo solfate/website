@@ -35,10 +35,12 @@
     "add": "^2.0.6",
     "boring-avatars": "^1.10.2",
     "bs58": "^5.0.0",
+    "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
     "contentlayer": "^0.3.4",
     "date-fns": "^2.30.0",
     "fathom-client": "^3.6.0",
+    "lucide-react": "^0.379.0",
     "next": "14.2.3",
     "next-auth": "^4.24.5",
     "next-contentlayer": "^0.3.4",
@@ -50,6 +52,8 @@
     "react-hot-toast": "^2.4.1",
     "react-spinners": "^0.13.8",
     "solana-auth": "^0.0.10",
+    "tailwind-merge": "^2.3.0",
+    "tailwindcss-animate": "^1.0.7",
     "zod": "^3.23.6"
   },
   "devDependencies": {

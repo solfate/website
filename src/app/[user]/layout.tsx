@@ -71,7 +71,7 @@ export default async function Layout({ children, params }: LayoutProps) {
             <div className="flex-grow space-y-2 md:space-y-3">
               <section className="space-y-0">
                 <h1 className="text-black line-clamp-1 text-xl md:text-3xl font-semibold">
-                  <Link href={`/${profile.username}`} className="link">
+                  <Link href={`/${profile.username}`} className="">
                     {profile.name || profile.username}
                   </Link>
                 </h1>
