@@ -14,6 +14,13 @@ type ImageSize = {
   height: number;
 };
 
+type LinkDetails = {
+  title: string;
+  href: string;
+  description: React.ReactNode;
+  icon?: string;
+};
+
 /**
  * Define simple type definitions of the env variables
  */
