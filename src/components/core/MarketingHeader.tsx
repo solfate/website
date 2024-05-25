@@ -16,12 +16,13 @@ import {
 } from "@/components/ui/navigation-menu";
 import { Drawer, DrawerTrigger, DrawerContent } from "@/components/ui/drawer";
 import { MenuIcon, XIcon } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useMediaQuery } from "@/hooks/use-media-query";
 import Link from "next/link";
 import PodcastImage from "@/../public/media/podcast/cover0.jpg";
 import Image from "next/image";
 import { NAV_ROUTES } from "@/lib/const/nav";
+import { usePathname } from "next/navigation";
 
 const podcast: { featured: LinkDetails; links: LinkDetails[] } = {
   featured: NAV_ROUTES["podcast"],
@@ -37,11 +38,11 @@ const podcast: { featured: LinkDetails; links: LinkDetails[] } = {
         </p>
       ),
     },
-    {
-      title: "Past Guest",
-      href: "/podcast#hosts",
-      description: "View the list of past guests on the podcast.",
-    },
+    // {
+    //   title: "Past Guest",
+    //   href: "/podcast#hosts",
+    //   description: "View the list of past guests on the podcast.",
+    // },
     {
       title: "Browse Episodes",
       href: "/podcast/browse/1",
@@ -73,8 +74,13 @@ export default function MarketingHeader({
 }: {
   session?: Option<Session>;
 }) {
+  const pathName = usePathname();
   const [open, setOpen] = useState(false);
   const isDesktop = useMediaQuery("(min-width: 768px)");
+
+  useEffect(() => {
+    setOpen(false);
+  }, [pathName]);
 
   return (
     <SessionProvider session={session}>
@@ -88,7 +94,7 @@ export default function MarketingHeader({
             "z-30 w-full flex items-center justify-between mx-auto gap-2 container"
           }
         >
-          <div className={"items-center gap-2 flex-1 flex"}>
+          <div className={"items-center gap-2 flex-1 justify-between flex"}>
             <AppLogo logoSize={36} />
 
             <NavigationMenu className="hidden md:block">
@@ -214,6 +220,17 @@ export default function MarketingHeader({
                         </NavigationListItem>
                       ))}
                     </ul>
+
+                    <section className="flex items-center justify-between w-full">
+                      {!session?.user && (
+                        <Link
+                          href={"/signin"}
+                          className={`btn btn-ghost w-full text-center items-center justify-center`}
+                        >
+                          Sign in
+                        </Link>
+                      )}
+                    </section>
                   </NavigationMenu>
                 </DrawerContent>
               </Drawer>
