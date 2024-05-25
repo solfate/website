@@ -31,7 +31,8 @@ type EpisodeAttributes = "episode" | "guest" | "project" | "clip";
  */
 export const mintableEpisodes: {
   [key: number]: MintableEpisode;
-} = {
+} = {};
+/* {
   42: {
     episode: 42,
     name: "EP#42 - Siong and Jupiter",
@@ -177,3 +178,4 @@ export const mintableEpisodes: {
   //   },
   // },
 };
+*/
