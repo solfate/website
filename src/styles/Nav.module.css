@@ -53,7 +53,8 @@
   /* @apply px-4 space-x-5 space-y-0 md:py-2; */
 }
 .linksListing {
-  @apply items-center flex-1 mr-0 flex md:mr-2 md:justify-between md:space-x-8;
+  @apply items-center flex-1 mr-0 flex md:mr-2 md:space-x-8;
+  @apply justify-between md:justify-start;
 }
 
 .nav a {
@@ -66,11 +67,6 @@
   @apply no-underline border-transparent;
   @apply hover:text-hot-pink;
   /* focus:outline-none focus:shadow-outline */
-}
-.primaryNavLink {
-  @apply p-4 space-x-2 md:px-6;
-  @apply text-lg;
-  @apply border-l-4 md:border-l-0 md:border-b-[3px];
 }
 .subNavLink {
   @apply px-4 py-2 md:px-6 space-x-0;
