@@ -52,7 +52,6 @@ const podcast: { featured: LinkDetails; links: LinkDetails[] } = {
 };
 
 const resources: LinkDetails[] = [
-  NAV_ROUTES["blog"],
   NAV_ROUTES["snapshot"],
   {
     title: "Solana Faucet",
@@ -103,6 +102,16 @@ export default function MarketingHeader({
 
             <NavigationMenu className="hidden md:block">
               <NavigationMenuList>
+                <NavigationMenuItem>
+                  <Link href="/blog" legacyBehavior passHref>
+                    <NavigationMenuLink
+                      className={navigationMenuTriggerStyle()}
+                    >
+                      Blog
+                    </NavigationMenuLink>
+                  </Link>
+                </NavigationMenuItem>
+
                 <NavigationMenuItem>
                   <NavigationMenuTrigger>Podcast</NavigationMenuTrigger>
                   <NavigationMenuContent>
