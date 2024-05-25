@@ -65,10 +65,11 @@ export async function getUserByProviderAccountId({
  */
 export async function getUserProfile({
   username,
+  include = undefined,
 }: {
   username?: Profile["username"];
-  // status?: Profile["status"];
-}) {
+  include?: Prisma.ProfileInclude;
+} = {}) {
   // fallback to the current authed user
   if (!username) {
     const session = await getUserSession();
@@ -78,15 +79,7 @@ export async function getUserProfile({
 
   const profile = await prisma.profile.findUnique({
     where: { username },
-    // include: {
-    //   user: {
-    //     select: {
-    //       name: true,
-    //       username: true,
-    //       image: true,
-    //     },
-    //   },
-    // },
+    include,
   });
 
   return profile;
