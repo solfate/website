@@ -1,6 +1,5 @@
 @tailwind base;
 @tailwind components;
-@tailwind utilities;
 
 @layer base {
   :root {
@@ -234,4 +233,4 @@ input[type="password"] {
 }
 
 /** always keep this as the end */
-/* @tailwind utilities; */
+@tailwind utilities;

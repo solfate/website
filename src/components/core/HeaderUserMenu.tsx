@@ -34,7 +34,7 @@ export const HeaderUserMenu = memo(({}: SimpleComponentProps) => {
     <Menu as="div" className={styles.menu}>
       <div>
         <Menu.Button
-          className={`${styles.button} rounded-full !p-0 btn btn-ghost border-transparent`}
+          className={`${styles.button} rounded-full !p-0 btn btn-ghost !border-transparent`}
         >
           <Avatar
             as="span"
