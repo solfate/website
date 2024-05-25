@@ -49,7 +49,7 @@ export default async function Page({ params }: PageProps) {
     return notFound();
   }
 
-  // get the mint timestamp but dont leak data
+  // get the mint timestamp and prevent data leakage
   const devlistMintTimestamp: number | undefined = await prisma.walletList
     .findUnique({
       where: {

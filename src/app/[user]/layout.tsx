@@ -7,6 +7,7 @@ import MarketingFooter from "@/components/core/MarketingFooter";
 import { SocialLinks } from "@/components/SocialLinks";
 import { SubNav } from "@/components/core/SubNav";
 import { Avatar } from "@/components/core/Avatar";
+import { getUserSession } from "@/lib/auth";
 
 type LayoutProps = {
   children: React.ReactNode;
@@ -47,6 +48,8 @@ export async function generateMetadata(
 export default async function Layout({ children, params }: LayoutProps) {
   if (!params.user) return notFound();
 
+  const session = await getUserSession();
+
   // get the user's profile record from the database
   const profile = await getUserProfile({
     username: params.user,
@@ -54,6 +57,9 @@ export default async function Layout({ children, params }: LayoutProps) {
   });
 
   if (!profile) return notFound();
+
+  const isAuthedUserProfile =
+    session?.user.username.toLowerCase() == profile.username.toLowerCase();
 
   return (
     <>
@@ -91,10 +97,19 @@ export default async function Layout({ children, params }: LayoutProps) {
 
           <div className="flex items-center gap-4 justify-between">
             <SocialLinks
+              className={"order-1 md:order-2"}
               twitter={profile.twitter}
               github={profile.github}
               website={profile.website}
             />
+            {isAuthedUserProfile && (
+              <Link
+                href={"/settings/profile"}
+                className="btn btn-ghost order-2 md:order-1"
+              >
+                Edit Profile
+              </Link>
+            )}
             {/* <button type="button" className="btn bg-hot-pink text-white">
               Follow
             </button> */}
