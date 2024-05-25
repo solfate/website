@@ -232,5 +232,10 @@ input[type="password"] {
   @apply w-full;
 }
 
+/* styles for the horizontal scrolling */
+.horizontalScrollContainer {
+  @apply snap-x snap-mandatory flex flex-row overflow-x-scroll;
+}
+
 /** always keep this as the end */
 @tailwind utilities;

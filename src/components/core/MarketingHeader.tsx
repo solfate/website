@@ -1,6 +1,5 @@
 "use client";
 
-import styles from "@/styles/Nav.module.css";
 import { AppLogo } from "@/components/core/AppLogo";
 import { HeaderUserMenu } from "./HeaderUserMenu";
 import { SessionProvider } from "next-auth/react";
@@ -79,10 +78,18 @@ export default function MarketingHeader({
 
   return (
     <SessionProvider session={session}>
-      <header className={styles.nav}>
-        <div className={`${styles.inner} container`}>
-          <div className={styles.linksListing}>
-            <AppLogo logoSize={36} /*className="pr-8" showImage={true}*/ />
+      <header
+        className={
+          "sticky top-0 z-10 lg:relative bg-background flex items-center justify-between w-full h-16 border-b border-border"
+        }
+      >
+        <div
+          className={
+            "z-30 w-full flex items-center justify-between mx-auto gap-2 container"
+          }
+        >
+          <div className={"items-center gap-2 flex-1 flex"}>
+            <AppLogo logoSize={36} />
 
             <NavigationMenu className="hidden md:block">
               <NavigationMenuList>
