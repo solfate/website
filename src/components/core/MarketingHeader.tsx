@@ -94,7 +94,11 @@ export default function MarketingHeader({
             "z-30 w-full flex items-center justify-between mx-auto gap-2 container"
           }
         >
-          <div className={"items-center gap-2 flex-1 justify-between flex"}>
+          <div
+            className={
+              "items-center gap-2 flex-1 justify-between md:justify-start flex"
+            }
+          >
             <AppLogo logoSize={36} />
 
             <NavigationMenu className="hidden md:block">
