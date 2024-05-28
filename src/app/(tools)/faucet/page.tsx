@@ -1,6 +1,7 @@
 import { Metadata } from "next";
 import { SITE } from "@/lib/const/general";
 
+import { NewsletterSignupWidget } from "@/components/content/NewsletterSignupWidget";
 import showerEmoji from "@/../public/icons/shower.svg";
 import Image from "next/image";
 
@@ -45,6 +46,8 @@ export default function Page() {
       </section>
 
       <AirdropRequestForm />
+
+      <NewsletterSignupWidget className="max-w-2xl mx-auto" />
     </main>
   );
 }
