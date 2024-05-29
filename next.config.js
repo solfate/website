@@ -10,6 +10,11 @@ const nextConfig = {
   async redirects() {
     return [
       {
+        source: "/drip",
+        destination: "https://drip.haus/solfate",
+        permanent: true,
+      },
+      {
         source: "/developers",
         destination: "/devlist",
         permanent: true,
