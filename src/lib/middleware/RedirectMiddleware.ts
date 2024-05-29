@@ -14,8 +14,10 @@ export default async function RedirectMiddleware(
   }
 
   // todo: this will not support float urls `7.5`
-  const mintableRegex = new RegExp(/^mint(\d+)/i);
+  const mintableRegex = new RegExp(/^mint(\d+)?/i);
   if (mintableRegex.test(fullKey)) {
+    return NextResponse.redirect(`https://drip.haus/solfate`);
+
     try {
       const episode = mintableRegex.exec(fullKey)?.[1];
 
