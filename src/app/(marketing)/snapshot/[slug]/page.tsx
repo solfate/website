@@ -51,15 +51,15 @@ export async function generateMetadata(
   // );
 
   // when an post image is set, always make that the primary image
-  if (!!post.image) {
-    const url = new URL(post.image, SITE.url);
-    // make the url unique to support cache busting
-    url.searchParams.set(
-      "v",
-      Math.floor(new Date().getTime() / 1000).toString(),
-    );
-    openGraphImages = [url.toString().replace(SITE.url, "")];
-  }
+  // if (!!post.image) {
+  //   const url = new URL(post.image, SITE.url);
+  //   // make the url unique to support cache busting
+  //   url.searchParams.set(
+  //     "v",
+  //     Math.floor(new Date().getTime() / 1000).toString(),
+  //   );
+  //   openGraphImages = [url.toString().replace(SITE.url, "")];
+  // }
 
   return {
     alternates: {
@@ -71,7 +71,12 @@ export async function generateMetadata(
       title: `Solfate Snapshot #${post.id} - ${post.longTitle || post.title}`,
       description: post.description,
       // note: `images` will be auto populated by the `opengraph-image` generator
-      images: openGraphImages,
+      images: post.image
+        ? {
+            url: post.image,
+            alt: post.title,
+          }
+        : undefined,
     },
   };
 }
