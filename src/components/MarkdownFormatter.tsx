@@ -8,26 +8,32 @@ const components: MDXRemoteProps["components"] = {
   // todo: add code highlighting
   //   code: (props) => <code></code>,
   // todo: handle relative links? including making them part of the authors list?
-  a: ({ ref, children, href, ...props }) => (
-    <Link
-      {...props}
-      href={
-        href?.replace(/^\/(content|public)\//i, "/").replace(/(.mdx?)$/i, "") ||
-        "#"
-      }
-      target={href!.startsWith("http") ? "_blank" : "_self"}
-    >
-      {children}
-    </Link>
-  ),
-  img: ({ ref, children, alt, src, ...props }) => (
+  a: ({ ref, children, href, ...props }) => {
+    href = (href!.toString() as string)
+      .replace(/^(https?:\/\/)?solfate.com\//gi, "/")
+      .replace(/^\/?(content|public)\//i, "/");
+
+    if (href.startsWith("/") || href.startsWith(".")) {
+      return (
+        <Link {...props} href={href?.replace(/(.mdx?)$/i, "") || "#"}>
+          {children}
+        </Link>
+      );
+    }
+
+    return (
+      <a target="_blank" {...props}>
+        {children}
+      </a>
+    );
+  },
+  img: ({ ref, src = "", ...props }) => (
     <img
       {...props}
-      alt={alt || ""}
-      src={src?.replace(/^\/(content|public)\//i, "/")}
-    >
-      {children}
-    </img>
+      src={src
+        .replace(/^(https?:\/\/)?solfate.com\//gi, "/")
+        .replace(/^\/?(content|public)\//i, "/")}
+    />
   ),
 };
 
