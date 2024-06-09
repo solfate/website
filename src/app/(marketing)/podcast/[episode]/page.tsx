@@ -2,7 +2,6 @@ import Image from "next/image";
 import Link from "next/link";
 import { SITE } from "@/lib/const/general";
 
-import { serialize } from "next-mdx-remote/serialize";
 import MarkdownFormatter from "@/components/MarkdownFormatter";
 import { SocialShareButtons } from "@/components/SocialButtons";
 import { ArrowLeft } from "react-feather";
@@ -90,11 +89,6 @@ export default async function Page({ params }: PageProps) {
 
   // load the mintable episode details
   const mintableEpisode = mintableEpisodes[parseInt(episode.ep)];
-
-  // serialize the markdown content for parsing via MDX
-  const mdxSerialized = await serialize(episode.body.raw, {
-    // scope: { }
-  });
 
   return (
     <main className="page-container max-w-3xl !space-y-4 md:!space-y-6">
@@ -185,7 +179,7 @@ export default async function Page({ params }: PageProps) {
       )}
 
       <article className="prose max-w-full !text-lg">
-        <MarkdownFormatter source={mdxSerialized} />
+        <MarkdownFormatter source={episode.body.raw} />
       </article>
 
       <PodcastDisclaimer />

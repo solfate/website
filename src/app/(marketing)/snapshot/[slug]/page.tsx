@@ -1,15 +1,13 @@
 import Image from "next/image";
 import Link from "next/link";
-import { ROUTE_PREFIX_SNAPSHOT, SITE } from "@/lib/const/general";
+import { ROUTE_PREFIX_SNAPSHOT } from "@/lib/const/general";
 
 import solfateLogoOrange from "@/../public/logo-orange.svg";
-import { serialize } from "next-mdx-remote/serialize";
 import MarkdownFormatter from "@/components/MarkdownFormatter";
-import { SocialShareButtons } from "@/components/SocialButtons";
+// import { SocialShareButtons } from "@/components/SocialButtons";
 import { ArrowLeft } from "react-feather";
 import { notFound, redirect } from "next/navigation";
 import { getBlogPost } from "@/lib/queries/getBlogPost";
-import { PODCAST } from "@/lib/const/podcast";
 import { FormattedDateAgo } from "@/components/core/FormattedDateAgo";
 import { NextPrevButtons } from "@/components/posts/NextPrevButtons";
 import { Metadata, ResolvingMetadata } from "next";
@@ -44,7 +42,7 @@ export async function generateMetadata(
   if (!post) return {};
 
   // get the parent images, and add the post specific ones
-  let openGraphImages = (await parent).openGraph?.images || [];
+  // let openGraphImages = (await parent).openGraph?.images || [];
   // todo: we can add a default formatted image if we want
   // openGraphImages.unshift(
   //   `${ROUTE_PREFIX_SNAPSHOT}/${post.slug}/opengraph-image`,
@@ -81,7 +79,7 @@ export async function generateMetadata(
   };
 }
 
-export default async function Page({ params }: PageProps) {
+export default function Page({ params }: PageProps) {
   // locate the current post being requested
   const { post, next, prev } = getBlogPost({
     slug: new RegExp(/^(?:.*)-([\d])+$/i).exec(params.slug)?.[1] || params.slug,
@@ -97,11 +95,6 @@ export default async function Page({ params }: PageProps) {
   }
 
   const author = SOLFATE_AUTHORS[post.author];
-
-  // serialize the markdown content for parsing via MDX
-  const mdxSerialized = await serialize(post.body.raw, {
-    // scope: { }
-  });
 
   return (
     <main className="page-container max-w-3xl !space-y-4 md:!space-y-6">
@@ -189,7 +182,7 @@ export default async function Page({ params }: PageProps) {
       </div> */}
 
       <article className="prose max-w-full !text-lg">
-        <MarkdownFormatter source={mdxSerialized} />
+        <MarkdownFormatter source={post.body.raw} />
       </article>
 
       <NewsletterSignupWidget />

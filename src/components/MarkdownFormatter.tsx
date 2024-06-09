@@ -1,24 +1,10 @@
-"use client";
-import * as mdx from "@mdx-js/react";
-import { MDXRemote, MDXRemoteSerializeResult } from "next-mdx-remote";
+import { MDXRemote, MDXRemoteProps } from "next-mdx-remote/rsc";
 import Link from "next/link";
-
-/** note: this is extracted from the `MDXRemote` component */
-type MDXComponentProps = React.ComponentProps<
-  typeof mdx.MDXProvider
->["components"];
-
-type MarkdownFormatterProps = {
-  source: MDXRemoteSerializeResult<
-    Record<string, unknown>,
-    Record<string, unknown>
-  >;
-};
 
 /**
  * Define the custom components used to render the markdown
  */
-const components: MDXComponentProps = {
+const components: MDXRemoteProps["components"] = {
   // todo: add code highlighting
   //   code: (props) => <code></code>,
   // todo: handle relative links? including making them part of the authors list?
@@ -45,6 +31,16 @@ const components: MDXComponentProps = {
   ),
 };
 
-export default function MarkdownFormatter({ source }: MarkdownFormatterProps) {
-  return <MDXRemote {...source} components={components} />;
+export default function MarkdownFormatter(props: MDXRemoteProps) {
+  return (
+    <MDXRemote
+      {...props}
+      options={{
+        mdxOptions: {
+          development: process.env.NODE_ENV === "development",
+        },
+      }}
+      components={components}
+    />
+  );
 }

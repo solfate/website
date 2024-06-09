@@ -3,7 +3,6 @@ import Link from "next/link";
 import { SITE } from "@/lib/const/general";
 
 import solfateLogoOrange from "@/../public/logo-orange.svg";
-import { serialize } from "next-mdx-remote/serialize";
 import MarkdownFormatter from "@/components/MarkdownFormatter";
 // import { SocialShareButtons } from "@/components/SocialButtons";
 import { ArrowLeft } from "react-feather";
@@ -73,7 +72,7 @@ export async function generateMetadata(
   };
 }
 
-export default async function Page({ params }: PageProps) {
+export default function Page({ params }: PageProps) {
   // locate the current post being requested
   const { post, next, prev } = getBlogPost({
     slug: params.post,
@@ -87,11 +86,6 @@ export default async function Page({ params }: PageProps) {
 
   // load the mintable post details
   // const mintableEpisode = mintableEpisodes[parseInt(post.ep)];
-
-  // serialize the markdown content for parsing via MDX
-  const mdxSerialized = await serialize(post.body.raw, {
-    // scope: { }
-  });
 
   return (
     <main className="page-container max-w-3xl !space-y-6 md:!space-y-8">
@@ -175,7 +169,7 @@ export default async function Page({ params }: PageProps) {
       </div> */}
 
       <article className="prose max-w-full !text-lg">
-        <MarkdownFormatter source={mdxSerialized} />
+        <MarkdownFormatter source={post.body.raw} />
       </article>
 
       <NewsletterSignupWidget />
