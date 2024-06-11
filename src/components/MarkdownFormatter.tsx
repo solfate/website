@@ -1,3 +1,4 @@
+import { SITE } from "@/lib/const/general";
 import { MDXRemote, MDXRemoteProps } from "next-mdx-remote/rsc";
 import Link from "next/link";
 
@@ -21,8 +22,11 @@ const components: MDXRemoteProps["components"] = {
       );
     }
 
+    const url = new URL(href);
+    url.searchParams.set("utm_source", SITE.name.toLowerCase());
+
     return (
-      <a target="_blank" {...props}>
+      <a {...props} target="_blank" href={url.toString()}>
         {children}
       </a>
     );
