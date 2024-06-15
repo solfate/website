@@ -6,7 +6,7 @@ import { debug } from "@/lib/helpers";
 import { getUser } from "@/lib/queries/users";
 import { createAccount, getAccountByProviderId } from "@/lib/queries/accounts";
 
-import { SolanaProvider } from "./SolanaProvider";
+import { SolanaProvider, SolanaProviderId } from "./SolanaProvider";
 import CredentialsProvider from "next-auth/providers/credentials";
 import Twitter from "next-auth/providers/twitter";
 import Github from "next-auth/providers/github";
@@ -108,7 +108,7 @@ export const authOptions: NextAuthOptions = {
 
       // we only allow creating new accounts using the "solana" provider
       // all other new accounts should fail
-      if (account?.provider == "solana") {
+      if (account?.provider == SolanaProviderId) {
         // todo: we may want to handle other things here in the future
 
         // do not allow signing in with a solana wallet if the user already has a session
@@ -209,8 +209,8 @@ export const authOptions: NextAuthOptions = {
       // debug("[token]", token);
 
       // handle unique actions based on the "solana" provider
-      // if (account?.provider == "solana") {
-      //   token.provider = "solana";
+      // if (account?.provider == SolanaProviderId) {
+      //   token.provider = SolanaProviderId;
       //   token.wallet = account.providerAccountId;
       // }
 

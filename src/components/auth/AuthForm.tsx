@@ -15,6 +15,7 @@ import { useWalletModal } from "@solana/wallet-adapter-react-ui";
 import { WALLET_STAGE, walletButtonLabel } from "@/lib/solana/const";
 import { AuthError } from "@/components/auth/AuthError";
 import { SolanaAuth, createSolanaAuthTransaction } from "solana-auth";
+import { SolanaProviderId } from "@/lib/auth/SolanaProvider";
 // import { WalletButton } from "@/context/SolanaProviders";
 
 type AuthFormProps = {
@@ -176,7 +177,7 @@ export const AuthForm = memo(({ className, callbackPath }: AuthFormProps) => {
        * finally, attempt to sign the user into the website
        * using the `solana` credential via next-auth
        */
-      return signIn("solana", {
+      return signIn(SolanaProviderId, {
         // auto redirect causes some error, so we will do it manually
         redirect: false,
         // force override the callback url (if desired)
