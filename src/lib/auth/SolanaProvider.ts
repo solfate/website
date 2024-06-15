@@ -5,13 +5,11 @@ import { SolanaAuth } from "solana-auth";
 import { debug } from "@/lib/helpers";
 import { getUserByProviderAccountId } from "@/lib//queries/users";
 import { NextAuthOptions, User } from "next-auth";
-import { getCsrfToken } from "next-auth/react";
+// import { getCsrfToken } from "next-auth/react";
+import { SolanaProviderId } from "./const";
 
 /***/
 export type SolanaProviderConfig = {};
-
-/***/
-export const SolanaProviderId = "solana";
 
 /***/
 export function SolanaProvider({}: SolanaProviderConfig) {

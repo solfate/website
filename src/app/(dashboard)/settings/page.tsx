@@ -2,7 +2,7 @@ import { Metadata } from "next";
 import { getUser, getUserProfile } from "@/lib/queries/users";
 import SettingsPageClient from "./page-client";
 import prisma from "@/lib/prisma";
-import { SolanaProviderId } from "@/lib/auth/SolanaProvider";
+import { SolanaProviderId } from "@/lib/auth/const";
 
 export const metadata: Metadata = {
   title: "Settings / General - Solfate",

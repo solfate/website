@@ -6,7 +6,8 @@ import { debug } from "@/lib/helpers";
 import { getUser } from "@/lib/queries/users";
 import { createAccount, getAccountByProviderId } from "@/lib/queries/accounts";
 
-import { SolanaProvider, SolanaProviderId } from "./SolanaProvider";
+import { SolanaProvider } from "./SolanaProvider";
+import { SolanaProviderId } from "./const";
 import CredentialsProvider from "next-auth/providers/credentials";
 import Twitter from "next-auth/providers/twitter";
 import Github from "next-auth/providers/github";

@@ -15,7 +15,7 @@ import { useWalletModal } from "@solana/wallet-adapter-react-ui";
 import { WALLET_STAGE, walletButtonLabel } from "@/lib/solana/const";
 import { AuthError } from "@/components/auth/AuthError";
 import { SolanaAuth, createSolanaAuthTransaction } from "solana-auth";
-import { SolanaProviderId } from "@/lib/auth/SolanaProvider";
+import { SolanaProviderId } from "@/lib/auth/const";
 // import { WalletButton } from "@/context/SolanaProviders";
 
 type AuthFormProps = {

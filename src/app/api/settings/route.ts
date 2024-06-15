@@ -9,7 +9,7 @@ import {
   ApiSettingsPatchInput,
   ApiSettingsPatchInputSchema,
 } from "@/lib/schemas/settings";
-import { SolanaProviderId } from "@/lib/auth/SolanaProvider";
+import { SolanaProviderId } from "@/lib/auth/const";
 
 export const PATCH = withUserAuth(async ({ req, session }) => {
   try {
