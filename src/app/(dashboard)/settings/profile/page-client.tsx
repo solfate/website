@@ -312,7 +312,7 @@ const ProfilePageClient = memo(({ profile }: ComponentProps) => {
                 value={formData.name || ""}
                 onChange={handleInputChange}
                 placeholder={formData.name || `@${profile!.username}`}
-                className="input-box w-full"
+                className="input input-box w-full"
               />
             </div>
           </div>
@@ -332,7 +332,7 @@ const ProfilePageClient = memo(({ profile }: ComponentProps) => {
                 value={formData.oneLiner || ""}
                 onChange={handleInputChange}
                 placeholder={""}
-                className="input-box w-full"
+                className="input input-box w-full"
               />
             </div>
 
@@ -349,7 +349,7 @@ const ProfilePageClient = memo(({ profile }: ComponentProps) => {
                 value={formData.bio || ""}
                 onChange={handleInputChange}
                 placeholder="Describe yourself"
-                className="w-full h-28 max-h-28"
+                className="input w-full h-28 max-h-28"
                 // disabled={true}
               />
             </div>
@@ -379,7 +379,7 @@ const ProfilePageClient = memo(({ profile }: ComponentProps) => {
               value={formData.website || ""}
               onChange={handleInputChange}
               placeholder="Website URL"
-              className="input-box w-full"
+              className="input input-box w-full"
             />
           </div>
           <div className="prefix-input">
@@ -391,7 +391,7 @@ const ProfilePageClient = memo(({ profile }: ComponentProps) => {
               value={formData.twitter || ""}
               onChange={handleInputChange}
               placeholder="Twitter handle"
-              className="input-box w-full"
+              className="input input-box w-full"
               // disabled={true}
             />
           </div>
@@ -404,7 +404,7 @@ const ProfilePageClient = memo(({ profile }: ComponentProps) => {
               value={formData.github || ""}
               onChange={handleInputChange}
               placeholder="github"
-              className="input-box w-full"
+              className="input input-box w-full"
             />
           </div>
         </div>

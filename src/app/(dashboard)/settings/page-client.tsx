@@ -135,7 +135,7 @@ const FormContent = ({
                 <FormControl>
                   <Input
                     disabled={isSubmitting}
-                    placeholder="shadcn"
+                    placeholder="Enter a unique username"
                     {...field}
                   />
                 </FormControl>

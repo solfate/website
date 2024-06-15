@@ -204,7 +204,7 @@ const OnboardingStep1SetUsername = memo(({ state }: OnboardingStepProps) => {
             defaultValue={state.data?.username || ""}
             id="username"
             placeholder="username"
-            className={`input-box`}
+            className={`input input-box`}
             maxLength={USERNAME_MAX_LEN}
             disabled={pending}
             aria-disabled={pending}
@@ -509,7 +509,7 @@ const OnboardingStep3BasicProfile = memo(
               disabled={pending}
               aria-disabled={pending}
               placeholder={"Defaults to your username"}
-              className="input-box w-full"
+              className="input input-box w-full"
             />
           </div>
 
@@ -528,7 +528,7 @@ const OnboardingStep3BasicProfile = memo(
               disabled={pending}
               aria-disabled={pending}
               placeholder={"Just one line"}
-              className="input-box w-full"
+              className="input input-box w-full"
             />
           </div>
 
@@ -546,7 +546,7 @@ const OnboardingStep3BasicProfile = memo(
               disabled={pending}
               aria-disabled={pending}
               placeholder="Describe yourself and tell the world"
-              className="w-full h-28 max-h-28"
+              className="input w-full h-28 max-h-28"
               // disabled={true}
             />
           </div>

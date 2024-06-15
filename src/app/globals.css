@@ -95,13 +95,7 @@ html {
   @apply space-y-8 md:space-y-20;
 }
 
-.input,
-textarea,
-input[type="url"],
-input[type="text"],
-input[type="number"],
-input[type="email"],
-input[type="password"] {
+.input {
   @apply px-3 py-2 rounded-lg;
   @apply border bg-white border-gray-300;
   @apply disabled:pointer-events-none disabled:opacity-60;
