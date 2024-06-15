@@ -9,6 +9,7 @@ import {
   ApiSettingsPatchInput,
   ApiSettingsPatchInputSchema,
 } from "@/lib/schemas/settings";
+import { SolanaProviderId } from "@/lib/auth/SolanaProvider";
 
 export const PATCH = withUserAuth(async ({ req, session }) => {
   try {
@@ -16,14 +17,22 @@ export const PATCH = withUserAuth(async ({ req, session }) => {
       await req.json(),
     );
 
-    if (
-      !!input.username &&
-      input.username.toLowerCase() == session.user.username.toLowerCase()
-    ) {
-      return new Response("Your username was unchanged");
-    }
+    const currentUser = await prisma.user.findUnique({
+      where: {
+        id: session.user.id,
+      },
+      include: {
+        profile: {
+          select: {
+            walletAddress: true,
+          },
+        },
+      },
+    });
 
-    if (!!input.username) {
+    if (!currentUser) throw "Unable to locate your account";
+
+    if (input.username.toLowerCase() !== currentUser.username.toLowerCase()) {
       const isUsernameTaken = await prisma.user.findUnique({
         where: {
           username: input.username,
@@ -31,27 +40,49 @@ export const PATCH = withUserAuth(async ({ req, session }) => {
       });
 
       if (isUsernameTaken) throw `Username "${input.username}" is taken`;
+    }
 
-      const updatedUser = await prisma.user.update({
+    // verify the user has verified the wallet address and attached it to their profile
+    if (currentUser.profile?.walletAddress !== input.wallet) {
+      const wallets = await prisma.account.findMany({
         where: {
-          id: session.user.id,
+          userId: currentUser.id,
+          provider: SolanaProviderId,
         },
-        data: {
-          username: input.username,
-          profile: {
-            upsert: {
-              create: {},
-              update: {},
+        select: { providerAccountId: true },
+      });
+
+      if (
+        wallets.findIndex(
+          ({ providerAccountId }) => providerAccountId === input.wallet,
+        ) < 0
+      ) {
+        throw "You have not connected this wallet address";
+      }
+    }
+
+    const updatedUser = await prisma.user.update({
+      where: {
+        id: session.user.id,
+      },
+      data: {
+        username: input.username,
+        profile: {
+          upsert: {
+            create: {
+              walletAddress: input.wallet,
+            },
+            update: {
+              walletAddress: input.wallet,
             },
           },
         },
-      });
+      },
+    });
 
-      if (!updatedUser) throw "Unable to update your username";
-      return new Response("Your username was updated");
-    }
+    if (!updatedUser) throw "Unable to update your username";
 
-    return new Response("No changes were made");
+    return new Response("Your account settings were updated");
   } catch (err) {
     return ApiErrorResponse(err);
   }

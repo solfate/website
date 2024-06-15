@@ -75,6 +75,9 @@ model Profile {
     flags  String? @db.VarChar(500)
     status Status? @default(ACTIVE)
 
+    walletAddress String? @default("") @db.VarChar(50)
+
+    @@index([walletAddress], name: "profile_wallet_idx")
     @@index([username], name: "profile_username_idx")
 }
 

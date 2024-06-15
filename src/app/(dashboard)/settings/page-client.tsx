@@ -1,158 +1,201 @@
 "use client";
 
-import { memo, useCallback, useReducer, useState } from "react";
-import { SettingsHeader } from "@/components/dashboard/settings/SettingsHeader";
+import { memo } from "react";
 import { getUser } from "@/lib/queries/users";
-import clsx from "clsx";
-import { User } from "@prisma/client";
 import toast from "react-hot-toast";
 import { fetcher } from "@/lib/api";
-import { ApiSettingsPatchInput } from "@/lib/schemas/settings";
+import {
+  ApiSettingsPatchInput,
+  ApiSettingsPatchInputSchema,
+} from "@/lib/schemas/settings";
 import { SITE } from "@/lib/const/general";
 import { USERNAME_MAX_LEN } from "@/lib/const/profile";
 import { signIn } from "next-auth/react";
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { z } from "zod";
+import { useForm, useFormContext, UseFormReturn } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { SettingsHeader } from "@/components/dashboard/settings/SettingsHeader";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
-type FormState = {
-  username: User["username"];
-};
+type FormValues = z.infer<typeof ApiSettingsPatchInputSchema>;
 
-type FormAction =
-  | { type: "update"; field: keyof FormState; value: string }
-  // Add more action types as needed
-  | { type: "reset" };
-
-type ComponentProps = { user: Awaited<ReturnType<typeof getUser>> };
-
-const SettingsPageClient = memo(({ user }: ComponentProps) => {
-  const [pendingChanges, setPendingChanges] = useState(false);
-  const [loading, setLoading] = useState(false);
-
-  const formReducer = useCallback(
-    (state: FormState, action: FormAction) => {
-      switch (action.type) {
-        case "update": {
-          if (!pendingChanges) setPendingChanges(true);
-          return { ...state, [action.field]: action.value };
-          // return Object.assign(state, { [action.field]: action.value });
-        }
-        // Add more cases for handling different actions (e.g., validation, submission)
-        default:
-          throw new Error(`Unhandled action type: ${action.type}`);
-      }
-    },
-    [pendingChanges, setPendingChanges],
-  );
-
-  const [formData, dispatch] = useReducer(formReducer, {
-    username: user?.username || "",
-  });
-
-  const handleInputChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
-  ): void => {
-    dispatch({
-      type: "update",
-      field: e.target.name as keyof FormState,
-      value: e.target.value,
+const SettingsPageClient = memo(
+  ({
+    user,
+    wallets,
+  }: {
+    user: Awaited<ReturnType<typeof getUser>>;
+    wallets: string[];
+  }) => {
+    const form = useForm<FormValues>({
+      resolver: zodResolver(ApiSettingsPatchInputSchema),
+      defaultValues: {
+        username: user?.username,
+        wallet: wallets[0],
+      },
     });
-  };
 
-  const submitHandler = useCallback(
-    async (e: React.FormEvent<HTMLFormElement>) => {
-      e.preventDefault();
+    return (
+      <Form {...form}>
+        <FormContent form={form} wallets={wallets} />
+      </Form>
+    );
+  },
+);
 
-      if (!pendingChanges || loading) return;
+const FormContent = ({
+  form,
+  wallets,
+}: {
+  form: UseFormReturn<FormValues>;
+  wallets: string[];
+}) => {
+  const {
+    formState: { dirtyFields, isSubmitting, defaultValues },
+    reset,
+  } = useFormContext();
 
-      // todo: perform any client side validation
+  async function onSubmit(formData: FormValues) {
+    try {
+      const res = await fetcher<ApiSettingsPatchInput>("/api/settings", {
+        method: "PATCH",
+        body: formData,
+      });
 
-      setLoading(true);
-
-      try {
-        const res = await fetcher<ApiSettingsPatchInput>("/api/settings", {
-          method: "PATCH",
-          body: formData,
+      // force update the user's current session
+      // (to capture their new username change in the jwt)
+      if (
+        !!formData.username &&
+        formData.username !== defaultValues?.username
+      ) {
+        await signIn("jwt", {
+          redirect: false,
         });
-
-        // force update the user's current session
-        // (to capture their new username change in the jwt)
-        if (!!formData.username && formData.username !== user?.username) {
-          await signIn("jwt", {
-            redirect: false,
-          });
-        }
-
-        if (!formData.username) {
-          dispatch({
-            type: "update",
-            field: "username",
-            value: user?.username || "",
-          });
-        }
-
-        setPendingChanges(false);
-        return toast.success(res);
-      } catch (err) {
-        console.error("failed::", err);
-
-        if (typeof err == "string") toast.error(err);
-        else if (err instanceof Error) toast.error(err.message);
-        else toast.error("An unknown error occurred");
-      } finally {
-        setLoading(false);
       }
-    },
-    [user?.username, pendingChanges, formData, loading, setLoading],
-  );
+
+      // reset the form with the new state
+      reset(formData);
+
+      return toast.success(res);
+    } catch (err) {
+      console.error("failed::", err);
+
+      if (typeof err == "string") toast.error(err);
+      else if (err instanceof Error) toast.error(err.message);
+      else toast.error("An unknown error occurred");
+    } finally {
+      // setLoading(false);
+    }
+  }
 
   return (
-    <main className="container space-y-6">
+    <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
       <SettingsHeader
         title={"General Settings"}
-        description={"Manage your Solfate account settings"}
-      ></SettingsHeader>
+        description={`Manage your ${SITE.name} account settings`}
+      >
+        <Button
+          type="submit"
+          variant={
+            isSubmitting || !Object.keys(dirtyFields).length
+              ? "outline"
+              : "default"
+          }
+          disabled={isSubmitting || !Object.keys(dirtyFields).length}
+        >
+          Save Changes
+        </Button>
+      </SettingsHeader>
 
-      <form onSubmit={submitHandler} className="card space-y-4">
-        <div className="grid md:flex items-start gap-2 justify-between">
-          <div className="space-y-0">
-            <h2 className="font-semibold text-xl">Username</h2>
-            <p className="text-gray-500">
-              This is part of your unique URL here on {SITE.name}
-            </p>
-          </div>
-          <button
-            type="submit"
-            className={clsx(
-              "btn text-center justify-center",
-              !pendingChanges ? "btn-ghost" : "btn-black",
-            )}
-            disabled={!pendingChanges}
-          >
-            Update
-          </button>
-        </div>
-
-        <div className="prefix-input">
-          <label htmlFor="username">{SITE.domain}/</label>
-          <input
-            type="text"
+      <section className="card">
+        <section className="space-y-6 max-w-xl">
+          <FormField
+            control={form.control}
             name="username"
-            id="username"
-            value={formData.username}
-            placeholder="username"
-            className="input-box"
-            onChange={handleInputChange}
-            maxLength={USERNAME_MAX_LEN}
-            // disabled={true}
+            render={({ field }) => (
+              <FormItem className="max-w-xl">
+                <FormLabel>Username</FormLabel>
+                <FormControl>
+                  <Input
+                    disabled={isSubmitting}
+                    placeholder="shadcn"
+                    {...field}
+                  />
+                </FormControl>
+                <FormDescription>
+                  This is your public display name and part of your unique URL
+                  here on {SITE.name}
+                </FormDescription>
+                <FormMessage>
+                  max of {USERNAME_MAX_LEN} characters: letters, numbers, dash,
+                  and underscore
+                </FormMessage>
+              </FormItem>
+            )}
           />
-        </div>
 
-        <p className="text-gray-500 text-sm">
-          max of {USERNAME_MAX_LEN} characters: letters, numbers, dash, and
-          underscore
-        </p>
-      </form>
-    </main>
+          <FormField
+            control={form.control}
+            name="wallet"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Public Wallet</FormLabel>
+                <Select
+                  onValueChange={field.onChange}
+                  defaultValue={field.value}
+                  disabled={isSubmitting}
+                >
+                  <FormControl>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select a Solana wallet address" />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    {wallets.map((wallet, key) => (
+                      <SelectItem
+                        key={key}
+                        disabled={!wallet && true}
+                        value={wallet || "none"}
+                      >
+                        {wallet || "None Selected"}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+
+                <FormDescription>
+                  Select a Solana wallet address to be displayed publicly on
+                  your profile.
+                </FormDescription>
+                <FormDescription>
+                  {/* You can manage email addresses in your{" "}
+                <Link href="/examples/forms">email settings</Link>. */}
+                </FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </section>
+      </section>
+    </form>
   );
-});
+};
 
 export default SettingsPageClient;
