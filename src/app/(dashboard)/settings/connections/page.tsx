@@ -3,6 +3,7 @@ import { ConnectionCardGrid } from "@/components/dashboard/settings/ConnectionCa
 import { convertAccountsToConnections, getUserSession } from "@/lib/auth";
 import { getAccountsByUserId } from "@/lib/queries/accounts";
 import { SettingsHeader } from "@/components/dashboard/settings/SettingsHeader";
+import { Button } from "@/components/ui/button";
 
 export const metadata: Metadata = {
   title: "Settings / Connections - Solfate",
@@ -24,15 +25,18 @@ export default async function Page() {
         title={"Connections"}
         description={"Connect external accounts, services, and wallets."}
       >
-        <button
+        <Button
           type="submit"
-          // className={clsx("btn", !pendingChanges ? "btn-ghost" : "btn-black")}
-          // disabled={!pendingChanges}
-          className={"btn text-center justify-center btn-ghost"}
+          variant={"outline"}
+          // variant={
+          //   isSubmitting || !Object.keys(dirtyFields).length
+          //     ? "outline"
+          //     : "default"
+          // }
           disabled={true}
         >
           Add Connection
-        </button>
+        </Button>
       </SettingsHeader>
 
       <ConnectionCardGrid connections={accountConnections} />

@@ -15,6 +15,7 @@ import { FeatherIcon } from "@/components/core/FeatherIcon";
 import { Avatar } from "@/components/core/Avatar";
 import { signIn } from "next-auth/react";
 import { ApiProfilePatchInput } from "@/lib/schemas/profile";
+import { Button } from "@/components/ui/button";
 
 type FormState = {
   name: Profile["name"];
@@ -206,16 +207,18 @@ const ProfilePageClient = memo(({ profile }: ComponentProps) => {
           "Update your public profile information that anyone can see"
         }
       >
-        <button
+        <Button
           type="submit"
-          className={clsx(
-            "btn text-center whitespace-nowrap justify-center",
-            !pendingChanges ? "btn-ghost" : "btn-black",
-          )}
+          className={
+            clsx()
+            // "btn text-center whitespace-nowrap justify-center",
+            // !pendingChanges ? "btn-ghost" : "btn-black",
+          }
+          variant={!pendingChanges ? "outline" : "default"}
           disabled={!pendingChanges}
         >
           Save Changes
-        </button>
+        </Button>
       </SettingsHeader>
 
       <input
