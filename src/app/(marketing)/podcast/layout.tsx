@@ -11,7 +11,7 @@ import { Metadata } from "next";
 export const metadata: Metadata = {
   title: `${PODCAST.name} - Interviews with blockchain founders on Solana`,
   description:
-    "Interviews with blockchain founders and builders in the Solana ecosystem. " +
+    "Solana Podcast: Interviews with blockchain founders and builders in the Solana ecosystem. " +
     "Hosted by two developers, Nick (@nickfrosty) and James (@jamesrp13).",
 };
 
