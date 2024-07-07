@@ -165,7 +165,8 @@ model Account {
 
     user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-    @@unique([provider, providerAccountId], name: "provider_and_account_id_idx")
+    // this specific name of `provider_providerAccountId` is required by next-auth
+    @@unique([provider, providerAccountId], name: "provider_providerAccountId")
     @@index([providerAccountId], name: "provider_account_id_idx")
     @@index(userId, name: "provider_user_id_idx")
 }

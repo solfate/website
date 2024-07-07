@@ -264,7 +264,7 @@ export const authOptions: NextAuthOptions = {
         debug("removing temporary jwt account");
         await prisma.account.delete({
           where: {
-            provider_and_account_id_idx: {
+            provider_providerAccountId: {
               provider: "jwt",
               providerAccountId: account.providerAccountId,
             },
