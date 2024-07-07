@@ -3,10 +3,11 @@ import prisma from "@/lib/prisma";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { SolanaAuth } from "solana-auth";
 import { debug } from "@/lib/helpers";
-import { getUserByProviderAccountId } from "@/lib//queries/users";
+import { getUser, getUserByProviderAccountId } from "@/lib//queries/users";
 import { NextAuthOptions, User } from "next-auth";
 // import { getCsrfToken } from "next-auth/react";
 import { SolanaProviderId } from "./const";
+import { getUserSession } from ".";
 
 /***/
 export type SolanaProviderConfig = {};
@@ -70,6 +71,12 @@ export function SolanaProvider({}: SolanaProviderConfig) {
         // actually validate/check the submitted message for the signature
         if (!solanaAuth.verifyAny())
           throw new Error("Could not validate the signed message");
+
+        const session = await getUserSession();
+        if (session) {
+          const user = await getUser();
+          return user as User;
+        }
 
         // locate the User from the db based on the connected wallet as an Account
         let user = await getUserByProviderAccountId({

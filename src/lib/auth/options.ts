@@ -12,6 +12,7 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import Twitter from "next-auth/providers/twitter";
 import Github from "next-auth/providers/github";
 import { Account, User } from "@prisma/client";
+import { SolanaAuth } from "solana-auth";
 
 const IS_VERCEL_DEPLOYMENT = !!process.env.VERCEL_URL;
 
@@ -44,7 +45,7 @@ export const authOptions: NextAuthOptions = {
       credentials: {},
       async authorize() {
         try {
-          const user = await getUser({});
+          const user = await getUser();
           if (!user) throw "Unable to locate current user";
           // todo: this will create a db Account record for JWT as a provider. prevent this
           return user as User;
@@ -107,18 +108,30 @@ export const authOptions: NextAuthOptions = {
       const session = await getServerSession(authOptions);
       debug("session::", session);
 
-      // we only allow creating new accounts using the "solana" provider
-      // all other new accounts should fail
       if (account?.provider == SolanaProviderId) {
         // todo: we may want to handle other things here in the future
 
-        // do not allow signing in with a solana wallet if the user already has a session
-        if (!!session) {
-          debug("Solana wallet-session error");
-          throw Error("Solana wallet error");
-        }
+        // if the user is not already logged in, we skip the manual account linking
+        if (!session) return true;
 
-        return true;
+        // ensure existence of the required input
+        if (!credentials || !credentials.message || !credentials.signedData)
+          throw new Error("Invalid Solana credentials provided");
+
+        // parse the signed message provided within the request
+        const solanaAuth = new SolanaAuth({
+          signedData: credentials.signedData as string,
+          message: credentials.message as string,
+          // manually add in the enforced server data
+        });
+
+        // actually validate/check the submitted message for the signature
+        if (!solanaAuth.verifyAny())
+          throw new Error("Could not validate the signed message");
+
+        // force update the `providerAccountId` to be user user's wallet
+        // to enable the manual account linking below
+        account.providerAccountId = solanaAuth.message.address;
       }
 
       // when a new sign in request is coming from an authenticated user

@@ -1,29 +1,37 @@
 "use client";
 
-import { Suspense, memo, useCallback, useEffect, useState } from "react";
-import toast from "react-hot-toast";
-import { SITE } from "@/lib/const/general";
-
-import base58 from "bs58";
-import { getCsrfToken, signIn } from "next-auth/react";
+import { Button } from "@/components/ui/button";
 import {
-  WalletContextState,
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { useCallback, useEffect, useState } from "react";
+import { getCsrfToken, signIn } from "next-auth/react";
+import { Icons } from "@/components/ui/icons";
+import {
   useConnection,
   useWallet,
+  WalletContextState,
 } from "@solana/wallet-adapter-react";
 import { useWalletModal } from "@solana/wallet-adapter-react-ui";
-import { WALLET_STAGE, walletButtonLabel } from "@/lib/solana/const";
-import { AuthError } from "@/components/auth/AuthError";
-import { SolanaAuth, createSolanaAuthTransaction } from "solana-auth";
+import { WALLET_STAGE } from "@/lib/solana/const";
+import { createSolanaAuthTransaction, SolanaAuth } from "solana-auth";
+import { SITE } from "@/lib/const/general";
+import base58 from "bs58";
+import toast from "react-hot-toast";
 import { SolanaProviderId } from "@/lib/auth/const";
-// import { WalletButton } from "@/context/SolanaProviders";
 
-type AuthFormProps = {
-  className?: string;
-  callbackPath?: string;
-};
+type AuthPlatforms = "twitter" | "github" | "solana";
 
-export const AuthForm = memo(({ className, callbackPath }: AuthFormProps) => {
+export function AddConnectionDialog() {
+  const [loading, setLoading] = useState<false | AuthPlatforms>(false);
+
   const wallet = useWallet();
   const { connection } = useConnection();
   const walletModal = useWalletModal();
@@ -36,12 +44,40 @@ export const AuthForm = memo(({ className, callbackPath }: AuthFormProps) => {
   );
   const [isLedger, setIsLedger] = useState<boolean>(false);
 
+  const baseCallback = "/settings/connections";
+
+  /**
+   * Authenticate to Twitter / X
+   */
+  const twitterAuth = useCallback(() => {
+    setLoading("twitter");
+    return signIn("twitter", {
+      redirect: false,
+      // force override the callback data
+      callbackUrl: `${baseCallback}?type=twitter`,
+    });
+  }, []);
+
+  /**
+   * Authenticate to GitHub
+   */
+  const githubAuth = useCallback(() => {
+    setLoading("github");
+    return signIn("github", {
+      redirect: false,
+      // force override the callback data
+      callbackUrl: `${baseCallback}?type=github`,
+    });
+  }, []);
+
   /**
    * Handler function for the "sign in with solana" option
    * note: since we are using the `useCallback` hook and using `wallet` as a dependency,
    * after the user connects their wallet, they will be auto prompted to sign the message!
    */
-  const handleSignInWithSolana = useCallback(async () => {
+  const solanaAuth = useCallback(async () => {
+    // setLoading("solana");
+
     if (
       processingStage !== WALLET_STAGE.IDLE &&
       processingStage !== WALLET_STAGE.WALLET_CONNECT
@@ -56,43 +92,19 @@ export const AuthForm = memo(({ className, callbackPath }: AuthFormProps) => {
         setProcessingStage(WALLET_STAGE.WALLET_CONNECT);
         await wallet.connect();
       } else if (!wallet.connected) {
-        walletModal.setVisible(true);
+        wallet.disconnect().then(() => walletModal.setVisible(true));
         return;
       }
     } catch (err) {}
 
     if (!wallet.publicKey?.toBase58()) {
       console.log("still no wallet connected");
+      walletModal.setVisible(true);
       return;
     }
 
     // if (wallet.connecting)
     setProcessingStage(WALLET_STAGE.WALLET_CONNECT);
-
-    // set the default callback url
-    let callbackUrl: string = !!callbackPath
-      ? `${window.location.protocol}//${window.location.host}${
-          !!callbackPath ? callbackPath : window.location.pathname
-        }`
-      : `${window.location.protocol}//${window.location.host}`;
-
-    if (callbackPath == "self") callbackUrl = window.location.href;
-
-    try {
-      let url = new URL(
-        new URL(window.location.href).searchParams.get("callbackUrl") || "",
-      );
-
-      // only update the callback sometimes
-      if (url.pathname != "/signin" && url.host == window.location.host) {
-        // clean up the url some (i.e. prevent nested callback urls)
-        url.searchParams.delete("callbackUrl");
-        // update the callback to be used
-        callbackUrl = url.toString();
-      }
-    } catch (err) {
-      //do nothing
-    }
 
     try {
       // get a csrf token from the server for the user to sign it
@@ -102,6 +114,7 @@ export const AuthForm = memo(({ className, callbackPath }: AuthFormProps) => {
 
         // we return here so the auto connect useEffect below can re-initiate
         // the connection flow after the user select a wallet
+        console.log("wait here");
         return;
       }
 
@@ -138,17 +151,6 @@ export const AuthForm = memo(({ className, callbackPath }: AuthFormProps) => {
               isMemoTransaction: true,
             });
           });
-        } else if (!!wallet.signIn) {
-          // get the user's wallet to sign the requests (`signIn` is preferred if supported)
-          await wallet.signIn(solanaAuth.message).then((res) => {
-            // store the wallet signed data
-            solanaAuth.storeSignature({
-              // note: the wallet could sign with a different wallet...
-              address: res.account.address,
-              signature: base58.encode(res.signature),
-              signedMessage: base58.encode(res.signedMessage),
-            });
-          });
         } else {
           // request the user sign the message using the fallback methods
           // i.e wallets that do not support the SIWS spec (aka the `signIn` function)
@@ -166,7 +168,7 @@ export const AuthForm = memo(({ className, callbackPath }: AuthFormProps) => {
         if (!solanaAuth.signedData) throw Error("Unknown signature");
       } catch (err) {
         console.error("Wallet failed to sign message:", err);
-        toast.error("You must sign the message with your wallet to sign in");
+        toast.error("You must sign the message to verify your wallet");
 
         // stop processing when the user did not actually sign the message
         setProcessingStage(WALLET_STAGE.IDLE);
@@ -180,27 +182,26 @@ export const AuthForm = memo(({ className, callbackPath }: AuthFormProps) => {
       return signIn(SolanaProviderId, {
         // auto redirect causes some error, so we will do it manually
         redirect: false,
-        // force override the callback url (if desired)
-        callbackUrl,
+        callbackUrl: `${baseCallback}?type=solana`,
         message: JSON.stringify(solanaAuth.message),
         signedData: JSON.stringify(solanaAuth.signedData),
       })
         .then((res) => {
-          // console.log("signin res:", res);
+          console.log("signin res:", res);
 
           if (!res?.ok) throw `Bad response: ${res?.error || "unknown"}`;
           if (res.error) throw res.error;
 
           setProcessingStage(WALLET_STAGE.SUCCESS);
 
-          toast.success("Successfully signed in!");
+          toast.success("Successfully connected your Solana wallet!");
 
           // manually redirect the user to the manually defined callbackUrl
-          window.location.href = callbackUrl;
+          window.location.href = `${baseCallback}?type=solana`;
         })
         .catch((err) => {
           console.warn("signIn error:", err);
-          let message = "Unable to Sign in with Solana";
+          let message = "Unable to verify Solana wallet";
           if (typeof err == "string") message = err;
           toast.error(message);
           setProcessingStage(WALLET_STAGE.IDLE);
@@ -211,7 +212,7 @@ export const AuthForm = memo(({ className, callbackPath }: AuthFormProps) => {
 
       setProcessingStage(WALLET_STAGE.IDLE);
 
-      toast.error("An unknown signin error occurred");
+      toast.error("An unknown Solana wallet error occurred");
     }
   }, [
     wallet,
@@ -220,7 +221,6 @@ export const AuthForm = memo(({ className, callbackPath }: AuthFormProps) => {
     processingStage,
     walletModal,
     setProcessingStage,
-    callbackPath,
   ]);
 
   /**
@@ -235,74 +235,85 @@ export const AuthForm = memo(({ className, callbackPath }: AuthFormProps) => {
       else if (wallet.connecting == false)
         setProcessingStage(WALLET_STAGE.IDLE);
       // the user just connected their wallet
-      if (wallet.connected && !!wallet.publicKey) handleSignInWithSolana();
+      if (wallet.connected && !!wallet.publicKey) solanaAuth();
       else if (
         !previousWalletState.wallet?.adapter &&
         !!wallet.wallet?.adapter
       ) {
-        handleSignInWithSolana();
+        solanaAuth();
       }
     }
 
     setPreviousWalletState(wallet);
-  }, [
-    wallet,
-    handleSignInWithSolana,
-    previousWalletState,
-    setPreviousWalletState,
-  ]);
+  }, [wallet, solanaAuth, previousWalletState, setPreviousWalletState]);
 
   return (
-    <div className={`space-y-8 ${className}`}>
-      <AuthError />
+    <Dialog>
+      <DialogTrigger asChild>
+        <Button variant="default">Connect Account</Button>
+      </DialogTrigger>
+      <DialogContent className="sm:max-w-[425px]">
+        <DialogHeader>
+          <DialogTitle>Connect an Account</DialogTitle>
+          <DialogDescription>
+            Connect a new Solana wallet, external account, or third-party
+            service
+          </DialogDescription>
+        </DialogHeader>
 
-      <section className="z-10 flex flex-col !items-stretch gap-2 p-8 card">
-        <Suspense>
-          {/* <WalletButton /> */}
-
-          <button
-            type="button"
-            // onClick={handleSignInWithSolana}
-            onClick={() =>
-              wallet.disconnect().then(() => walletModal.setVisible(true))
-            }
-            disabled={processingStage !== WALLET_STAGE.IDLE}
-            className={`btn w-full btn-black inline-flex items-center py-3 justify-center text-center gap-2`}
-          >
-            {walletButtonLabel({
-              stage: processingStage,
-              placeholder: "Sign in with Solana",
-              success: "Success! Redirecting...",
-            })}
-          </button>
-          <div className="flex items-center justify-center">
-            <a
-              className="link hover:underline hover:text-hot-pink"
-              href="#"
-              onClick={(e) => {
-                e.preventDefault();
-                wallet.disconnect().then(() => walletModal.setVisible(true));
-              }}
+        <div className="grid gap-3 py-4">
+          <DialogClose asChild>
+            <Button
+              onClick={() =>
+                wallet.disconnect().then(() => walletModal.setVisible(true))
+              }
+              variant="outline"
+              type="button"
+              disabled={Boolean(loading)}
             >
-              Connect a different wallet?
-            </a>
-          </div>
+              {loading == "solana" ? (
+                <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
+              ) : (
+                <Icons.solana className="mr-2 h-4 w-4" />
+              )}
+              Solana Wallet
+            </Button>
+          </DialogClose>
 
-          <label
-            htmlFor="ledger"
-            className="flex hover:cursor-pointer items-center justify-center gap-2"
+          <Button
+            onClick={twitterAuth}
+            variant="outline"
+            type="button"
+            disabled={Boolean(loading)}
           >
-            Using a Ledger?
-            <input
-              id="ledger"
-              name="ledger"
-              checked={isLedger}
-              type="checkbox"
-              onChange={() => setIsLedger(!isLedger)}
-            />
-          </label>
-        </Suspense>
-      </section>
-    </div>
+            {loading == "twitter" ? (
+              <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
+            ) : (
+              <Icons.twitter className="mr-2 h-4 w-4" />
+            )}
+            Twitter / X.com
+          </Button>
+
+          <Button
+            type="button"
+            onClick={githubAuth}
+            variant="outline"
+            disabled={Boolean(loading)}
+          >
+            {loading == "github" ? (
+              <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
+            ) : (
+              <Icons.gitHub className="mr-2 h-4 w-4" />
+            )}
+            GitHub
+          </Button>
+        </div>
+        <DialogFooter>
+          <DialogClose asChild>
+            <Button type="button">Cancel</Button>
+          </DialogClose>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
   );
-});
+}

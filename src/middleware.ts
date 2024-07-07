@@ -43,5 +43,27 @@ export default async function middleware(req: NextRequest, ev: NextFetchEvent) {
     return NextResponse.redirect(new URL("/signin", req.url));
   }
 
+  // enable better handling of custom callbacks via next-auth
+  if (key == "signin" && req.nextUrl.searchParams.get("callbackUrl")) {
+    try {
+      const callbackUrl = new URL(
+        req.nextUrl.searchParams.get("callbackUrl") || req.nextUrl,
+      );
+      if (req.nextUrl.host != callbackUrl.host)
+        throw "External url. Do not redirect.";
+
+      if (
+        req.nextUrl.pathname != "signin" &&
+        callbackUrl.pathname != "signin"
+      ) {
+        req.nextUrl.searchParams.delete("callbackUrl");
+        req.nextUrl.pathname = callbackUrl.pathname;
+        return NextResponse.redirect(req.nextUrl);
+      }
+    } catch (err) {
+      // do nothing
+    }
+  }
+
   return NextResponse.next();
 }

@@ -12,7 +12,7 @@ export async function getUser({
 }: {
   id?: User["id"];
   username?: User["username"];
-}) {
+} = {}) {
   // require some input, or fallback to the current authed user
   if (!id && !username) {
     // auto-magically fallback to the user
