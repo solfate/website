@@ -98,7 +98,7 @@ function getProviderDetails(connection: AccountConnection) {
       };
     case "solana":
       return {
-        title: "Solana blockchain",
+        title: "Solana Wallet",
         label: shortWalletAddress(connection.value),
         href: `https://solana.fm/account/${connection.value}`,
       };
