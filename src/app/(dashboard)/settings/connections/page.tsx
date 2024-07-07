@@ -3,7 +3,8 @@ import { ConnectionCardGrid } from "@/components/dashboard/settings/ConnectionCa
 import { convertAccountsToConnections, getUserSession } from "@/lib/auth";
 import { getAccountsByUserId } from "@/lib/queries/accounts";
 import { SettingsHeader } from "@/components/dashboard/settings/SettingsHeader";
-import { Button } from "@/components/ui/button";
+import { AddConnectionDialog } from "@/components/add-connection-dialog";
+import { SolanaProvider } from "@/context/SolanaProvider";
 
 export const metadata: Metadata = {
   title: "Settings / Connections - Solfate",
@@ -20,26 +21,17 @@ export default async function Page() {
   );
 
   return (
-    <main className="container space-y-6">
-      <SettingsHeader
-        title={"Connections"}
-        description={"Connect external accounts, services, and wallets."}
-      >
-        <Button
-          type="submit"
-          variant={"outline"}
-          // variant={
-          //   isSubmitting || !Object.keys(dirtyFields).length
-          //     ? "outline"
-          //     : "default"
-          // }
-          disabled={true}
+    <SolanaProvider autoConnect={false}>
+      <main className="container space-y-6">
+        <SettingsHeader
+          title={"Connections"}
+          description={"Connect external accounts, services, and wallets."}
         >
-          Add Connection
-        </Button>
-      </SettingsHeader>
+          <AddConnectionDialog />
+        </SettingsHeader>
 
-      <ConnectionCardGrid connections={accountConnections} />
-    </main>
+        <ConnectionCardGrid connections={accountConnections} />
+      </main>
+    </SolanaProvider>
   );
 }
