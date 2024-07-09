@@ -5,6 +5,7 @@ import { getUserSession } from "@/lib/auth";
 import {
   Card,
   CardContent,
+  CardFooter,
   CardHeader,
   CardSection,
   CardTitle,
@@ -16,6 +17,8 @@ import prisma from "@/lib/prisma";
 import { DevListApplicationExtraData } from "@/types/api/lists";
 import { formattedDate } from "@/lib/utils";
 import Link from "next/link";
+import { DonateDialog } from "@/components/donate-dialog";
+import { Button } from "@/components/ui/button";
 
 type PageProps = {
   params: {
@@ -27,6 +30,9 @@ export default async function Page({ params }: PageProps) {
   if (!params.user) return notFound();
 
   const session = await getUserSession();
+
+  const isViewingOwnProfile =
+    session?.user.username.toLowerCase() == params.user.toLowerCase();
 
   // get the product's record from the database
   const profile = (await getUserProfile({
@@ -42,9 +48,7 @@ export default async function Page({ params }: PageProps) {
 
   if (!profile) {
     // direct the user to setup their profile
-    if (session?.user.username.toLowerCase() == params.user.toLowerCase()) {
-      return redirect("/onboarding");
-    }
+    if (isViewingOwnProfile) return redirect("/onboarding");
 
     return notFound();
   }
@@ -68,7 +72,37 @@ export default async function Page({ params }: PageProps) {
 
   return (
     <main className="container md:!py-12 min-h-[60vh] max-w-5xl gap-4 md:gap-y-10 flex flex-col md:flex-row justify-between">
-      <section className="min-w-80 md:max-w-80 md:order-2">
+      <section className="min-w-80 md:max-w-80 md:order-2 flex flex-col gap-4">
+        {profile.walletAddress ? (
+          <DonateDialog walletAddress={profile.walletAddress} />
+        ) : isViewingOwnProfile ? (
+          <Card className="border-destructive border-dashed">
+            <CardHeader>
+              <CardTitle>
+                Start accepting tips and donations on Solana
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <Button
+                asChild
+                variant={"destructive"}
+                className="block text-center"
+              >
+                <Link href={"/settings"}>Add a Public Wallet</Link>
+              </Button>
+            </CardContent>
+            <CardFooter className="!block space-y-1">
+              <p className="">
+                Add a public Solana wallet to accept tips and donations from
+                others directly to your wallet
+              </p>
+              <p className="text-muted-foreground text-sm italic">
+                Only you see this message
+              </p>
+            </CardFooter>
+          </Card>
+        ) : null}
+
         {devlistMintTimestamp && (
           <DevListCard mintTimestamp={devlistMintTimestamp} />
         )}
