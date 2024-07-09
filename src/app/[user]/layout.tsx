@@ -42,6 +42,12 @@ export async function generateMetadata(
     alternates: {
       canonical: `/${profile.username.toLowerCase()}`,
     },
+    openGraph: {
+      images: profile.image || "/logo-orange.png",
+    },
+    twitter: {
+      card: "summary",
+    },
   };
 }
 
