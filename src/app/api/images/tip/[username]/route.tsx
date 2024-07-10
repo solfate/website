@@ -47,7 +47,7 @@ export const GET = async (req: Request, { params }: RouteParams) => {
 
     return new ImageResponse(
       (
-        <div tw="flex flex-col w-full h-full bg-black text-white">
+        <div tw="flex flex-col w-full h-full bg-[#fffafa] text-black">
           {/* <div tw="w-full h-1" style={{ background: "#f5820b" }} /> */}
 
           <div tw="flex flex-col items-center justify-between p-8 flex-grow">
@@ -79,11 +79,11 @@ export const GET = async (req: Request, { params }: RouteParams) => {
               />
             </div>
 
-            <div tw="flex w-full items-center justify-between">
-              <div tw="flex rounded-full p-3 m-4 text-wrap border-2 border-[#323232]">
+            <div tw="flex w-full items-center justify-between text-base">
+              <div tw="flex rounded-full p-3 m-4 text-wrap border-2 border-[#ddd]">
                 {shortWalletAddress(profile.walletAddress, 6)}
               </div>
-              <div tw="flex items-center px-3 py-2 m-4 rounded-full border-2 border-[#323232]">
+              <div tw="flex items-center px-3 py-2 m-4 rounded-full border-2 border-[#ddd]">
                 <span className="flex rounded-full">
                   <img
                     src={profile.image || logoUrl}
