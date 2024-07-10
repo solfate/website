@@ -13,13 +13,7 @@ import {
 import { Input } from "@/components/ui/input";
 import toast from "react-hot-toast";
 import { useEffect, useState } from "react";
-import {
-  clusterApiUrl,
-  LAMPORTS_PER_SOL,
-  PublicKey,
-  SystemProgram,
-  Transaction,
-} from "@solana/web3.js";
+import { clusterApiUrl, LAMPORTS_PER_SOL, PublicKey } from "@solana/web3.js";
 import {
   useUnifiedWallet,
   useConnection,
@@ -28,8 +22,9 @@ import {
   ConnectionProvider,
 } from "@jup-ag/wallet-adapter";
 import { cn } from "@/lib/utils";
-import { TREASURY_PLATFORM_FEE, TREASURY_PUBKEY } from "@/lib/const/solana";
+import { TREASURY_PLATFORM_FEE } from "@/lib/const/solana";
 import { Icons } from "./ui/icons";
+import { createTipSolTransaction } from "@/lib/solana/actions";
 
 export function DonateDialog(props: {
   tokenSymbol?: string;
@@ -85,7 +80,7 @@ export function DonateDialog(props: {
 export function DonateDialogInner({
   walletAddress,
   tokenSymbol = "SOL",
-  label = "Support with a Tip",
+  label = "Send Tip",
   modalOpen,
   setModalOpen,
 }: {
@@ -109,7 +104,6 @@ export function DonateDialogInner({
       if (Number.isNaN(amount))
         throw "Invalid amount provided. It must be a number";
       if (amount <= 0) throw "Amount must be greater than zero";
-      amount = amount * LAMPORTS_PER_SOL;
     } catch (err) {
       let message = "Invalid amount provided";
       if (typeof err == "string") message = err;
@@ -139,19 +133,10 @@ export function DonateDialogInner({
         throw `Insufficient ${tokenSymbol} balance. Currently: ${balance / LAMPORTS_PER_SOL} ${tokenSymbol}`;
       }
 
-      const transaction = new Transaction().add(
-        // transfer the donation funds to the end recipient
-        SystemProgram.transfer({
-          fromPubkey: wallet.publicKey,
-          lamports: amount,
-          toPubkey: recipient,
-        }),
-        // take the platform fee
-        SystemProgram.transfer({
-          fromPubkey: wallet.publicKey,
-          lamports: amount * TREASURY_PLATFORM_FEE,
-          toPubkey: TREASURY_PUBKEY,
-        }),
+      const transaction = createTipSolTransaction(
+        wallet.publicKey,
+        recipient,
+        amount,
       );
       transaction.feePayer = wallet.publicKey;
       transaction.recentBlockhash = (
@@ -224,12 +209,10 @@ export function DonateDialogInner({
         )}
 
         <DialogHeader>
-          <DialogTitle className="text-2xl">
-            Support this builder with a tip
-          </DialogTitle>
+          <DialogTitle className="text-2xl">Send a Tip</DialogTitle>
           <DialogDescription>
             Help support this builder by tipping them directly with{" "}
-            {tokenSymbol}, sending it directly to their public wallet.
+            {tokenSymbol}, sending it to their public wallet.
           </DialogDescription>
         </DialogHeader>
         <div className="grid gap-4 py-4 relative">
@@ -245,25 +228,25 @@ export function DonateDialogInner({
           />
           {!!wallet.publicKey && (
             <>
-              <div className="flex justify-between gap-2">
+              <div className="grid grid-cols-3 justify-between gap-2">
                 <Button
                   type="button"
                   disabled={walletState}
                   onClick={() => transferSol("0.1")}
-                  className="w-1/3"
-                >{`0.1 ${tokenSymbol}`}</Button>
+                  className="w-full whitespace-pre-wrap h-auto"
+                >{`Send 0.1 ${tokenSymbol}`}</Button>
                 <Button
                   type="button"
                   disabled={walletState}
                   onClick={() => transferSol("0.5")}
-                  className="w-1/3"
-                >{`0.5 ${tokenSymbol}`}</Button>
+                  className="w-full whitespace-pre-wrap h-auto"
+                >{`Send 0.5 ${tokenSymbol}`}</Button>
                 <Button
                   type="button"
                   disabled={walletState}
                   onClick={() => transferSol("1.0")}
-                  className="w-1/3"
-                >{`1.0 ${tokenSymbol}`}</Button>
+                  className="w-full whitespace-pre-wrap h-auto"
+                >{`Send 1.0 ${tokenSymbol}`}</Button>
               </div>
 
               <div className="flex item-center  gap-2 justify-center">
@@ -282,7 +265,7 @@ export function DonateDialogInner({
                 <div className="flex items-center gap-2">
                   <Input
                     disabled={walletState}
-                    placeholder={`Enter any amount of ${tokenSymbol}`}
+                    placeholder={`Enter any amount of ${tokenSymbol} to send`}
                     onChange={(e) => {
                       setAmount(e.target.value);
                     }}
