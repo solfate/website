@@ -50,6 +50,9 @@ dependencies:
   '@solana-developers/helpers':
     specifier: ^1.3.1
     version: 1.5.1
+  '@solana/actions':
+    specifier: ^1.1.1
+    version: 1.1.1(fastestsmallesttextencoderdecoder@1.0.22)
   '@solana/buffer-layout':
     specifier: ^4.0.1
     version: 4.0.1
@@ -4367,6 +4370,24 @@ packages:
       - react-native
     dev: false
 
+  /@solana/actions@1.1.1(fastestsmallesttextencoderdecoder@1.0.22):
+    resolution: {integrity: sha512-QS9Bf6IPjHXMr3UMh1aeSEWL9sdVq6gtyOv6RK9IU3bh6W07uPr15OyWVOVBZwgNLD+nzWBfeJWo//bk1vpj/w==}
+    engines: {node: '>=16'}
+    dependencies:
+      '@solana/qr-code-styling': 1.6.0
+      '@solana/spl-token': 0.3.11(@solana/web3.js@1.91.7)(fastestsmallesttextencoderdecoder@1.0.22)
+      '@solana/web3.js': 1.91.7
+      bs58: 5.0.0
+      cross-fetch: 3.1.8
+      js-base64: 3.7.7
+      tweetnacl: 1.0.3
+    transitivePeerDependencies:
+      - bufferutil
+      - encoding
+      - fastestsmallesttextencoderdecoder
+      - utf-8-validate
+    dev: false
+
   /@solana/buffer-layout-utils@0.2.0:
     resolution: {integrity: sha512-szG4sxgJGktbuZYDg2FfNmkMi0DYQoVjN2h7ta1W1hPrwzarcFLBq9UpX1UjNXsNpT9dn+chgprtWGioUAr4/g==}
     engines: {node: '>= 10'}
@@ -4445,6 +4466,12 @@ packages:
     dependencies:
       '@solana/codecs-core': 2.0.0-preview.2
       '@solana/codecs-numbers': 2.0.0-preview.2
+    dev: false
+
+  /@solana/qr-code-styling@1.6.0:
+    resolution: {integrity: sha512-KyBmyFKPxQPhUkP0jjnxV2ZeF1R1guTD8Hrd0YvHvMnhtrNEoEEdv4Jpp4W0GN4qCGG2KYOM5d3TgoLD+CNf9Q==}
+    dependencies:
+      qrcode-generator: 1.4.4
     dev: false
 
   /@solana/spl-token-metadata@0.1.4(@solana/web3.js@1.91.7)(fastestsmallesttextencoderdecoder@1.0.22):
@@ -5985,6 +6012,14 @@ packages:
       parse-json: 5.2.0
       path-type: 4.0.0
       yaml: 1.10.2
+    dev: false
+
+  /cross-fetch@3.1.8:
+    resolution: {integrity: sha512-cvA+JwZoU0Xq+h6WkMvAUqPEYy92Obet6UdKLfW60qn99ftItKjB5T+BkyWOFWe2pUyfQ+IJHmpOTznqk1M6Kg==}
+    dependencies:
+      node-fetch: 2.7.0
+    transitivePeerDependencies:
+      - encoding
     dev: false
 
   /cross-spawn@7.0.3:
@@ -10028,6 +10063,10 @@ packages:
     engines: {node: '>=6'}
     dev: true
 
+  /qrcode-generator@1.4.4:
+    resolution: {integrity: sha512-HM7yY8O2ilqhmULxGMpcHSF1EhJJ9yBj8gvDEuZ6M+KGJ0YY2hKpnXvRD+hZPLrDVck3ExIGhmPtSdcjC+guuw==}
+    dev: false
+
   /querystring@0.2.1:
     resolution: {integrity: sha512-wkvS7mL/JMugcup3/rMitHmd9ecIGd2lhFhK9N3UUQ450h66d1r3Y9nvXzQAW1Lq+wyx61k/1pfKS5KuKiyEbg==}
     engines: {node: '>=0.4.x'}
@@ -11320,6 +11359,10 @@ packages:
 
   /tslib@2.6.2:
     resolution: {integrity: sha512-AEYxH93jGFPn/a2iVAwW87VuUIkR1FVUKB77NwMF7nBTDkDrrT/Hpt/IrCJ0QXhW27jTBDcf5ZY7w6RiqTMw2Q==}
+    dev: false
+
+  /tweetnacl@1.0.3:
+    resolution: {integrity: sha512-6rt+RN7aOi1nGMyC4Xa5DdYiukl2UWCbcJft7YhxReBGQD7OAM8Pbxw6YMo4r2diNEA8FEmu32YOn9rhaiE5yw==}
     dev: false
 
   /typanion@3.14.0:

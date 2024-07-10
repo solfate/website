@@ -31,6 +31,7 @@
     "@radix-ui/react-select": "^2.0.0",
     "@radix-ui/react-slot": "^1.0.2",
     "@solana-developers/helpers": "^1.3.1",
+    "@solana/actions": "^1.1.1",
     "@solana/buffer-layout": "^4.0.1",
     "@solana/buffer-layout-utils": "^0.2.0",
     "@solana/spl-token": "^0.3.11",
