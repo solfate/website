@@ -26,47 +26,27 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { SettingsHeader } from "@/components/dashboard/settings/SettingsHeader";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 
 type FormValues = z.infer<typeof ApiSettingsPatchInputSchema>;
 
 const SettingsPageClient = memo(
-  ({
-    user,
-    wallets,
-  }: {
-    user: Awaited<ReturnType<typeof getUser>>;
-    wallets: string[];
-  }) => {
+  ({ user }: { user: Awaited<ReturnType<typeof getUser>> }) => {
     const form = useForm<FormValues>({
       resolver: zodResolver(ApiSettingsPatchInputSchema),
       defaultValues: {
         username: user?.username,
-        wallet: wallets[0],
       },
     });
 
     return (
       <Form {...form}>
-        <FormContent form={form} wallets={wallets} />
+        <FormContent form={form} />
       </Form>
     );
   },
 );
 
-const FormContent = ({
-  form,
-  wallets,
-}: {
-  form: UseFormReturn<FormValues>;
-  wallets: string[];
-}) => {
+const FormContent = ({ form }: { form: UseFormReturn<FormValues> }) => {
   const {
     formState: { dirtyFields, isSubmitting, defaultValues },
     reset,
@@ -147,48 +127,6 @@ const FormContent = ({
                   max of {USERNAME_MAX_LEN} characters: letters, numbers, dash,
                   and underscore
                 </FormMessage>
-              </FormItem>
-            )}
-          />
-
-          <FormField
-            control={form.control}
-            name="wallet"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Public Wallet</FormLabel>
-                <Select
-                  onValueChange={field.onChange}
-                  defaultValue={field.value}
-                  disabled={isSubmitting}
-                >
-                  <FormControl>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select a Solana wallet address" />
-                    </SelectTrigger>
-                  </FormControl>
-                  <SelectContent>
-                    {wallets.map((wallet, key) => (
-                      <SelectItem
-                        key={key}
-                        disabled={!wallet && true}
-                        value={wallet || "none"}
-                      >
-                        {wallet || "None Selected"}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-
-                <FormDescription>
-                  Select a Solana wallet address to be displayed publicly on
-                  your profile.
-                </FormDescription>
-                <FormDescription>
-                  {/* You can manage email addresses in your{" "}
-                <Link href="/examples/forms">email settings</Link>. */}
-                </FormDescription>
-                <FormMessage />
               </FormItem>
             )}
           />

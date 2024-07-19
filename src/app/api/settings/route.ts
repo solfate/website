@@ -9,7 +9,6 @@ import {
   ApiSettingsPatchInput,
   ApiSettingsPatchInputSchema,
 } from "@/lib/schemas/settings";
-import { SolanaProviderId } from "@/lib/auth/const";
 
 export const PATCH = withUserAuth(async ({ req, session }) => {
   try {
@@ -20,13 +19,6 @@ export const PATCH = withUserAuth(async ({ req, session }) => {
     const currentUser = await prisma.user.findUnique({
       where: {
         id: session.user.id,
-      },
-      include: {
-        profile: {
-          select: {
-            walletAddress: true,
-          },
-        },
       },
     });
 
@@ -42,41 +34,12 @@ export const PATCH = withUserAuth(async ({ req, session }) => {
       if (isUsernameTaken) throw `Username "${input.username}" is taken`;
     }
 
-    // verify the user has verified the wallet address and attached it to their profile
-    if (currentUser.profile?.walletAddress !== input.wallet) {
-      const wallets = await prisma.account.findMany({
-        where: {
-          userId: currentUser.id,
-          provider: SolanaProviderId,
-        },
-        select: { providerAccountId: true },
-      });
-
-      if (
-        wallets.findIndex(
-          ({ providerAccountId }) => providerAccountId === input.wallet,
-        ) < 0
-      ) {
-        throw "You have not connected this wallet address";
-      }
-    }
-
     const updatedUser = await prisma.user.update({
       where: {
         id: session.user.id,
       },
       data: {
         username: input.username,
-        profile: {
-          upsert: {
-            create: {
-              walletAddress: input.wallet,
-            },
-            update: {
-              walletAddress: input.wallet,
-            },
-          },
-        },
       },
     });
 
