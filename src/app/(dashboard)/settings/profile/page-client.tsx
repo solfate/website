@@ -297,7 +297,6 @@ const ProfilePageClient = memo(({ profile }: ComponentProps) => {
                 </button>
               </div>
             </div>
-
             <div className="space-y-1">
               <label htmlFor="name" className="block">
                 Display name:
@@ -315,12 +314,9 @@ const ProfilePageClient = memo(({ profile }: ComponentProps) => {
                 className="input input-box w-full"
               />
             </div>
-          </div>
-
-          <div className="space-y-2">
             <div className="space-y-1">
               <label htmlFor="oneLiner" className="block">
-                One line headline:
+                Profile headline:
               </label>
 
               {/* <p className="text-gray-500 text-sm"></p> */}
@@ -335,25 +331,27 @@ const ProfilePageClient = memo(({ profile }: ComponentProps) => {
                 className="input input-box w-full"
               />
             </div>
-
-            <div className="space-y-1">
-              <label htmlFor="bio" className="block">
-                Bio:
-              </label>
-
-              {/* <p className="text-gray-500 text-sm"></p> */}
-
-              <textarea
-                name="bio"
-                id="bio"
-                value={formData.bio || ""}
-                onChange={handleInputChange}
-                placeholder="Describe yourself"
-                className="input w-full h-28 max-h-28"
-                // disabled={true}
-              />
-            </div>
           </div>
+
+          {/* <div className="space-y-2"> */}
+          <div className="space-y-1">
+            <label htmlFor="bio" className="block">
+              Bio:
+            </label>
+
+            {/* <p className="text-gray-500 text-sm"></p> */}
+
+            <textarea
+              name="bio"
+              id="bio"
+              value={formData.bio || ""}
+              onChange={handleInputChange}
+              placeholder="Describe yourself"
+              className="input w-full min-h-32 h-[90%]"
+              // disabled={true}
+            />
+          </div>
+          {/* </div> */}
         </div>
       </div>
 

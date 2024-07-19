@@ -10,6 +10,7 @@ import {
   ApiProfilePatchInputSchema,
   ApiProfilePatchInput,
 } from "@/lib/schemas/profile";
+import { ASSETS_DOMAIN } from "@/lib/const/general";
 
 export const PATCH = withUserAuth(async ({ req, session }) => {
   try {
@@ -21,7 +22,7 @@ export const PATCH = withUserAuth(async ({ req, session }) => {
     const validatedProfileData: Prisma.ProfileUpdateInput = {
       name: input.name,
       oneLiner: input.oneLiner,
-      bio: input.bio,
+      bio: input.bio?.replace(/^\s*$(?:\r\n?|\n)/gm, ""),
       website: input.website,
       twitter: input.twitter,
       github: input.github,
@@ -31,7 +32,10 @@ export const PATCH = withUserAuth(async ({ req, session }) => {
       const url = new URL(input.image);
 
       // only allow the user to use images that they uploaded
-      if (!url.pathname.startsWith(`/profile/${session.user.id}`)) {
+      if (
+        !url.pathname.startsWith(`/profile/${session.user.id}`) ||
+        url.host != ASSETS_DOMAIN
+      ) {
         throw "Invalid profile image url";
       }
 

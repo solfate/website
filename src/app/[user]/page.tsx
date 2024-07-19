@@ -112,7 +112,7 @@ export default async function Page({ params }: PageProps) {
         <ProfileSection
           title={`About ${profile.name || `@${profile.username}`}`}
         >
-          <p className="">
+          <p className="whitespace-pre break-words">
             {profile.bio || profile.oneLiner || (
               <span className="italic text-gray-400">
                 Nothing to see here :)
