@@ -107,6 +107,18 @@ const nextConfig = {
       //   hostname: "storage.googleapis.com",
       //   pathname: "/assets.solfate.com/**",
       // },
+      {
+        protocol: "https",
+        hostname: "**.twimg.com",
+      },
+      {
+        protocol: "https",
+        hostname: "i.ytimg.com",
+      },
+      {
+        protocol: "https",
+        hostname: "img.youtube.com",
+      },
     ],
   },
 };
