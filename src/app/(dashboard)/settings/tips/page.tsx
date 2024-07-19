@@ -31,7 +31,7 @@ export default async function Page() {
   ).map((item) => item.providerAccountId);
 
   if (profile?.walletAddress) {
-    const index = wallets.findIndex((item) => item === profile.walletAddress);
+    const index = wallets.findIndex((item) => item === profile!.walletAddress);
     if (index >= 0) wallets.splice(index, 1);
     wallets.unshift(profile.walletAddress);
   } else {
