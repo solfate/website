@@ -39,6 +39,13 @@ export const SettingsSidebar = memo(
               label="Connections"
             />
           </li>
+          <li>
+            <SidebarLink
+              href="/tips"
+              icon="Target"
+              label="Tips and Donations"
+            />
+          </li>
           {/* <li>
             <SidebarLink
               href="/notifications"
