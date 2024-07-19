@@ -96,13 +96,13 @@ export async function onboardingFlow(
         profile: {
           upsert: {
             create: {
-              bio: input.data.bio,
+              bio: input.data.bio?.replace(/^\s*$(?:\r\n?|\n)/gm, ""),
               name: input.data.name,
               image: input.data.image,
               oneLiner: input.data.oneLiner,
             },
             update: {
-              bio: input.data.bio,
+              bio: input.data.bio?.replace(/^\s*$(?:\r\n?|\n)/gm, ""),
               name: input.data.name,
               image: input.data.image,
               oneLiner: input.data.oneLiner,
