@@ -410,7 +410,7 @@ const OnboardingStep2UploadAvatarUploadAvatar = memo(
               type="button"
               disabled={uploading || pending}
               aria-disabled={uploading || pending}
-              // onClick={() => fileRef?.current?.click()}
+              onClick={() => fileRef?.current?.click()}
               className="btn btn-black w-full justify-center text-center"
             >
               Upload Image
