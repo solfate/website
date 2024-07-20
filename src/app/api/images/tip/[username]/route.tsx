@@ -39,10 +39,6 @@ export const GET = async (req: Request, { params }: RouteParams) => {
       );
     }
 
-    if (!profile.walletAddress) {
-      throw `@${profile.username} does not have a public wallet set`;
-    }
-
     const logoUrl = `${SITE.url}/logo-orange.png`;
 
     return new ImageResponse(
@@ -70,13 +66,19 @@ export const GET = async (req: Request, { params }: RouteParams) => {
               <div tw="text-7xl text-center">{profile.username}</div>
             </div> */}
             <div tw="flex flex-col w-full justify-between items-center">
-              <div tw="text-7xl text-center my-5">Send a Tip</div>
+              <div tw="text-7xl text-center my-5">
+                {!!profile?.walletAddress ? "Send a Tip" : "No Public Wallet"}
+              </div>
               {profile.image ? (
                 <img
                   src={profile.image || logoUrl}
                   alt="User Image"
                   tw="rounded-full flex border-4 border-[#f5820b]"
-                  style={{ width: 256, height: 256 }}
+                  style={
+                    !!profile?.walletAddress
+                      ? { width: 256, height: 256 }
+                      : { width: 200, height: 200 }
+                  }
                 />
               ) : (
                 <svg
@@ -138,18 +140,22 @@ export const GET = async (req: Request, { params }: RouteParams) => {
             </div>
 
             <div tw="flex w-full items-center justify-between text-base">
-              <div tw="flex rounded-full p-3 m-4 text-wrap border-2 border-[#ddd]">
-                {shortWalletAddress(profile.walletAddress, 6)}
-              </div>
+              {!!profile?.walletAddress ? (
+                <div tw="flex rounded-full p-3 m-4 text-wrap border-2 border-[#ddd]">
+                  {shortWalletAddress(profile.walletAddress, 6)}
+                </div>
+              ) : (
+                <div></div>
+              )}
               <div tw="flex items-center px-3 py-2 m-4 rounded-full border-2 border-[#ddd]">
-                <span className="flex rounded-full">
+                {/* <span className="flex rounded-full">
                   <img
                     src={profile.image || logoUrl}
                     alt="User Image"
                     tw="rounded-full flex mr-2"
                     style={{ width: 30, height: 30 }}
                   />
-                </span>
+                </span> */}
                 <span>
                   @
                   {profile.username.length > 24

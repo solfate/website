@@ -67,7 +67,7 @@ export const GET = async (req: Request, { params }: RouteParams) => {
     const payload: ActionGetResponse = {
       //   icon: new URL("/logo-orange.png", new URL(req.url).origin).toString(),
       icon: new URL(
-        `/api/images/tip/${profile.username}`,
+        `/api/images/tip/${profile.username}?wallet=${profile.walletAddress}`,
         new URL(req.url).origin,
       ).toString(),
       title: `Tip ${nameLabel} with SOL`,

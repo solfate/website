@@ -31,9 +31,10 @@ import {
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
-import { CopyIcon } from "lucide-react";
+import { CopyIcon, InfoIcon } from "lucide-react";
 import { SITE, TWITTER } from "@/lib/const/general";
 import { Icons } from "@/components/ui/icons";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
 type FormValues = z.infer<typeof ApiSettingsTipPatchInputSchema>;
 
@@ -124,9 +125,21 @@ const FormContent = ({
         </div>
       </SettingsHeader>
 
+      {!defaultValues?.wallet && (
+        <Alert variant={"destructive"}>
+          <InfoIcon className="h-4 w-4" />
+          <AlertTitle>Heads up: No public wallet, no tips!</AlertTitle>
+          <AlertDescription>
+            You do not have a public Solana wallet selected for your profile.
+            You cannot accept tips/donations via your profile or blink until you
+            select one.
+          </AlertDescription>
+        </Alert>
+      )}
+
       <section className="block md:flex gap-6">
         <section className="card flex-grow">
-          <section className="space-y-6 max-w-xl">
+          <section className="space-y-6">
             <FormField
               control={form.control}
               name="wallet"
@@ -185,9 +198,9 @@ const FormContent = ({
           <div className="grid grid-cols-2 gap-3 items-center justify-between text-sm">
             <Button
               type="button"
-              variant={"secondary"}
+              variant={"twitter"}
               size={"sm"}
-              className="!bg-twitter text-white inline-flex"
+              className="inline-flex"
               onClick={(e) => {
                 e.preventDefault();
 
@@ -204,6 +217,7 @@ const FormContent = ({
                   )
                   ?.focus();
               }}
+              disabled={!defaultValues?.wallet}
             >
               Share Blink
             </Button>
@@ -219,6 +233,7 @@ const FormContent = ({
 
                 toast.success("Copied to clipboard!");
               }}
+              disabled={!defaultValues?.wallet}
             >
               <span>Copy Link</span>
               <CopyIcon size={14} />
@@ -226,7 +241,7 @@ const FormContent = ({
           </div>
 
           <Image
-            src={`/api/images/tip/${username}`}
+            src={`/api/images/tip/${username}?${dirtyFields.wallet || defaultValues?.wallet}`}
             alt={"Your tip image"}
             width={600}
             height={600}
