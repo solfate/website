@@ -16,6 +16,9 @@ import { Avatar } from "@/components/core/Avatar";
 import { signIn } from "next-auth/react";
 import { ApiProfilePatchInput } from "@/lib/schemas/profile";
 import { Button } from "@/components/ui/button";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { InfoIcon } from "lucide-react";
+import Link from "next/link";
 
 type FormState = {
   name: Profile["name"];
@@ -220,6 +223,25 @@ const ProfilePageClient = memo(({ profile }: ComponentProps) => {
           Save Changes
         </Button>
       </SettingsHeader>
+
+      {!profile?.walletAddress && (
+        <Alert variant={"destructive"}>
+          <InfoIcon className="h-4 w-4" />
+          <AlertTitle>Heads up: No public wallet, no tips!</AlertTitle>
+          <AlertDescription>
+            You do not have a public Solana wallet selected for your profile.
+            You cannot accept tips/donations via your Solfate profile or blink
+            until you select one.{" "}
+            <Link
+              href={"/settings/tips"}
+              className="underline text-twitter hover:text-"
+            >
+              Select a public wallet
+            </Link>{" "}
+            in your &quot;Tips and Donations&quot; settings.
+          </AlertDescription>
+        </Alert>
+      )}
 
       <input
         aria-hidden={true}
