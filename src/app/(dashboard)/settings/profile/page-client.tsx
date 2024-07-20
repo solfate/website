@@ -15,10 +15,12 @@ import { FeatherIcon } from "@/components/core/FeatherIcon";
 import { Avatar } from "@/components/core/Avatar";
 import { signIn } from "next-auth/react";
 import { ApiProfilePatchInput } from "@/lib/schemas/profile";
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { InfoIcon } from "lucide-react";
+import { ExternalLinkIcon, InfoIcon } from "lucide-react";
 import Link from "next/link";
+import { cn } from "@/lib/utils";
+import { Icons } from "@/components/ui/icons";
 
 type FormState = {
   name: Profile["name"];
@@ -35,7 +37,9 @@ type FormAction =
   // Add more action types as needed
   | { type: "reset" };
 
-type ComponentProps = { profile: Awaited<ReturnType<typeof getUserProfile>> };
+type ComponentProps = {
+  profile: NonNullable<Awaited<ReturnType<typeof getUserProfile>>>;
+};
 
 const ProfilePageClient = memo(({ profile }: ComponentProps) => {
   const [pendingChanges, setPendingChanges] = useState(false);
@@ -210,18 +214,26 @@ const ProfilePageClient = memo(({ profile }: ComponentProps) => {
           "Update your public profile information that anyone can see"
         }
       >
-        <Button
-          type="submit"
-          className={
-            clsx()
-            // "btn text-center whitespace-nowrap justify-center",
-            // !pendingChanges ? "btn-ghost" : "btn-black",
-          }
-          variant={!pendingChanges ? "outline" : "default"}
-          disabled={!pendingChanges}
-        >
-          Save Changes
-        </Button>
+        <div className="flex items-center gap-2">
+          <Button
+            type="submit"
+            variant={loading || !pendingChanges ? "outline" : "default"}
+            disabled={loading || !pendingChanges}
+          >
+            <span className={cn(loading && "opacity-0")}>Save Changes</span>
+            {loading && (
+              <Icons.spinner className="absolute mx-auto h-4 w-4 animate-spin" />
+            )}
+          </Button>
+          <Link
+            target="_blank"
+            href={`/${profile?.username}`}
+            className={cn(buttonVariants({ variant: "outline" }))}
+          >
+            View
+            <ExternalLinkIcon size={16} className="size-4" />
+          </Link>
+        </div>
       </SettingsHeader>
 
       {!profile?.walletAddress && (
