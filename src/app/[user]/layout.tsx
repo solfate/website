@@ -74,6 +74,7 @@ export default async function Layout({ children, params }: LayoutProps) {
           <div className="flex gap-3 md:gap-5 items-center flex-grow">
             <Avatar
               size={128}
+              username={profile.username}
               title={profile.name || profile.username}
               imageSrc={profile.image}
               href={`/${profile.username}`}

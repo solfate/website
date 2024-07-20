@@ -55,7 +55,7 @@ export const Avatar = memo(
           <BoringAvatar
             square={true}
             size={size}
-            name={username}
+            name={username || title}
             variant="beam"
             colors={["#0A0310", "#49007E", "#FF005B", "#FF7D10", "#FFB238"]}
           />
