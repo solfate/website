@@ -72,6 +72,11 @@ export const HeaderUserMenu = memo(({}: SimpleComponentProps) => {
           )}
 
           <div className={styles.section}>
+            <MenuItemLink
+              href="/settings/profile"
+              label="Edit Profile"
+              icon="User"
+            />
             <MenuItemLink href="/settings" label="Settings" icon="Settings" />
             <MenuItemButton
               label="Sign out"
