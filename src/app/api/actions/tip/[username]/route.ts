@@ -74,7 +74,7 @@ export const GET = async (req: Request, { params }: RouteParams) => {
       label: `Tip ${nameLabel} with SOL`,
       description:
         `Help support ${nameLabel} by tipping ` +
-        `them directly with ${tokenSymbol}, sending it to their public wallet.`,
+        `them with ${tokenSymbol}, sending it directly to their personal Solana wallet.`,
       links: {
         actions: [
           {

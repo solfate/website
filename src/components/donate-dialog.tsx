@@ -211,8 +211,13 @@ export function DonateDialogInner({
         <DialogHeader>
           <DialogTitle className="text-2xl">Send a Tip</DialogTitle>
           <DialogDescription>
-            Help support this builder by tipping them directly with{" "}
-            {tokenSymbol}, sending it to their public wallet.
+            Help support this builder by tipping them with{" "}
+            <span className="font-semibold underline">{tokenSymbol}</span>,
+            sending it directly to{" "}
+            <span className="font-semibold underline">
+              their personal Solana wallet
+            </span>
+            .
           </DialogDescription>
         </DialogHeader>
         <div className="grid gap-4 py-4 relative">
