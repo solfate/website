@@ -39,16 +39,16 @@ export default async function Page() {
             Collect tips/donations to any of your Solana wallets
           </AlertTitle>
           <AlertDescription>
-            You do not have a public Solana wallet selected for your profile.
-            You cannot accept tips/donations via your profile or blink until you
-            select one.{" "}
+            You do not have a public Solana wallet selected for your Solfate
+            profile. You <b>cannot accept tips/donations</b> on your profile or
+            blink until you select one.{" "}
             <Link
               href={"/settings/tips"}
               className="underline text-twitter hover:text-"
             >
               Select a public wallet
             </Link>{" "}
-            for in your &quot;Tips and Donations&quot; settings.
+            in your &quot;Tips and Donations&quot; settings.
           </AlertDescription>
         </Alert>
 
