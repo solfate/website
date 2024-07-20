@@ -6,23 +6,18 @@ import { ApiErrorResponse } from "@/lib/api";
 import { withUserAuth } from "@/lib/auth";
 import prisma from "@/lib/prisma";
 import { Prisma } from "@prisma/client";
-import {
-  ApiProfilePatchInputSchema,
-  ApiProfilePatchInput,
-} from "@/lib/schemas/profile";
+import { profileSchema } from "@/lib/schemas/profile";
 import { ASSETS_DOMAIN } from "@/lib/const/general";
 
 export const PATCH = withUserAuth(async ({ req, session }) => {
   try {
-    const input: ApiProfilePatchInput = ApiProfilePatchInputSchema.parse(
-      await req.json(),
-    );
+    const input = profileSchema.parse(await req.json());
 
     // init the with the data that requires no additional validation
     const validatedProfileData: Prisma.ProfileUpdateInput = {
       name: input.name,
       oneLiner: input.oneLiner,
-      bio: input.bio?.replace(/^\s*$(?:\r\n?|\n)/gm, ""),
+      bio: input.bio,
       website: input.website,
       twitter: input.twitter,
       github: input.github,

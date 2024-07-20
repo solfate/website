@@ -1,9 +1,6 @@
-import {
-  isValidLocalAssetImage,
-  secureUrl,
-  usernameSchema,
-} from "@/lib/validators";
 import { z } from "zod";
+import { profileSchema } from "@/lib/schemas/profile";
+import { usernameSchema } from "@/lib/validators";
 
 export enum ONBOARDING_STEPS {
   SET_USERNAME = 1,
@@ -12,18 +9,13 @@ export enum ONBOARDING_STEPS {
   LENGTH_SIZE = 3,
 }
 
-export const schema = z.object({
-  step: z.string(),
-  // .refine(
-  //   (val) => val < 0 && val > ONBOARDING_STEPS.LENGTH_SIZE,
-  //   "Invalid onboarding step",
-  // ),
+export const schema = profileSchema.extend({
+  step: z
+    .string()
+    .refine((val) => parseInt(val), "Invalid onboarding step")
+    .refine(
+      (val) => Object.values(ONBOARDING_STEPS).includes(parseInt(val)),
+      "Unknown onboarding step selected",
+    ),
   username: usernameSchema,
-  name: z.union([z.string().trim().nullish(), z.literal("")]),
-  bio: z.union([z.string().trim().nullish(), z.literal("")]),
-  oneLiner: z.union([z.string().trim().nullish(), z.literal("")]),
-  image: z.union([
-    secureUrl.refine(isValidLocalAssetImage).nullish(),
-    z.literal(""),
-  ]),
 });

@@ -1,5 +1,6 @@
 import { z } from "zod";
 import {
+  profileConfig,
   USERNAME_BLACKLIST,
   USERNAME_BLACKLIST_PREFIX,
   USERNAME_MAX_LEN,
@@ -9,6 +10,7 @@ import {
 
 export const usernameSchema = z
   .string()
+  .trim()
   .refine(
     (val) => val.length <= USERNAME_MAX_LEN,
     `Username can be max of ${USERNAME_MAX_LEN} characters`,
@@ -28,3 +30,13 @@ export const usernameSchema = z
     }
     return true;
   }, `Username prefix not allowed`);
+
+export const bioSchema = z
+  .string()
+  .trim()
+  .refine(
+    (val) => val.length <= profileConfig.bio.max,
+    `Bio can be max of ${profileConfig.bio.max} characters`,
+  )
+  // remove multi line spaces (but still allow a single line break spacer)
+  .transform((val) => val.replace(/^\s*$(?:\r\n?|\n)/gm, "\n").trim());

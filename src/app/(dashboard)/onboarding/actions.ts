@@ -5,7 +5,6 @@ import type { ActionFormState } from "@/types";
 import { Prisma } from "@prisma/client";
 import { getUserSession } from "@/lib/auth";
 import { ONBOARDING_STEPS, schema } from "./const";
-import { z } from "zod";
 
 export async function onboardingFlow(
   _prevState: ActionFormState<typeof schema>,
@@ -96,13 +95,13 @@ export async function onboardingFlow(
         profile: {
           upsert: {
             create: {
-              bio: input.data.bio?.replace(/^\s*$(?:\r\n?|\n)/gm, ""),
+              bio: input.data.bio,
               name: input.data.name,
               image: input.data.image,
               oneLiner: input.data.oneLiner,
             },
             update: {
-              bio: input.data.bio?.replace(/^\s*$(?:\r\n?|\n)/gm, ""),
+              bio: input.data.bio,
               name: input.data.name,
               image: input.data.image,
               oneLiner: input.data.oneLiner,
