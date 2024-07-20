@@ -205,7 +205,7 @@ const FormContent = ({
                   ?.focus();
               }}
             >
-              Share Tweet
+              Share Blink
             </Button>
             <Button
               size={"sm"}
