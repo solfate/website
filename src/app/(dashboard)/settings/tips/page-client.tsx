@@ -103,7 +103,7 @@ const FormContent = ({
     <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
       <SettingsHeader
         title={"Tips and Donations"}
-        description={`Accept tips and donations directly to your Solana wallet`}
+        description={`Accept tips and donations directly to your Solana wallet on your Solfate profile or blink`}
       >
         <div className="relative">
           <Button
