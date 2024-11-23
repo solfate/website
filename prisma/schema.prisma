@@ -53,7 +53,7 @@ model Profile {
     username String @unique @db.VarChar(255)
     user     User   @relation("username", fields: [username], references: [username])
 
-    // 
+    // basic user status info
     name     String?
     image    String?
     oneLiner String? @default("") @db.VarChar(255)
@@ -61,10 +61,15 @@ model Profile {
     website  String? @db.VarChar(256)
     twitter  String? @db.VarChar(30)
     github   String? @db.VarChar(256)
-
-    // basic user status info
     verified Boolean @default(false)
-    // type      UserType? @default(USER)
+
+    // user work and skill information
+    // category1               Int?      @default(0) // PROFILE_CATEGORY
+    // category2               Int?      @default(0) // PROFILE_CATEGORY
+    // category3               Int?      @default(0) // PROFILE_CATEGORY
+    // lookingForWorkUpdatedAt DateTime? @default(now()) @db.Timestamp()
+    // lookingForWorkStatus    Int?      @default(0) // PROFILE_WORK_STATUS
+    // skills                  Json?     @default("[]") // PROFILE_SKILLS[]
 
     // json array of the block elements to be rendered on the page
     elements      Json? @default("[]")
